@@ -32,6 +32,7 @@ export default function CustomAppBar() {
             aria-expanded={open ? "true" : undefined}
             onClick={handleClick}
             mr={3}
+            sx={{cursor:'pointer'}}
           >
             Carteiras
           </Typography>
