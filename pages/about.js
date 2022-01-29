@@ -11,9 +11,13 @@ export default function About() {
       <Box justifyContent={"center"} display={"flex"}>
         <Box textAlign="center" width={"70%"}>
           <h3>
-            App para consulta de empresas melhores rankeadas pelo critério da
-            "Fórmula Mágica de Joel Greenblatt"
+            App para consulta de carteiras teóricas:
             <br />
+          </h3>
+          <h3>
+            1ª - Fórmula Mágica - Joel Greenblatt
+            <br />
+            2ª - Preço Justo de Graham
             <br />
           </h3>
           <h3>

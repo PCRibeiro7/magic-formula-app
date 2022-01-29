@@ -1,3 +1,8 @@
 .link {
   margin-right: 24px;
 }
+
+.linkActive {
+  margin-right: 24px;
+  font-weight: 900;
+}

@@ -1,7 +1,8 @@
 import { Box, TextField } from "@mui/material";
 import { useState } from "react";
-import MagicFormulaTable from "../components/MagicFormulaTable";
+import GrahamWalletTable from "../components/GrahamWalletTable";
 import styles from "../styles/Home.module.css";
+
 const axios = require("axios");
 
 export async function getServerSideProps(context) {
@@ -29,32 +30,30 @@ export async function getServerSideProps(context) {
     }
   );
   const stocks = stocksResponse.data;
-  const filteredStocks = stocks.filter((stock) => {
-    return stock.eV_Ebit > 0 && stock.roic > 0;
+
+  const getGrahamPrice = (stock) => {
+    const profitPerStock = stock.price / stock.p_L;
+    const equityValuePerStock = stock.price / stock.p_VP;
+    const grahamPrice = (22.5 * profitPerStock * equityValuePerStock) ** 0.5;
+    return grahamPrice;
+  };
+
+  const stocksWithGraham = stocks.map((stock) => {
+    const graham_price = getGrahamPrice(stock);
+    const graham_price_diff = (graham_price - stock.price) / graham_price;
+    return {
+      graham_price,
+      graham_price_diff,
+      ...stock,
+    };
+  });
+  let filteredStocks = stocksWithGraham.filter((stock) => {
+    return stock.p_VP > 0 && stock.p_L > 0 && stock.graham_price_diff >= 0.2;
   });
 
-  const orderedByEV_EBIT = JSON.parse(JSON.stringify(filteredStocks)).sort(
-    (a, b) => a.eV_Ebit - b.eV_Ebit
-  );
-  const orderedByROIC = JSON.parse(JSON.stringify(filteredStocks)).sort(
-    (a, b) => b.roic - a.roic
-  );
-
-  const stocksWithRanking = JSON.parse(JSON.stringify(filteredStocks))
-    .map((company) => ({
-      rank:
-        orderedByEV_EBIT.findIndex((c) => c.ticker === company.ticker) +
-        orderedByROIC.findIndex((c) => c.ticker === company.ticker),
-      rank_EV_EBIT:
-        orderedByEV_EBIT.findIndex((c) => c.ticker === company.ticker) + 1,
-      rank_ROIC:
-        orderedByROIC.findIndex((c) => c.ticker === company.ticker) + 1,
-      ...company,
-    }))
-    .sort((a, b) => a.rank - b.rank);
   return {
     props: {
-      stocks: stocksWithRanking,
+      stocks: filteredStocks,
     }, // will be passed to the page component as props
   };
 }
@@ -75,7 +74,7 @@ export default function Home({ stocks }) {
   return (
     <div className={styles.container}>
       <main className={styles.main}>
-        <h1 className={styles.title}>Fórmula Mágica - Brasil</h1>
+        <h1 className={styles.title}>Carteira Graham - Brasil</h1>
       </main>
       <Box justifyContent={"space-evenly"} display={"flex"} mb={4}>
         <TextField
@@ -96,7 +95,7 @@ export default function Home({ stocks }) {
         />
       </Box>
 
-      <MagicFormulaTable
+      <GrahamWalletTable
         rows={stocks.filter(filterByMarketCap).filter(filterByLiquidity)}
       />
     </div>
