@@ -254,6 +254,7 @@ export default function EnhancedTable({ rows }) {
           page={page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
+          labelRowsPerPage="Linhas por página:"
         />
       </Paper>
     </Box>

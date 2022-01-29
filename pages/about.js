@@ -9,17 +9,16 @@ export default function About() {
         <h1 className={styles.title}>Sobre</h1>
       </main>
       <Box justifyContent={"center"} display={"flex"}>
-        <Box textAlign="center" width={"50%"}>
+        <Box textAlign="center" width={"70%"}>
           <h3>
             App para consulta de empresas melhores rankeadas pelo critério da
-            "Fórmula Mágica de Joel Greenblatt".
+            "Fórmula Mágica de Joel Greenblatt"
             <br />
             <br />
           </h3>
-
           <h3>
             Os tickers são rankeados com base nos dados dos 4 últimos trimestres
-            disponíveis.
+            disponíveis
           </h3>
         </Box>
       </Box>
