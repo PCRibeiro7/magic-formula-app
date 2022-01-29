@@ -47,9 +47,6 @@ const headCells = [
 ];
 
 export default function GrahamWallet({ stocks }) {
-  const [minimumMarketCap, setMinimumMarketCap] = useState(0);
-  const [minimumLiquidity, setMinimumLiquidity] = useState(0);
-
   return (
     <div className={styles.container}>
       <main className={styles.main}>

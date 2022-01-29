@@ -17,7 +17,7 @@ export default function RankingPanel({ stocks, headCells, initialOrderBy }) {
       : true;
   };
   return (
-    <Paper sx={{ padding: "24px 8px",  }} >
+    <Paper sx={{ padding: "24px 8px", maxWidth: "800px"  }} >
       <Typography variant="h5" textAlign={"start"} ml={2} mb={2}>
         Filtros:
       </Typography>
