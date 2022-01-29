@@ -193,7 +193,7 @@ export default function EnhancedTable({ rows }) {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box sx={{ width: "100%", maxWidth:'800px' }}>
       <Paper sx={{ width: "100%", mb: 2, backgroundImage: "unset" }}>
         <TableContainer>
           <Table aria-labelledby="tableTitle" size={dense ? "small" : "medium"}>

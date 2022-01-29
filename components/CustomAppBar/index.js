@@ -9,6 +9,10 @@ import { useRouter } from "next/router";
 const pages = [
   {
     path: "",
+    label: "Home",
+  },
+  {
+    path: "magic_formula",
     label: "Fórmula Mágica",
   },
   {
