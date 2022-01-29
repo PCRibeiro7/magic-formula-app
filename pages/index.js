@@ -1,7 +1,5 @@
 import { Box, TextField } from "@mui/material";
-import Head from "next/head";
-import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import EnhancedTable from "../components/EnhancedTable";
 import styles from "../styles/Home.module.css";
 const axios = require("axios");
@@ -73,19 +71,10 @@ export default function Home({ stocks }) {
   };
   return (
     <div className={styles.container}>
-      <Head>
-        <title>Magic Formula</title>
-        <meta
-          name="description"
-          content="Página para consulta das ações da fórmula magica"
-        />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
       <main className={styles.main}>
         <h1 className={styles.title}>Fórmula Mágica - Brasil</h1>
       </main>
-      <Box justifyContent={"space-evenly"} display={"flex"}>
+      <Box justifyContent={"space-evenly"} display={"flex"} mb={4}>
         <TextField
           helperText="Digite o valor de mercado mínimo"
           value={minimumMarketCap}
