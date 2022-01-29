@@ -1,4 +1,4 @@
-import { Box, TextField, Typography } from "@mui/material";
+import { Box, TextField, Typography, Paper } from "@mui/material";
 import { useState } from "react";
 import MagicFormulaTable from "../components/MagicFormulaTable";
 import MaskedNumberInput from "../components/MaskedNumberInput";
@@ -35,14 +35,14 @@ export default function Home({ stocks }) {
         <h1 className={styles.title}>Carteira Fórmula Mágica:</h1>
       </main>
       <Box mb={4}>
-        <Typography>Líquidez diáira mínima:</Typography>
+        <Typography>Líquidez diária mínima: (R$)</Typography>
         <MaskedNumberInput
           value={minimumLiquidity}
           handleChange={(e) => setMinimumLiquidity(e.target.value)}
         />
       </Box>
       <Box mb={4}>
-        <Typography>Valor de mercado mínimo:</Typography>
+        <Typography>Valor de mercado mínimo: (R$)</Typography>
         <MaskedNumberInput
           value={minimumMarketCap}
           handleChange={(e) => setMinimumMarketCap(e.target.value)}

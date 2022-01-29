@@ -29,20 +29,21 @@ export default function Home({ stocks }) {
       ? stock.liquidezMediaDiaria > minimumLiquidity
       : true;
   };
+
   return (
     <div className={styles.container}>
       <main className={styles.main}>
         <h1 className={styles.title}>Carteira Graham:</h1>
       </main>
       <Box mb={4}>
-        <Typography>Líquidez diáira mínima:</Typography>
+        <Typography>Líquidez diária mínima: (R$)</Typography>
         <MaskedNumberInput
           value={minimumLiquidity}
           handleChange={(e) => setMinimumLiquidity(e.target.value)}
         />
       </Box>
       <Box mb={4}>
-        <Typography>Valor de mercado mínimo:</Typography>
+        <Typography>Valor de mercado mínimo: (R$)</Typography>
         <MaskedNumberInput
           value={minimumMarketCap}
           handleChange={(e) => setMinimumMarketCap(e.target.value)}

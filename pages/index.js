@@ -31,7 +31,7 @@ export default function Home() {
       </main>
       <Grid container spacing={2} justifyContent={"center"}>
         {cards.map((card) => (
-          <Grid
+          <Grid 
             item
             key={card.title}
             onClick={() => router.push(card.pagePath)}
