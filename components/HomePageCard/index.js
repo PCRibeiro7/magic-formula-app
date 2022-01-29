@@ -7,7 +7,6 @@ import Image from "next/image";
 import { Button, CardActions } from "@mui/material";
 
 export default function HomePageCard({ image, title, description }) {
-    console.log(image);
   return (
     <Card
       sx={{

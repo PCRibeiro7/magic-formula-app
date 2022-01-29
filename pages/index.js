@@ -27,13 +27,13 @@ export default function Home() {
   return (
     <div className={styles.container}>
       <main className={styles.main}>
-        <h1 className={styles.title}>Carteiras disponíveis</h1>
+        <h1 className={styles.title}>Carteiras disponíveis:</h1>
       </main>
       <Grid container spacing={2} justifyContent={"center"}>
         {cards.map((card) => (
           <Grid
             item
-            key={card.tile}
+            key={card.title}
             onClick={() => router.push(card.pagePath)}
             sx={{ cursor: 'pointer' }}
           >

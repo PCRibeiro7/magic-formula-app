@@ -13,6 +13,7 @@ import TableSortLabel from "@mui/material/TableSortLabel";
 import Paper from "@mui/material/Paper";
 
 import { visuallyHidden } from "@mui/utils";
+import { checkIfTickerIsBestRanked } from "../../utils/wallets";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -210,9 +211,13 @@ export default function EnhancedTable({ rows }) {
                  rows.slice().sort(getComparator(order, orderBy)) */}
               {stableSort(rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
+                .map((row, index,stocks) => {
                   const isItemSelected = isSelected(row.name);
                   const labelId = `enhanced-table-checkbox-${index}`;
+                  const isTickerBestRanked = checkIfTickerIsBestRanked(
+                    row.ticker,
+                    stocks
+                  );
 
                   return (
                     <TableRow
@@ -223,7 +228,12 @@ export default function EnhancedTable({ rows }) {
                       key={row.ticker}
                       selected={isItemSelected}
                     >
-                      <TableCell component="th" id={labelId} scope="row">
+                      <TableCell
+                        component="th"
+                        id={labelId}
+                        scope="row"
+                        sx={{ color: isTickerBestRanked ? "gold" : "" }}
+                      >
                         {row.ticker}
                       </TableCell>
                       <TableCell align="right">{row.rank}º</TableCell>

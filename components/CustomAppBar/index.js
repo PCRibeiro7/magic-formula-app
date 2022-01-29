@@ -31,21 +31,19 @@ export default function CustomAppBar() {
     <Box>
       <AppBar position="static">
         <Toolbar>
-          <div>
-            {pages.map((page) => (
-              <Link href={`/${page.path}`} key={`link-app-bar-${page.path}`}>
-                <a
-                  className={
-                    router.pathname === `/${page.path}`
-                      ? styles.linkActive
-                      : styles.link
-                  }
-                >
-                  {page.label}
-                </a>
-              </Link>
-            ))}
-          </div>
+          {pages.map((page) => (
+            <Link href={`/${page.path}`} key={`link-app-bar-${page.path}`}>
+              <a
+                className={
+                  router.pathname === `/${page.path}`
+                    ? styles.linkActive
+                    : styles.link
+                }
+              >
+                {page.label}
+              </a>
+            </Link>
+          ))}
         </Toolbar>
       </AppBar>
     </Box>

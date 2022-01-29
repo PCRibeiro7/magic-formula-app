@@ -1,6 +1,7 @@
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import Layout from "../components/Layout";
 import "../styles/globals.css";
+import NextNProgress from "nextjs-progressbar";
 
 const darkTheme = createTheme({
   palette: {
@@ -16,6 +17,7 @@ function MyApp({ Component, pageProps }) {
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
       <Layout>
+        <NextNProgress color="gold" options={{ showSpinner: false }} />
         <Component {...pageProps} />
       </Layout>
     </ThemeProvider>
