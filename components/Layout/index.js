@@ -5,7 +5,7 @@ export default function Layout({ children }) {
   return (
     <>
       <Head>
-        <title>Magic Formula</title>
+        <title>Carteiras Teóricas</title>
         <meta
           name="description"
           content="Página para consulta das ações da fórmula magica"
