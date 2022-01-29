@@ -28,7 +28,7 @@ const NumberFormatCustom = React.forwardRef(function NumberFormatCustom(
   );
 });
 
-export default function MaskedNumberInput({ value, handleChange }) {
+export default function MaskedNumberInput({ value, handleChange,placeholder }) {
   return (
     <TextField
       value={value}
@@ -36,6 +36,7 @@ export default function MaskedNumberInput({ value, handleChange }) {
       InputProps={{
         inputComponent: NumberFormatCustom,
       }}
+      placeholder={placeholder}
     />
   );
 }

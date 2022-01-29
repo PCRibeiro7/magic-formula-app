@@ -1,10 +1,7 @@
-import { Box, TextField, Typography, Paper, Stack } from "@mui/material";
-import { useState } from "react";
-import CustomTable from "../components/CustomTable";
-import MaskedNumberInput from "../components/MaskedNumberInput";
 import { fetchAllStocks } from "../services/statusInvest";
 import styles from "../styles/Wallets.module.css";
 import { filterByMagicFormula } from "../utils/wallets";
+import RankingPanel from "../components/RankingPanel";
 
 export async function getServerSideProps(context) {
   const stocks = await fetchAllStocks();
@@ -61,42 +58,14 @@ const headCells = [
   },
 ];
 
-export default function Home({ stocks }) {
-  const [minimumMarketCap, setMinimumMarketCap] = useState("");
-  const [minimumLiquidity, setMinimumLiquidity] = useState("");
-
-  const filterByMarketCap = (stock) => {
-    return minimumMarketCap ? stock.valorMercado > minimumMarketCap : true;
-  };
-
-  const filterByLiquidity = (stock) => {
-    return minimumLiquidity
-      ? stock.liquidezMediaDiaria > minimumLiquidity
-      : true;
-  };
+export default function MagicFormula({ stocks }) {
   return (
     <div className={styles.container}>
       <main className={styles.main}>
         <h1 className={styles.title}>Carteira Fórmula Mágica:</h1>
       </main>
-      <Paper sx={{ padding: "24px 8px" }}>
-        <Box mb={4}>
-          <Typography>Liquidez diária mínima: (R$)</Typography>
-          <MaskedNumberInput
-            value={minimumLiquidity}
-            handleChange={(e) => setMinimumLiquidity(e.target.value)}
-          />
-        </Box>
-        <Box mb={4}>
-          <Typography>Valor de mercado mínimo: (R$)</Typography>
-          <MaskedNumberInput
-            value={minimumMarketCap}
-            handleChange={(e) => setMinimumMarketCap(e.target.value)}
-          />
-        </Box>
-      </Paper>
-      <CustomTable
-        rows={stocks.filter(filterByMarketCap).filter(filterByLiquidity)}
+      <RankingPanel
+        stocks={stocks}
         headCells={headCells}
         initialOrderBy={{ column: "rank", direction: "asc" }}
       />

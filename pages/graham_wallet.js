@@ -1,7 +1,6 @@
 import { Box, Paper, TextField, Typography } from "@mui/material";
 import { useState } from "react";
-import CustomTable from "../components/CustomTable";
-import MaskedNumberInput from "../components/MaskedNumberInput";
+import RankingPanel from "../components/RankingPanel";
 import { fetchAllStocks } from "../services/statusInvest";
 import styles from "../styles/Wallets.module.css";
 import { filterByGraham } from "../utils/wallets";
@@ -47,46 +46,20 @@ const headCells = [
   },
 ];
 
-export default function Home({ stocks }) {
-  const [minimumMarketCap, setMinimumMarketCap] = useState("");
-  const [minimumLiquidity, setMinimumLiquidity] = useState("");
-
-  const filterByMarketCap = (stock) => {
-    return minimumMarketCap ? stock.valorMercado > minimumMarketCap : true;
-  };
-
-  const filterByLiquidity = (stock) => {
-    return minimumLiquidity
-      ? stock.liquidezMediaDiaria > minimumLiquidity
-      : true;
-  };
+export default function GrahamWallet({ stocks }) {
+  const [minimumMarketCap, setMinimumMarketCap] = useState(0);
+  const [minimumLiquidity, setMinimumLiquidity] = useState(0);
 
   return (
     <div className={styles.container}>
       <main className={styles.main}>
         <h1 className={styles.title}>Carteira Graham:</h1>
       </main>
-      <Paper sx={{ padding: "24px 8px" }}>
-        <Box mb={4}>
-          <Typography>Liquidez diária mínima: (R$)</Typography>
-          <MaskedNumberInput
-            value={minimumLiquidity}
-            handleChange={(e) => setMinimumLiquidity(e.target.value)}
-          />
-        </Box>
-        <Box mb={4}>
-          <Typography>Valor de mercado mínimo: (R$)</Typography>
-          <MaskedNumberInput
-            value={minimumMarketCap}
-            handleChange={(e) => setMinimumMarketCap(e.target.value)}
-          />
-        </Box>
-        <CustomTable
-          rows={stocks.filter(filterByMarketCap).filter(filterByLiquidity)}
-          headCells={headCells}
-          initialOrderBy={{ column: "graham_price_diff", direction: "desc" }}
-        />
-      </Paper>
+      <RankingPanel
+        stocks={stocks}
+        headCells={headCells}
+        initialOrderBy={{ column: "graham_price_diff", direction: "desc" }}
+      />
     </div>
   );
 }
