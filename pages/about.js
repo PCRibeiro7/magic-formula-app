@@ -1,6 +1,7 @@
-import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
+import Image from "next/image";
 import styles from "../styles/Home.module.css";
+import stonksImage from "../public/stonks.jpg";
 
 export default function About() {
   return (
@@ -10,22 +11,24 @@ export default function About() {
       </main>
       <Box justifyContent={"center"} display={"flex"}>
         <Box textAlign="center" width={"80%"}>
-          <body>
+          <p>
             Site para consulta de carteiras teóricas:
             <br />
-            <br />
-          </body>
-          <body>
+          </p>
+          <p>
             1ª - Fórmula Mágica - Joel Greenblatt
             <br />
             2ª - Preço Justo de Graham
             <br />
-            <br />
-          </body>
-          <body>
+          </p>
+          <p>
             Os tickers são rankeados com base nos dados dos 4 últimos trimestres
             disponíveis
-          </body>
+          </p>
+          <Image
+            src={stonksImage}
+            alt="stonks image"
+          />
         </Box>
       </Box>
     </div>
