@@ -8,18 +8,20 @@ export default function About() {
       <main className={styles.main}>
         <h1 className={styles.title}>Sobre</h1>
       </main>
-      <Box textAlign="center">
-        <h2>
-          App para consulta de empresas melhores rankeadas pelo critério da
-          "Fórmula Mágica de Joel Greenblatt".
-          <br />
-          <br />
-        </h2>
+      <Box justifyContent={"center"} display={"flex"}>
+        <Box textAlign="center" width={"50%"}>
+          <h3>
+            App para consulta de empresas melhores rankeadas pelo critério da
+            "Fórmula Mágica de Joel Greenblatt".
+            <br />
+            <br />
+          </h3>
 
-        <h2>
-          Os tickers são rankeados com base nos dados dos 4 últimos trimestres
-          disponíveis.
-        </h2>
+          <h3>
+            Os tickers são rankeados com base nos dados dos 4 últimos trimestres
+            disponíveis.
+          </h3>
+        </Box>
       </Box>
     </div>
   );

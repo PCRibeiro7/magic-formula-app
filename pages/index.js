@@ -39,6 +39,7 @@ export async function getServerSideProps(context) {
   const orderedByROIC = JSON.parse(JSON.stringify(filteredStocks)).sort(
     (a, b) => b.roic - a.roic
   );
+
   const stocksWithRanking = JSON.parse(JSON.stringify(filteredStocks))
     .map((company) => ({
       rank:
