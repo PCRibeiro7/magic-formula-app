@@ -59,15 +59,15 @@ export async function getServerSideProps(context) {
 }
 
 export default function Home({ stocks }) {
-  const [minimumMarketCap, setMinimumMarketCap] = useState(0);
-  const [minimumLiquidity, setMinimumLiquidity] = useState(0);
+  const [minimumMarketCap, setMinimumMarketCap] = useState("");
+  const [minimumLiquidity, setMinimumLiquidity] = useState("");
 
   const filterByMarketCap = (stock) => {
-    return stock.valorMercado > minimumMarketCap;
+    return stock.valorMercado > minimumMarketCap || 0;
   };
 
   const filterByLiquidity = (stock) => {
-    return stock.liquidezMediaDiaria > minimumLiquidity;
+    return stock.liquidezMediaDiaria > minimumLiquidity || 0;
   };
   return (
     <div className={styles.container}>
@@ -76,18 +76,20 @@ export default function Home({ stocks }) {
       </main>
       <Box justifyContent={"space-evenly"} display={"flex"} mb={4}>
         <TextField
-          helperText="Digite o valor de mercado mínimo"
+          label="Digite o valor de mercado mínimo"
           value={minimumMarketCap}
-          label="Valor de mercado mínimo"
+          helperText="Valor de mercado mínimo"
           onChange={(e) => setMinimumMarketCap(e.target.value)}
           type={"number"}
+          placeholder={"50000"}
         />
         <TextField
-          helperText="Digite a liquidez diária mínima"
+          label="Digite a liquidez diária mínima"
           value={minimumLiquidity}
-          label="Líquidez diáira mínima"
+          helperText="Líquidez diáira mínima"
           onChange={(e) => setMinimumLiquidity(e.target.value)}
           type={"number"}
+          placeholder={"10000"}
         />
       </Box>
 

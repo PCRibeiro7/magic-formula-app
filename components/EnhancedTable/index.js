@@ -55,7 +55,7 @@ const headCells = [
     id: "rank",
     numeric: true,
     disablePadding: false,
-    label: "Rank",
+    label: "Rank Fórmula Mágica",
   },
   {
     id: "eV_Ebit",
@@ -64,10 +64,22 @@ const headCells = [
     label: "EV/EBIT",
   },
   {
+    id: "rank_EV_EBIT",
+    numeric: true,
+    disablePadding: false,
+    label: "Rank EV/EBIT",
+  },
+  {
     id: "roic",
     numeric: true,
     disablePadding: false,
     label: "ROIC",
+  },
+  {
+    id: "rank_ROIC",
+    numeric: true,
+    disablePadding: false,
+    label: "Rank ROIC",
   },
 ];
 
@@ -211,16 +223,14 @@ export default function EnhancedTable({ rows }) {
                       key={row.ticker}
                       selected={isItemSelected}
                     >
-                      <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                      >
+                      <TableCell component="th" id={labelId} scope="row">
                         {row.ticker}
                       </TableCell>
-                      <TableCell align="right">{row.rank}</TableCell>
+                      <TableCell align="right">{row.rank}º</TableCell>
                       <TableCell align="right">{row.eV_Ebit}</TableCell>
+                      <TableCell align="right">{row.rank_EV_EBIT}º</TableCell>
                       <TableCell align="right">{row.roic}</TableCell>
+                      <TableCell align="right">{row.rank_ROIC}º</TableCell>
                     </TableRow>
                   );
                 })}
