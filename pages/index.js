@@ -1,5 +1,7 @@
+import { Box, TextField } from "@mui/material";
 import Head from "next/head";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 import EnhancedTable from "../components/EnhancedTable";
 import styles from "../styles/Home.module.css";
 const axios = require("axios");
@@ -28,7 +30,7 @@ export async function getServerSideProps(context) {
       credentials: "include",
     }
   );
-  const stocks = stocksResponse.data
+  const stocks = stocksResponse.data;
   const filteredStocks = stocks.filter((stock) => {
     return stock.eV_Ebit > 0 && stock.roic > 0;
   });
@@ -40,19 +42,17 @@ export async function getServerSideProps(context) {
     (a, b) => b.roic - a.roic
   );
   const stocksWithRanking = JSON.parse(JSON.stringify(filteredStocks))
-  .map((company) => ({
-    rank:
-      orderedByEV_EBIT.findIndex((c) => c.ticker === company.ticker) +
-      orderedByROIC.findIndex((c) => c.ticker === company.ticker),
-    rank_EV_EBIT: orderedByEV_EBIT.findIndex(
-      (c) => c.ticker === company.ticker
-    ),
-    rank_ROIC: orderedByROIC.findIndex(
-      (c) => c.ticker === company.ticker
-    ),
-    ...company,
-  }))
-  .sort((a, b) => a.rank - b.rank);
+    .map((company) => ({
+      rank:
+        orderedByEV_EBIT.findIndex((c) => c.ticker === company.ticker) +
+        orderedByROIC.findIndex((c) => c.ticker === company.ticker),
+      rank_EV_EBIT: orderedByEV_EBIT.findIndex(
+        (c) => c.ticker === company.ticker
+      ),
+      rank_ROIC: orderedByROIC.findIndex((c) => c.ticker === company.ticker),
+      ...company,
+    }))
+    .sort((a, b) => a.rank - b.rank);
   return {
     props: {
       stocks: stocksWithRanking,
@@ -60,21 +60,51 @@ export async function getServerSideProps(context) {
   };
 }
 
-export default function Home({stocks}) {
-  console.log(stocks)
+export default function Home({ stocks }) {
+  const [minimumMarketCap, setMinimumMarketCap] = useState(0);
+  const [minimumLiquidity, setMinimumLiquidity] = useState(0);
+
+  const filterByMarketCap = (stock) => {
+    return stock.valorMercado > minimumMarketCap;
+  };
+
+  const filterByLiquidity = (stock) => {
+    return stock.liquidezMediaDiaria > minimumLiquidity;
+  };
   return (
     <div className={styles.container}>
       <Head>
         <title>Magic Formula</title>
-        <meta name="description" content="Página para consulta das ações da fórmula magica" />
+        <meta
+          name="description"
+          content="Página para consulta das ações da fórmula magica"
+        />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>Formula Mágica - Brasil</h1>
+        <h1 className={styles.title}>Fórmula Mágica - Brasil</h1>
       </main>
-      <EnhancedTable rows={stocks}/>
+      <Box justifyContent={"space-evenly"} display={"flex"}>
+        <TextField
+          helperText="Digite o valor de mercado mínimo"
+          value={minimumMarketCap}
+          label="Valor de mercado mínimo"
+          onChange={(e) => setMinimumMarketCap(e.target.value)}
+          type={"number"}
+        />
+        <TextField
+          helperText="Digite a liquidez diária mínima"
+          value={minimumLiquidity}
+          label="Líquidez diáira mínima"
+          onChange={(e) => setMinimumLiquidity(e.target.value)}
+          type={"number"}
+        />
+      </Box>
 
+      <EnhancedTable
+        rows={stocks.filter(filterByMarketCap).filter(filterByLiquidity)}
+      />
     </div>
   );
 }
