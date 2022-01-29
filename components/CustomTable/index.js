@@ -45,53 +45,12 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-const headCells = [
-  {
-    id: "ticker",
-    numeric: false,
-    disablePadding: false,
-    label: "Ticker",
-  },
-  {
-    id: "rank",
-    numeric: true,
-    disablePadding: false,
-    label: "Rank Fórmula Mágica",
-  },
-  {
-    id: "eV_Ebit",
-    numeric: true,
-    disablePadding: false,
-    label: "EV/EBIT",
-  },
-  {
-    id: "rank_EV_EBIT",
-    numeric: true,
-    disablePadding: false,
-    label: "Rank EV/EBIT",
-  },
-  {
-    id: "roic",
-    numeric: true,
-    disablePadding: false,
-    label: "ROIC",
-  },
-  {
-    id: "rank_ROIC",
-    numeric: true,
-    disablePadding: false,
-    label: "Rank ROIC",
-  },
-];
-
 function EnhancedTableHead(props) {
   const {
-    onSelectAllClick,
     order,
     orderBy,
-    numSelected,
-    rowCount,
     onRequestSort,
+    headCells
   } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
@@ -135,9 +94,9 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-export default function EnhancedTable({ rows }) {
-  const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("rank");
+export default function CustomTable({ rows, headCells, initialOrderBy }) {
+  const [order, setOrder] = React.useState(initialOrderBy.direction);
+  const [orderBy, setOrderBy] = React.useState(initialOrderBy.column);
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
@@ -159,26 +118,6 @@ export default function EnhancedTable({ rows }) {
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
-    let newSelected = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
-    }
-
-    setSelected(newSelected);
-  };
-
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -193,9 +132,10 @@ export default function EnhancedTable({ rows }) {
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+
   return (
-    <Box sx={{ width: "100%", maxWidth:'800px' }}>
-      <Paper sx={{ width: "100%", mb: 2, backgroundImage: "unset" }}>
+    <Box sx={{ width: "100%", maxWidth: "800px" }}>
+      <Paper sx={{ width: "100%", mb: 2, }}>
         <TableContainer>
           <Table aria-labelledby="tableTitle" size={dense ? "small" : "medium"}>
             <EnhancedTableHead
@@ -205,13 +145,14 @@ export default function EnhancedTable({ rows }) {
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
               rowCount={rows.length}
+              headCells={headCells}
             />
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                  rows.slice().sort(getComparator(order, orderBy)) */}
               {stableSort(rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index,stocks) => {
+                .map((row, index, stocks) => {
                   const isItemSelected = isSelected(row.name);
                   const labelId = `enhanced-table-checkbox-${index}`;
                   const isTickerBestRanked = checkIfTickerIsBestRanked(
@@ -228,19 +169,23 @@ export default function EnhancedTable({ rows }) {
                       key={row.ticker}
                       selected={isItemSelected}
                     >
-                      <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        sx={{ color: isTickerBestRanked ? "gold" : "" }}
-                      >
-                        {row.ticker}
-                      </TableCell>
-                      <TableCell align="right">{row.rank}º</TableCell>
-                      <TableCell align="right">{row.eV_Ebit}</TableCell>
-                      <TableCell align="right">{row.rank_EV_EBIT}º</TableCell>
-                      <TableCell align="right">{row.roic}</TableCell>
-                      <TableCell align="right">{row.rank_ROIC}º</TableCell>
+                      {headCells.map((headCell, index) =>
+                        index === 0 ? (
+                          <TableCell
+                            component="th"
+                            id={labelId}
+                            scope="row"
+                            sx={{ color: isTickerBestRanked ? "gold" : "" }}
+                          >
+                            {row.ticker}
+                          </TableCell>
+                        ) : (
+                          <TableCell align="right" key={headCell.id}>
+                            {row[headCell.id]}
+                            {headCell.isOrdinal && "º"}
+                          </TableCell>
+                        )
+                      )}
                     </TableRow>
                   );
                 })}

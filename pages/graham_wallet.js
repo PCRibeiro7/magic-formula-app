@@ -1,6 +1,6 @@
-import { Box, TextField, Typography } from "@mui/material";
+import { Box, Paper, TextField, Typography } from "@mui/material";
 import { useState } from "react";
-import GrahamWalletTable from "../components/GrahamWalletTable";
+import CustomTable from "../components/CustomTable";
 import MaskedNumberInput from "../components/MaskedNumberInput";
 import { fetchAllStocks } from "../services/statusInvest";
 import styles from "../styles/Wallets.module.css";
@@ -15,6 +15,37 @@ export async function getServerSideProps(context) {
     }, // will be passed to the page component as props
   };
 }
+
+const headCells = [
+  {
+    id: "ticker",
+    numeric: false,
+    disablePadding: false,
+    isOrdinal: false,
+    label: "Ticker",
+  },
+  {
+    id: "graham_price_diff",
+    numeric: true,
+    disablePadding: false,
+    isOrdinal: false,
+    label: "Margem de Graham (%)",
+  },
+  {
+    id: "price",
+    numeric: true,
+    disablePadding: false,
+    isOrdinal: false,
+    label: "Cotação Atual (R$)",
+  },
+  {
+    id: "graham_price",
+    numeric: true,
+    disablePadding: false,
+    isOrdinal: false,
+    label: "Preço Graham  (R$)",
+  },
+];
 
 export default function Home({ stocks }) {
   const [minimumMarketCap, setMinimumMarketCap] = useState("");
@@ -35,24 +66,27 @@ export default function Home({ stocks }) {
       <main className={styles.main}>
         <h1 className={styles.title}>Carteira Graham:</h1>
       </main>
-      <Box mb={4}>
-        <Typography>Líquidez diária mínima: (R$)</Typography>
-        <MaskedNumberInput
-          value={minimumLiquidity}
-          handleChange={(e) => setMinimumLiquidity(e.target.value)}
+      <Paper sx={{ padding: "24px 8px" }}>
+        <Box mb={4}>
+          <Typography>Liquidez diária mínima: (R$)</Typography>
+          <MaskedNumberInput
+            value={minimumLiquidity}
+            handleChange={(e) => setMinimumLiquidity(e.target.value)}
+          />
+        </Box>
+        <Box mb={4}>
+          <Typography>Valor de mercado mínimo: (R$)</Typography>
+          <MaskedNumberInput
+            value={minimumMarketCap}
+            handleChange={(e) => setMinimumMarketCap(e.target.value)}
+          />
+        </Box>
+        <CustomTable
+          rows={stocks.filter(filterByMarketCap).filter(filterByLiquidity)}
+          headCells={headCells}
+          initialOrderBy={{ column: "graham_price_diff", direction: "desc" }}
         />
-      </Box>
-      <Box mb={4}>
-        <Typography>Valor de mercado mínimo: (R$)</Typography>
-        <MaskedNumberInput
-          value={minimumMarketCap}
-          handleChange={(e) => setMinimumMarketCap(e.target.value)}
-        />
-      </Box>
-
-      <GrahamWalletTable
-        rows={stocks.filter(filterByMarketCap).filter(filterByLiquidity)}
-      />
+      </Paper>
     </div>
   );
 }

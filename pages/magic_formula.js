@@ -1,6 +1,6 @@
-import { Box, TextField, Typography, Paper } from "@mui/material";
+import { Box, TextField, Typography, Paper, Stack } from "@mui/material";
 import { useState } from "react";
-import MagicFormulaTable from "../components/MagicFormulaTable";
+import CustomTable from "../components/CustomTable";
 import MaskedNumberInput from "../components/MaskedNumberInput";
 import { fetchAllStocks } from "../services/statusInvest";
 import styles from "../styles/Wallets.module.css";
@@ -15,6 +15,51 @@ export async function getServerSideProps(context) {
     }, // will be passed to the page component as props
   };
 }
+
+const headCells = [
+  {
+    id: "ticker",
+    numeric: false,
+    disablePadding: false,
+    isOrdinal: false,
+    label: "Ticker",
+  },
+  {
+    id: "rank",
+    numeric: true,
+    disablePadding: false,
+    isOrdinal: true,
+    label: "Rank Fórmula Mágica",
+  },
+  {
+    id: "eV_Ebit",
+    numeric: true,
+    disablePadding: false,
+    isOrdinal: false,
+    label: "EV/EBIT",
+  },
+  {
+    id: "rank_EV_EBIT",
+    numeric: true,
+    disablePadding: false,
+    isOrdinal: true,
+    label: "Rank EV/EBIT",
+  },
+  {
+    id: "roic",
+    numeric: true,
+    disablePadding: false,
+    isOrdinal: false,
+    label: "ROIC",
+  },
+  {
+    id: "rank_ROIC",
+    numeric: true,
+    disablePadding: false,
+    isOrdinal: true,
+    label: "Rank ROIC",
+  },
+];
 
 export default function Home({ stocks }) {
   const [minimumMarketCap, setMinimumMarketCap] = useState("");
@@ -34,23 +79,26 @@ export default function Home({ stocks }) {
       <main className={styles.main}>
         <h1 className={styles.title}>Carteira Fórmula Mágica:</h1>
       </main>
-      <Box mb={4}>
-        <Typography>Líquidez diária mínima: (R$)</Typography>
-        <MaskedNumberInput
-          value={minimumLiquidity}
-          handleChange={(e) => setMinimumLiquidity(e.target.value)}
-        />
-      </Box>
-      <Box mb={4}>
-        <Typography>Valor de mercado mínimo: (R$)</Typography>
-        <MaskedNumberInput
-          value={minimumMarketCap}
-          handleChange={(e) => setMinimumMarketCap(e.target.value)}
-        />
-      </Box>
-
-      <MagicFormulaTable
+      <Paper sx={{ padding: "24px 8px" }}>
+        <Box mb={4}>
+          <Typography>Liquidez diária mínima: (R$)</Typography>
+          <MaskedNumberInput
+            value={minimumLiquidity}
+            handleChange={(e) => setMinimumLiquidity(e.target.value)}
+          />
+        </Box>
+        <Box mb={4}>
+          <Typography>Valor de mercado mínimo: (R$)</Typography>
+          <MaskedNumberInput
+            value={minimumMarketCap}
+            handleChange={(e) => setMinimumMarketCap(e.target.value)}
+          />
+        </Box>
+      </Paper>
+      <CustomTable
         rows={stocks.filter(filterByMarketCap).filter(filterByLiquidity)}
+        headCells={headCells}
+        initialOrderBy={{ column: "rank", direction: "asc" }}
       />
     </div>
   );

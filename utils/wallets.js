@@ -28,13 +28,14 @@ const getGrahamPrice = (stock) => {
   const profitPerStock = stock.price / stock.p_L;
   const equityValuePerStock = stock.price / stock.p_VP;
   const grahamPrice = (22.5 * profitPerStock * equityValuePerStock) ** 0.5;
-  return grahamPrice;
+  return Math.floor(grahamPrice * 100) / 100;
 };
 
 export const filterByGraham = (stocks) => {
   const stocksWithGraham = stocks.map((stock) => {
     const graham_price = getGrahamPrice(stock);
-    const graham_price_diff = (graham_price - stock.price) / graham_price;
+    const graham_price_diff =
+      Math.floor(((graham_price - stock.price) / graham_price) * 10000) / 100;
     return {
       graham_price,
       graham_price_diff,

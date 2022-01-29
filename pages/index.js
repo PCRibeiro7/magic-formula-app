@@ -11,18 +11,18 @@ const cards = [
     image: greenblattImage,
     title: "Fórmula Mágica",
     description:
-      'Ranking de ações baseados em um baixo EV/EBIT (empresas baratas) e um alto ROIC (empresas eficientes).',
+      'Ranking de ações baseado em um baixo EV/EBIT (empresas baratas) e um alto ROIC (empresas eficientes).',
   },
   {
     pagePath: '/graham_wallet',
     image: grahamImage,
     title: "Carteira  Graham",
     description:
-      'Ranking de ações baseados no preço justo de graham. Este preço se baseia no lucro e valor patrimonial da empresa.',
+      'Ranking de ações baseado no preço justo de graham. Este preço é calculado em função do lucro e valor patrimonial da empresa.',
   },
 ];
 
-export default function Home() {
+export default function Home() {  
   const router = useRouter();
   return (
     <div className={styles.container}>
