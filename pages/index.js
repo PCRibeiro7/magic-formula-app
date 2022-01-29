@@ -75,7 +75,7 @@ export default function Home({ stocks }) {
   return (
     <div className={styles.container}>
       <main className={styles.main}>
-        <h1 className={styles.title}>Fórmula Mágica - Brasil</h1>
+        <h1 className={styles.title}>Carteira Fórmula Mágica - Brasil</h1>
       </main>
       <Box justifyContent={"space-evenly"} display={"flex"} mb={4}>
         <TextField

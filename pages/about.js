@@ -6,24 +6,26 @@ export default function About() {
   return (
     <div className={styles.container}>
       <main className={styles.main}>
-        <h1 className={styles.title}>Sobre</h1>
+        <h1 className={styles.title}>Sobre:</h1>
       </main>
       <Box justifyContent={"center"} display={"flex"}>
-        <Box textAlign="center" width={"70%"}>
-          <h3>
-            App para consulta de carteiras teóricas:
+        <Box textAlign="center" width={"80%"}>
+          <body>
+            Site para consulta de carteiras teóricas:
             <br />
-          </h3>
-          <h3>
+            <br />
+          </body>
+          <body>
             1ª - Fórmula Mágica - Joel Greenblatt
             <br />
             2ª - Preço Justo de Graham
             <br />
-          </h3>
-          <h3>
+            <br />
+          </body>
+          <body>
             Os tickers são rankeados com base nos dados dos 4 últimos trimestres
             disponíveis
-          </h3>
+          </body>
         </Box>
       </Box>
     </div>

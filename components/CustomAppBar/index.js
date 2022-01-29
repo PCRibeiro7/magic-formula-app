@@ -9,11 +9,11 @@ import { useRouter } from "next/router";
 const pages = [
   {
     path: "",
-    label: "Carteira Fórmula Mágica",
+    label: "Fórmula Mágica",
   },
   {
     path: "graham_wallet",
-    label: "Carteira Graham",
+    label: "Graham",
   },
   {
     path: "about",
