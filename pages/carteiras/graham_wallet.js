@@ -54,23 +54,20 @@ export default function GrahamWallet({ stocks }) {
       <WalletRules
         ruleDescription={
           <>
-            1 - Ter lucro líquido em todos os últimos 5 exercícios.
-            <br />
-            <br />
-            2 - Ter Valor Patrimonial por ação positivo, ou seja, a empresa não
+            1 - Ter Valor Patrimonial por ação positivo, ou seja, a empresa não
             pode ter mais passivos (obrigações a pagar) que ativos (bens ou
             direitos a receber).
             <br />
             <br />
-            3 - Ter Lucro por ação maior que zero, isto é, a empresa não pode
+            2 - Ter Lucro por ação maior que zero, isto é, a empresa não pode
             estar com prejuízo atualmente.
             <br />
-            <br />4 - Preço atual pelo menos 20% abaixo do{" "}
-            <stong>preço justo de Graham</stong>.
+            <br />3 - Preço atual pelo menos 20% abaixo do{" "}
+            <strong>preço justo de Graham</strong>.
             <br />
-            <br />5 - Criamos o ranking considerando as ações{" "}
-            <stong>mais descontadas</stong> em relação ao{" "}
-            <stong>preço justo de Graham</stong>.
+            <br />4 - Criamos o ranking considerando as ações{" "}
+            <strong>mais descontadas</strong> em relação ao{" "}
+            <strong>preço justo de Graham</strong>.
           </>
         }
       />
