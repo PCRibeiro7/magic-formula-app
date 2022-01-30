@@ -1,8 +1,8 @@
 import { Grid } from "@mui/material";
-import HomePageCard from "../components/HomePageCard";
-import styles from "../styles/Home.module.css";
-import greenblattImage from "../public/greenblatt.jpg";
-import grahamImage from "../public/graham.jpg";
+import HomePageCard from "components/HomePageCard";
+import styles from "styles/Home.module.css";
+import greenblattImage from "public/greenblatt.jpg";
+import grahamImage from "public/graham.jpg";
 import { useRouter } from 'next/router'
 
 const cards = [

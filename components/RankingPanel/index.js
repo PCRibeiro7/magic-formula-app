@@ -1,8 +1,8 @@
 import { Divider, Paper, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { useState } from "react";
-import CustomTable from "../CustomTable";
-import MaskedNumberInput from "../MaskedNumberInput";
+import CustomTable from "components/CustomTable";
+import MaskedNumberInput from "components/MaskedNumberInput";
 
 export default function RankingPanel({ stocks, headCells, initialOrderBy }) {
   const [minimumMarketCap, setMinimumMarketCap] = useState("");
@@ -17,8 +17,8 @@ export default function RankingPanel({ stocks, headCells, initialOrderBy }) {
       : true;
   };
   return (
-    <Paper sx={{ paddingTop: "24px", maxWidth: "800px"  }} >
-      <Typography variant="h5" textAlign={"start"} ml={2} mb={2}>
+    <Paper sx={{ paddingTop: "24px" }} >
+      <Typography variant="h6" textAlign={"start"} ml={2} mb={2}>
         Filtros:
       </Typography>
       <Box mb={4} textAlign={"start"} ml={2}>
@@ -38,7 +38,7 @@ export default function RankingPanel({ stocks, headCells, initialOrderBy }) {
         />
       </Box>
       <Divider sx={{ width: "90%" }} />
-      <Typography variant="h5" textAlign={"start"} ml={2} mt={3}>
+      <Typography variant="h6" textAlign={"start"} ml={2} mt={3}>
         Ranking:
       </Typography>
       <CustomTable

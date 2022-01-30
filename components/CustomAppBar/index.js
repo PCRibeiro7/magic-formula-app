@@ -2,9 +2,9 @@ import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
-import styles from "../../styles/CustomAppBar.module.css";
+import styles from "styles/CustomAppBar.module.css";
 import { Menu, MenuItem, Typography } from "@mui/material";
-import CustomLink from "../CustomLink";
+import CustomLink from "components/CustomLink";
 
 export default function CustomAppBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -32,7 +32,7 @@ export default function CustomAppBar() {
             aria-expanded={open ? "true" : undefined}
             onClick={handleClick}
             mr={3}
-            sx={{cursor:'pointer'}}
+            sx={{ cursor: "pointer" }}
           >
             Carteiras
           </Typography>
@@ -47,7 +47,7 @@ export default function CustomAppBar() {
           >
             <MenuItem onClick={handleClose}>
               <CustomLink
-                path={"magic_formula"}
+                path={"carteiras/magic_formula"}
                 key={`link-app-bar-${"magic_formula"}`}
                 styles={styles}
                 label={"Fórmula Mágica"}
@@ -55,7 +55,7 @@ export default function CustomAppBar() {
             </MenuItem>
             <MenuItem onClick={handleClose}>
               <CustomLink
-                path={"graham_wallet"}
+                path={"carteiras/graham_wallet"}
                 key={`link-app-bar-${"graham_wallet"}`}
                 styles={styles}
                 label={"Graham"}
@@ -66,7 +66,7 @@ export default function CustomAppBar() {
             path={"about"}
             key={`link-app-bar-${"about"}`}
             styles={styles}
-            label={"About"}
+            label={"Sobre"}
           />
         </Toolbar>
       </AppBar>

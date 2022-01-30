@@ -13,7 +13,7 @@ import TableSortLabel from "@mui/material/TableSortLabel";
 import Paper from "@mui/material/Paper";
 
 import { visuallyHidden } from "@mui/utils";
-import { checkIfTickerIsBestRanked } from "../../utils/wallets";
+import { checkIfTickerIsBestRanked } from "utils/wallets";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {

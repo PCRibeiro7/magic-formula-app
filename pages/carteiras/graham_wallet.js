@@ -1,9 +1,8 @@
-import { Box, Paper, TextField, Typography } from "@mui/material";
-import { useState } from "react";
-import RankingPanel from "../components/RankingPanel";
-import { fetchAllStocks } from "../services/statusInvest";
-import styles from "../styles/Wallets.module.css";
-import { filterByGraham } from "../utils/wallets";
+import RankingPanel from "components/RankingPanel";
+import { WalletRules } from "components/WalletRules";
+import { fetchAllStocks } from "services/statusInvest";
+import styles from "styles/Wallets.module.css";
+import { filterByGraham } from "utils/wallets";
 
 export async function getServerSideProps(context) {
   const stocks = await fetchAllStocks();
@@ -52,6 +51,29 @@ export default function GrahamWallet({ stocks }) {
       <main className={styles.main}>
         <h1 className={styles.title}>Carteira Graham:</h1>
       </main>
+      <WalletRules
+        ruleDescription={
+          <>
+            1 - Ter lucro líquido em todos os últimos 5 exercícios.
+            <br />
+            <br />
+            2 - Ter Valor Patrimonial por ação positivo, ou seja, a empresa não
+            pode ter mais passivos (obrigações a pagar) que ativos (bens ou
+            direitos a receber).
+            <br />
+            <br />
+            3 - Ter Lucro por ação maior que zero, isto é, a empresa não pode
+            estar com prejuízo atualmente.
+            <br />
+            <br />4 - Preço atual pelo menos 20% abaixo do{" "}
+            <stong>preço justo de Graham</stong>.
+            <br />
+            <br />5 - Criamos o ranking considerando as ações{" "}
+            <stong>mais descontadas</stong> em relação ao{" "}
+            <stong>preço justo de Graham</stong>.
+          </>
+        }
+      />
       <RankingPanel
         stocks={stocks}
         headCells={headCells}

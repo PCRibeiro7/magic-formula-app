@@ -1,5 +1,5 @@
 import Head from "next/head";
-import CustomAppBar from "../CustomAppBar";
+import CustomAppBar from "components/CustomAppBar";
 
 export default function Layout({ children }) {
   return (
@@ -8,7 +8,7 @@ export default function Layout({ children }) {
         <title>Carteiras Teóricas</title>
         <meta
           name="description"
-          content="Página para consulta das ações da fórmula magica"
+          content="Página para consulta de carteiras teóricas"
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
