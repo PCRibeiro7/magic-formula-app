@@ -7,14 +7,14 @@ import { useRouter } from 'next/router'
 
 const cards = [
   {
-    pagePath: '/magic_formula',
+    pagePath: 'carteiras/magic_formula',
     image: greenblattImage,
     title: "Fórmula Mágica",
     description:
       'Ranking de ações baseado em um baixo EV/EBIT (empresas baratas) e um alto ROIC (empresas eficientes).',
   },
   {
-    pagePath: '/graham_wallet',
+    pagePath: 'carteiras/graham_wallet',
     image: grahamImage,
     title: "Carteira  Graham",
     description:

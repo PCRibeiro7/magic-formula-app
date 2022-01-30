@@ -77,11 +77,11 @@ export default function MagicFormula({ stocks }) {
         <WalletRules
           ruleDescription={
             <>
-              1 - Ranking de empresas <strong>&quot;mais baratas&quot;  </strong>:
+              1 - Ranking de empresas <strong>&quot;mais baratas&quot; </strong>:
               <br />
               Ordenamos empresas por menor <strong>EV/EBIT</strong>.
               <br />
-              <br />2 - Ranking de empresas <strong>&quot;mais eficientes&quot; </strong>:
+              <br />2 - Ranking de empresas <strong>&quot;mais eficientes&quot;</strong>:
               <br />
               Ordenamos empresas por maior <strong>ROIC</strong>.
               <br />
