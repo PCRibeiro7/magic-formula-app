@@ -17,7 +17,7 @@ export function WalletRules({ ruleDescription }) {
         <Typography variant="h6">Regras do Ranking:</Typography>
       </AccordionSummary>
       <AccordionDetails>
-        <Typography>
+        <Typography textAlign="start">
           {ruleDescription}
         </Typography>
       </AccordionDetails>
