@@ -1,3 +1,4 @@
+import { Stack } from "@mui/material";
 import RankingPanel from "components/RankingPanel";
 import { WalletRules } from "components/WalletRules";
 import { fetchAllStocks } from "services/statusInvest";
@@ -51,31 +52,33 @@ export default function GrahamWallet({ stocks }) {
       <main className={styles.main}>
         <h1 className={styles.title}>Carteira Graham:</h1>
       </main>
-      <WalletRules
-        ruleDescription={
-          <>
-            1 - Ter Valor Patrimonial por ação positivo, ou seja, a empresa não
-            pode ter mais passivos (obrigações a pagar) que ativos (bens ou
-            direitos a receber).
-            <br />
-            <br />
-            2 - Ter Lucro por ação maior que zero, isto é, a empresa não pode
-            estar com prejuízo atualmente.
-            <br />
-            <br />3 - Preço atual pelo menos 20% abaixo do{" "}
-            <strong>preço justo de Graham</strong>.
-            <br />
-            <br />4 - Criamos o ranking considerando as ações{" "}
-            <strong>mais descontadas</strong> em relação ao{" "}
-            <strong>preço justo de Graham</strong>.
-          </>
-        }
-      />
-      <RankingPanel
-        stocks={stocks}
-        headCells={headCells}
-        initialOrderBy={{ column: "graham_price_diff", direction: "desc" }}
-      />
+      <Stack maxWidth={"800px"}>
+        <WalletRules
+          ruleDescription={
+            <>
+              1 - Ter Valor Patrimonial por ação positivo, ou seja, a empresa
+              não pode ter mais passivos (obrigações a pagar) que ativos (bens
+              ou direitos a receber).
+              <br />
+              <br />
+              2 - Ter Lucro por ação maior que zero, isto é, a empresa não pode
+              estar com prejuízo atualmente.
+              <br />
+              <br />3 - Preço atual pelo menos 20% abaixo do{" "}
+              <strong>preço justo de Graham</strong>.
+              <br />
+              <br />4 - Criamos o ranking considerando as ações{" "}
+              <strong>mais descontadas</strong> em relação ao{" "}
+              <strong>preço justo de Graham</strong>.
+            </>
+          }
+        />
+        <RankingPanel
+          stocks={stocks}
+          headCells={headCells}
+          initialOrderBy={{ column: "graham_price_diff", direction: "desc" }}
+        />
+      </Stack>
     </div>
   );
 }
