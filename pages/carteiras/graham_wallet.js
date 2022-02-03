@@ -1,13 +1,36 @@
 import { Stack } from "@mui/material";
 import RankingPanel from "components/RankingPanel";
 import { WalletRules } from "components/WalletRules";
-import { fetchAllStocks } from "services/statusInvest";
+import { fetchAllStocks, fetchHistoricalData } from "services/statusInvest";
 import styles from "styles/Wallets.module.css";
 import { filterByGraham } from "utils/wallets";
 
 export async function getServerSideProps(context) {
   const stocks = await fetchAllStocks();
-  const stocksWithRanking = filterByGraham(stocks);
+  let stocksWithRanking = filterByGraham(stocks);
+  const historicalData = await Promise.all(
+    stocksWithRanking.map((stock) =>
+      fetchHistoricalData({ ticker: stock.ticker })
+    )
+  );
+  const historicalDataWithTicker = historicalData.map((companyData, index) => {
+    return { ticker: stocksWithRanking[index].ticker, ...companyData };
+  });
+  stocksWithRanking = stocksWithRanking.filter((stock) => {
+    const historicalStock = historicalDataWithTicker.find(
+      (historicalStock) => historicalStock.ticker === stock.ticker
+    );
+    const profitableLastYears = historicalStock["P/L"].series
+      .slice(2, 7)
+      .filter((year) => year.value > 0);
+    const alternativeProfitableLastYears = historicalStock["LPA"].series
+      .slice(2, 7)
+      .filter((year) => year.value > 0);
+    return (
+      profitableLastYears.length === 5 ||
+      alternativeProfitableLastYears.length === 5
+    );
+  });
   return {
     props: {
       stocks: stocksWithRanking,
@@ -61,13 +84,16 @@ export default function GrahamWallet({ stocks }) {
               ou direitos a receber).
               <br />
               <br />
-              2 - Ter Lucro por ação maior que zero, isto é, a empresa não pode
+              2 - Ter lucro líquido em todos os últimos 5 exercícios.
+              <br />
+              <br />
+              3 - Ter Lucro por ação maior que zero, isto é, a empresa não pode
               estar com prejuízo atualmente.
               <br />
-              <br />3 - Preço atual pelo menos 20% abaixo do{" "}
+              <br />4 - Preço atual pelo menos 20% abaixo do{" "}
               <strong>preço justo de Graham</strong>.
               <br />
-              <br />4 - Criamos o ranking considerando as ações{" "}
+              <br />5 - Criamos o ranking considerando as ações{" "}
               <strong>mais descontadas</strong> em relação ao{" "}
               <strong>preço justo de Graham</strong>.
             </>

@@ -1,4 +1,5 @@
 const axios = require("axios");
+const { indexBy } = require('underscore')
 
 export const fetchAllStocks = async () => {
   const stocksResponse = await axios.get(
@@ -25,4 +26,80 @@ export const fetchAllStocks = async () => {
     }
   );
   return stocksResponse.data;
+};
+
+export const fetchHistoricalData = async ({ ticker }) => {
+  const stockHistoricalInfoUrl =
+    "https://statusinvest.com.br/acao/indicatorhistoricallist";
+  const { data } = await axios.request(stockHistoricalInfoUrl, {
+    headers: {
+      accept: "*/*",
+      "accept-language":
+        "en-US,en;q=0.9,pt-BR;q=0.8,pt;q=0.7,es-MX;q=0.6,es;q=0.5",
+      "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+      "x-requested-with": "XMLHttpRequest",
+      "user-agent":
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko)",
+    },
+    method: "POST",
+    data: `codes=${ticker}&time=5`,
+  });
+  const dataKey = Object.keys(data.data)[0];
+  if (!data.success) {
+    return null;
+  }
+  return indexBy(
+    toReadableStockHistoricalInfoResult(data.data[dataKey]),
+    "key"
+  );
+};
+
+const keyMap = {
+  dy: "Dividend Yield",
+  p_l: "P/L",
+  p_vp: "P/VP",
+  p_ebita: "P/EBITDA",
+  p_ebit: "P/EBIT",
+  p_sr: "PSR",
+  p_ativo: "P/Ativo",
+  p_capitlgiro: "P/Capital de Giro",
+  p_ativocirculante: "P/ACL",
+  ev_ebitda: "EV/EBITDA",
+  ev_ebit: "EV/EBIT",
+  lpa: "LPA",
+  vpa: "VPA",
+  peg_Ratio: "PEGRatio",
+  dividaliquida_patrimonioliquido: "Dívida Líquida/Patrimônio",
+  dividaliquida_ebitda: "Dívida Líquida/EBITDA",
+  dividaliquida_ebit: "Dívida Líquida/EBIT",
+  patrimonio_ativo: "Patrimônio/Ativos",
+  passivo_ativo: "Passivos/Ativos",
+  liquidezcorrente: "Liquidez Corrente",
+  margembruta: "Margem Bruta",
+  margemebitda: "Margem EBITDA",
+  margemebit: "Margem EBIT",
+  margeliquida: "Margem Líquida",
+  roe: "ROE",
+  roa: "ROA",
+  roic: "ROIC",
+  giro_ativos: "Giro Ativos",
+  receitas_cagr5: "CAGR Receitas 5 Anos",
+  lucros_cagr5: "CAGR Lucros 5 Anos",
+};
+
+export const toReadableStockHistoricalInfoResult = (infos) => {
+  return infos.map((info) => ({
+    key: keyMap[info.key],
+    currentValue: info.actual,
+    avgValue: info.avg,
+    avgDiffValue: info.avgDifference,
+    minValue: info.minValue,
+    minValueYear: info.minValueRank,
+    maxValue: info.maxValue,
+    maxValueYear: info.maxValueRank,
+    series: info.ranks.map((rank) => ({
+      year: rank.rank,
+      value: rank.value || null,
+    })),
+  }));
 };
