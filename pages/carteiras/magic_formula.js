@@ -3,13 +3,8 @@ import styles from "styles/Wallets.module.css";
 import { filterByMagicFormula } from "utils/wallets";
 import RankingPanel from "components/RankingPanel";
 import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
   Stack,
-  Typography,
 } from "@mui/material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { WalletRules } from "components/WalletRules";
 
 export async function getServerSideProps(context) {

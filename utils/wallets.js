@@ -14,7 +14,8 @@ export const filterByMagicFormula = (stocks) => {
     .map((company) => ({
       rank:
         orderedByEV_EBIT.findIndex((c) => c.ticker === company.ticker) +
-        orderedByROIC.findIndex((c) => c.ticker === company.ticker),
+        orderedByROIC.findIndex((c) => c.ticker === company.ticker) +
+        2,
       rank_EV_EBIT:
         orderedByEV_EBIT.findIndex((c) => c.ticker === company.ticker) + 1,
       rank_ROIC:
