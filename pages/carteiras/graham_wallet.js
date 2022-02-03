@@ -16,21 +16,13 @@ export async function getServerSideProps(context) {
   const historicalDataWithTicker = historicalData.map((companyData, index) => {
     return { ticker: stocksWithRanking[index].ticker, ...companyData };
   });
-  stocksWithRanking = stocksWithRanking.filter((stock) => {
-    const historicalStock = historicalDataWithTicker.find(
+  stocksWithRanking = stocksWithRanking.map((stock) => ({
+    ...stock,
+    historicalData: historicalDataWithTicker.find(
       (historicalStock) => historicalStock.ticker === stock.ticker
-    );
-    const profitableLastYears = historicalStock["P/L"].series
-      .slice(2, 7)
-      .filter((year) => year.value > 0);
-    const alternativeProfitableLastYears = historicalStock["LPA"].series
-      .slice(2, 7)
-      .filter((year) => year.value > 0);
-    return (
-      profitableLastYears.length === 5 ||
-      alternativeProfitableLastYears.length === 5
-    );
-  });
+    ),
+  }));
+
   return {
     props: {
       stocks: stocksWithRanking,
@@ -84,16 +76,13 @@ export default function GrahamWallet({ stocks }) {
               ou direitos a receber).
               <br />
               <br />
-              2 - Ter lucro líquido em todos os últimos 5 exercícios.
-              <br />
-              <br />
-              3 - Ter Lucro por ação maior que zero, isto é, a empresa não pode
+              2 - Ter Lucro por ação maior que zero, isto é, a empresa não pode
               estar com prejuízo atualmente.
               <br />
-              <br />4 - Preço atual pelo menos 20% abaixo do{" "}
+              <br />3 - Preço atual pelo menos 20% abaixo do{" "}
               <strong>preço justo de Graham</strong>.
               <br />
-              <br />5 - Criamos o ranking considerando as ações{" "}
+              <br />4 - Criamos o ranking considerando as ações{" "}
               <strong>mais descontadas</strong> em relação ao{" "}
               <strong>preço justo de Graham</strong>.
             </>
