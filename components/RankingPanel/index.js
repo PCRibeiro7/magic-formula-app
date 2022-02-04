@@ -2,7 +2,6 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Divider,
   Paper,
   TextField,
   Typography,
@@ -12,6 +11,8 @@ import { useState } from "react";
 import CustomTable from "components/CustomTable";
 import MaskedNumberInput from "components/MaskedNumberInput";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import EmojiEventsIcon from '@mui/icons-material/EmojiEventsOutlined';
+import FilterAltIcon from '@mui/icons-material/FilterAltOutlined';
 
 export default function RankingPanel({
   stocks,
@@ -58,7 +59,10 @@ export default function RankingPanel({
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
-          <Typography variant="h6">Filtros:</Typography>
+          <Typography variant="h6">
+            <FilterAltIcon sx={{ verticalAlign: "sub", marginRight: "8px" }} />
+            Filtros:
+          </Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Box mb={4} textAlign={"start"} ml={2}>
@@ -92,7 +96,8 @@ export default function RankingPanel({
         </AccordionDetails>
       </Accordion>
       <Paper sx={{ padding: "16px" }}>
-        <Typography variant="h6" textAlign={"start"} >
+        <Typography variant="h6" textAlign={"start"}>
+        <EmojiEventsIcon sx={{ verticalAlign: "sub", marginRight: "8px" }} />
           Ranking:
         </Typography>
         <CustomTable
