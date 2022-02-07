@@ -55,11 +55,12 @@ function EnhancedTableHead(props) {
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
+  const headCellWithRank = [{ id: "number_rank_default", label:'Rank' }, ...headCells];
 
   return (
     <TableHead>
       <TableRow>
-        {headCells.map((headCell) => (
+        {headCellWithRank.map((headCell) => (
           <TableCell
             key={headCell.id}
             align={headCell.numeric ? "right" : "left"}
@@ -100,10 +101,9 @@ export default function CustomTable({ rows, headCells, initialOrderBy }) {
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(25);
+  const [rowsPerPage, setRowsPerPage] = React.useState(rows.length);
 
   const handleRequestSort = (event, property) => {
-    console.log({ property });
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
@@ -134,8 +134,8 @@ export default function CustomTable({ rows, headCells, initialOrderBy }) {
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
   return (
-    <Box sx={{ width: "100%"}}>
-      <Paper sx={{ width: "100%", mb: 2, }}>
+    <Box sx={{ width: "100%" }}>
+      <Paper sx={{ width: "100%", mb: 2 }}>
         <TableContainer>
           <Table aria-labelledby="tableTitle" size={dense ? "small" : "medium"}>
             <EnhancedTableHead
@@ -169,6 +169,9 @@ export default function CustomTable({ rows, headCells, initialOrderBy }) {
                       key={row.ticker}
                       selected={isItemSelected}
                     >
+                      <TableCell >
+                        {index+1}º
+                      </TableCell>
                       {headCells.map((headCell, index) =>
                         index === 0 ? (
                           <TableCell
@@ -176,11 +179,15 @@ export default function CustomTable({ rows, headCells, initialOrderBy }) {
                             id={labelId}
                             scope="row"
                             sx={{ color: isTickerBestRanked ? "gold" : "" }}
+                            key={headCell.id}
                           >
                             {row.ticker}
                           </TableCell>
                         ) : (
-                          <TableCell align="right" key={headCell.id}>
+                          <TableCell
+                            align="right"
+                            key={row.ticker + headCell.id}
+                          >
                             {row[headCell.id]}
                             {headCell.isOrdinal && "º"}
                           </TableCell>
@@ -202,7 +209,7 @@ export default function CustomTable({ rows, headCells, initialOrderBy }) {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[5, 10, 25, rows.length]}
           component="div"
           count={rows.length}
           rowsPerPage={rowsPerPage}

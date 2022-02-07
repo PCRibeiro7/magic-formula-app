@@ -1,4 +1,4 @@
-import { fetchAllStocks } from "services/statusInvest";
+import { fetchAllStocks, fetchHistoricalData } from "services/statusInvest";
 import styles from "styles/Wallets.module.css";
 import { filterByMagicFormula } from "utils/wallets";
 import RankingPanel from "components/RankingPanel";
@@ -9,7 +9,23 @@ import { WalletRules } from "components/WalletRules";
 
 export async function getServerSideProps(context) {
   const stocks = await fetchAllStocks();
-  const stocksWithRanking = filterByMagicFormula(stocks);
+  let stocksWithRanking = filterByMagicFormula(stocks);
+
+  const historicalData = await Promise.all(
+    stocksWithRanking.map((stock) =>
+      fetchHistoricalData({ ticker: stock.ticker })
+    )
+  );
+  const historicalDataWithTicker = historicalData.map((companyData, index) => {
+    return { ticker: stocksWithRanking[index].ticker, ...companyData };
+  });
+  stocksWithRanking = stocksWithRanking.map((stock) => ({
+    ...stock,
+    historicalData: historicalDataWithTicker.find(
+      (historicalStock) => historicalStock.ticker === stock.ticker
+    ),
+  }));
+
   return {
     props: {
       stocks: stocksWithRanking,
@@ -93,7 +109,7 @@ export default function MagicFormula({ stocks }) {
           stocks={stocks}
           headCells={headCells}
           initialOrderBy={{ column: "rank", direction: "asc" }}
-          hideYearsWithProfitFilter={true}
+          // hideYearsWithProfitFilter={true}
         />
       </Stack>
     </div>
