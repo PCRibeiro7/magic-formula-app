@@ -43,9 +43,11 @@ export const filterByGraham = (stocks) => {
       ...stock,
     };
   });
-  return stocksWithGraham.filter((stock) => {
-    return stock.p_VP > 0 && stock.p_L > 0 && stock.graham_price_diff >= 0.2;
-  });
+  return stocksWithGraham
+    .filter((stock) => {
+      return stock.p_VP > 0 && stock.p_L > 0 && stock.graham_price_diff >= 0.2;
+    })
+    .sort((a, b) => b.graham_price_diff - a.graham_price_diff);
 };
 
 export const checkIfTickerIsBestRanked = (ticker, stocks) => {

@@ -14,6 +14,9 @@ import Paper from "@mui/material/Paper";
 
 import { visuallyHidden } from "@mui/utils";
 import { checkIfTickerIsBestRanked } from "utils/wallets";
+import { Checkbox, Radio } from "@mui/material";
+import StarIcon from '@mui/icons-material/Star';
+import StarOutlineIcon from '@mui/icons-material/StarOutline';
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -95,7 +98,13 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-export default function CustomTable({ rows, headCells, initialOrderBy }) {
+export default function CustomTable({
+  rows,
+  headCells,
+  initialOrderBy,
+  favoriteTickers,
+  updateFavoriteTickers,
+}) {
   const [order, setOrder] = React.useState(initialOrderBy.direction);
   const [orderBy, setOrderBy] = React.useState(initialOrderBy.column);
   const [selected, setSelected] = React.useState([]);
@@ -125,6 +134,12 @@ export default function CustomTable({ rows, headCells, initialOrderBy }) {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
+  };
+
+  const handleClickOnStar = (event, ticker) => {
+    console.log("ALOU", event.target.checked, ticker);
+    const action = event.target.checked ? "add" : "remove";
+    updateFavoriteTickers(ticker, action);
   };
 
   const isSelected = (name) => selected.indexOf(name) !== -1;
@@ -169,19 +184,33 @@ export default function CustomTable({ rows, headCells, initialOrderBy }) {
                       key={row.ticker}
                       selected={isItemSelected}
                     >
-                      <TableCell >
-                        {index+1}º
-                      </TableCell>
+                      <TableCell>{index + page * rowsPerPage + 1}º</TableCell>
                       {headCells.map((headCell, index) =>
                         index === 0 ? (
                           <TableCell
                             component="th"
                             id={labelId}
                             scope="row"
-                            sx={{ color: isTickerBestRanked ? "gold" : "" }}
+                            sx={{
+                              color: isTickerBestRanked ? "gold" : "",
+                              display: "flex",
+                              alignItems: "center",
+                            }}
                             key={headCell.id}
                           >
                             {row.ticker}
+                            <Checkbox
+                              checked={favoriteTickers.includes(row.ticker)}
+                              onChange={(e) => handleClickOnStar(e, row.ticker)}
+                              value={row.ticker}
+                              icon={<StarOutlineIcon />}
+                              checkedIcon={<StarIcon />}
+                              sx={{
+                                "&.Mui-checked": {
+                                  color: "gold",
+                                },
+                              }}
+                            />
                           </TableCell>
                         ) : (
                           <TableCell

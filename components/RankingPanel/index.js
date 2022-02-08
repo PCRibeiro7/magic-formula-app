@@ -3,16 +3,22 @@ import {
   AccordionDetails,
   AccordionSummary,
   Paper,
-  TextField,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import CustomTable from "components/CustomTable";
-import MaskedNumberInput from "components/MaskedNumberInput";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import EmojiEventsIcon from '@mui/icons-material/EmojiEventsOutlined';
-import FilterAltIcon from '@mui/icons-material/FilterAltOutlined';
+import { FilterPanel } from "components/FilterPanel";
+import StarIcon from '@mui/icons-material/Star';
+
+const LOCAL_STORAGE_FAVORITE_TICKERS_KEY = "favoriteTickers";
 
 export default function RankingPanel({
   stocks,
@@ -23,18 +29,23 @@ export default function RankingPanel({
   const [minimumMarketCap, setMinimumMarketCap] = useState("");
   const [minimumLiquidity, setMinimumLiquidity] = useState("");
   const [minimumYearsWithProfit, setMinimumYearsWithProfit] = useState("");
+  const [favoriteTickers, setFavoriteTickers] = useState(
+    typeof window !== 'undefined' && JSON.parse(localStorage.getItem(LOCAL_STORAGE_FAVORITE_TICKERS_KEY)) || []
+  );
+  const [filteredStocks, setFilteredStocks] = useState([]);
 
-  const filterByMarketCap = (stock) => {
+
+  const filterByMarketCap = useCallback((stock) => {
     return minimumMarketCap ? stock.valorMercado > minimumMarketCap : true;
-  };
+  },[minimumMarketCap]);
 
-  const filterByLiquidity = (stock) => {
+  const filterByLiquidity = useCallback((stock) => {
     return minimumLiquidity
       ? stock.liquidezMediaDiaria > minimumLiquidity
       : true;
-  };
+  },[minimumLiquidity]);
 
-  const filterByYearsWithProfit = (stock) => {
+  const filterByYearsWithProfit = useCallback((stock) => {
     const minimumYearsWithProfitAsNumber = Number(minimumYearsWithProfit);
     const profitableLastYears = stock?.historicalData?.["P/L"]?.series
       .slice(2, 2 + minimumYearsWithProfitAsNumber)
@@ -49,10 +60,52 @@ export default function RankingPanel({
           alternativeProfitableLastYears?.length ===
             minimumYearsWithProfitAsNumber
       : true;
+  },[minimumYearsWithProfit]);
+
+  const updateFavoriteTickers = (ticker, action) => {
+    if (action === "add") {
+      setFavoriteTickers((currTickers) => {
+        const newTickers = [...currTickers, ticker];
+        localStorage.setItem(
+          LOCAL_STORAGE_FAVORITE_TICKERS_KEY,
+          JSON.stringify(newTickers)
+        );
+        return newTickers;
+      });
+    } else if (action === "remove") {
+      setFavoriteTickers((currTickers) => {
+        const newTickers = currTickers.filter(
+          (currTicker) => currTicker !== ticker
+        );
+        localStorage.setItem(
+          LOCAL_STORAGE_FAVORITE_TICKERS_KEY,
+          JSON.stringify(newTickers)
+        );
+        return newTickers;
+      });
+    }
   };
+
+  useEffect(() => {
+    setFilteredStocks(
+      stocks
+        .filter(filterByMarketCap)
+        .filter(filterByLiquidity)
+        .filter(filterByYearsWithProfit)
+    );
+  }, [filterByLiquidity, filterByMarketCap, filterByYearsWithProfit, stocks]);
 
   return (
     <>
+      <FilterPanel
+        minimumLiquidity={minimumLiquidity}
+        setMinimumLiquidity={setMinimumLiquidity}
+        minimumMarketCap={minimumMarketCap}
+        setMinimumMarketCap={setMinimumMarketCap}
+        minimumYearsWithProfit={minimumYearsWithProfit}
+        setMinimumYearsWithProfit={setMinimumYearsWithProfit}
+        hideYearsWithProfitFilter={hideYearsWithProfitFilter}
+      />
       <Accordion sx={{ marginBottom: "16px" }}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -60,53 +113,54 @@ export default function RankingPanel({
           id="panel1a-header"
         >
           <Typography variant="h6">
-            <FilterAltIcon sx={{ verticalAlign: "sub", marginRight: "8px" }} />
-            Filtros:
+            <StarIcon
+              sx={{ verticalAlign: "sub", marginRight: "8px" }}
+            />
+            Favoritos:
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Box mb={4} textAlign={"start"} ml={2}>
-            <Typography>Liquidez diária mínima: (R$)</Typography>
-            <MaskedNumberInput
-              value={minimumLiquidity}
-              handleChange={(e) => setMinimumLiquidity(e.target.value)}
-              placeholder={"0"}
-            />
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Rank</TableCell>
+                  <TableCell>Ativo</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {filteredStocks
+                  .filter((stock) => favoriteTickers.includes(stock.ticker))
+                  .map((stock, index) => (
+                    <>
+                      <TableRow>
+                        <TableCell>
+                          {`${
+                            filteredStocks.findIndex(
+                              (currStock) => currStock.ticker === stock.ticker
+                            ) + 1
+                          }º`}
+                        </TableCell>
+                        <TableCell>{stock.ticker}</TableCell>
+                      </TableRow>
+                    </>
+                  ))}
+              </TableBody>
+            </Table>
           </Box>
-          <Box mb={4} textAlign={"start"} ml={2}>
-            <Typography>Valor de mercado mínimo: (R$)</Typography>
-            <MaskedNumberInput
-              value={minimumMarketCap}
-              handleChange={(e) => setMinimumMarketCap(e.target.value)}
-              placeholder={"0"}
-            />
-          </Box>
-          {hideYearsWithProfitFilter ? (
-            <></>
-          ) : (
-            <Box mb={4} textAlign={"start"} ml={2}>
-              <Typography>Anos passados com lucro: (Anos)</Typography>
-              <TextField
-                value={minimumYearsWithProfit}
-                onChange={(e) => setMinimumYearsWithProfit(e.target.value)}
-                placeholder={"0"}
-              />
-            </Box>
-          )}
         </AccordionDetails>
       </Accordion>
       <Paper sx={{ padding: "16px" }}>
         <Typography variant="h6" textAlign={"start"}>
-        <EmojiEventsIcon sx={{ verticalAlign: "sub", marginRight: "8px" }} />
+          <EmojiEventsIcon sx={{ verticalAlign: "sub", marginRight: "8px" }} />
           Ranking:
         </Typography>
         <CustomTable
-          rows={stocks
-            .filter(filterByMarketCap)
-            .filter(filterByLiquidity)
-            .filter(filterByYearsWithProfit)}
+          rows={filteredStocks}
           headCells={headCells}
           initialOrderBy={initialOrderBy}
+          favoriteTickers={favoriteTickers}
+          updateFavoriteTickers={updateFavoriteTickers}
         />
       </Paper>
     </>
