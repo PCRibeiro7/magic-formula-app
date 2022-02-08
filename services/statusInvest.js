@@ -1,5 +1,5 @@
 const axios = require("axios");
-const { indexBy } = require('underscore')
+const { indexBy } = require("underscore");
 
 export const fetchAllStocks = async () => {
   const stocksResponse = await axios.get(
@@ -26,6 +26,28 @@ export const fetchAllStocks = async () => {
     }
   );
   return stocksResponse.data;
+};
+
+const getStockHistoricalInfo = async ({ ticker }) => {
+  const stockHistoricalInfoUrl =
+    "https://statusinvest.com.br/acao/indicatorhistorical";
+  const { data } = await axios.request(stockHistoricalInfoUrl, {
+    headers: {
+      accept: "*/*",
+      "accept-language":
+        "en-US,en;q=0.9,pt-BR;q=0.8,pt;q=0.7,es-MX;q=0.6,es;q=0.5",
+      "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+      "x-requested-with": "XMLHttpRequest",
+      "user-agent":
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko)",
+    },
+    method: "POST",
+    data: `ticker=${ticker}&time=5`,
+  });
+  if (!data.success) {
+    return null;
+  }
+  return indexBy(toReadableStockHistoricalInfoResult(data.data), "key");
 };
 
 export const fetchHistoricalData = async ({ ticker }) => {
@@ -102,4 +124,21 @@ export const toReadableStockHistoricalInfoResult = (infos) => {
       value: rank.value || null,
     })),
   }));
+};
+
+export const getHistoricalDataInBatches = async (stocks) => {
+  let historicalData = [];
+  const batchSize = 100;
+  for (let i = 0; i < stocks.length; i = i + batchSize) {
+    const currStocksBatch = stocks.slice(i, i + batchSize);
+    const currHistoricalData = await Promise.all(
+      currStocksBatch.map((stock) =>
+        getStockHistoricalInfo({
+          ticker: stock.ticker,
+        })
+      )
+    );
+    historicalData = [...historicalData, ...currHistoricalData];
+  }
+  return historicalData;
 };

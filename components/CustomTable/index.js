@@ -101,7 +101,7 @@ export default function CustomTable({ rows, headCells, initialOrderBy }) {
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(rows.length);
+  const [rowsPerPage, setRowsPerPage] = React.useState(25);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";

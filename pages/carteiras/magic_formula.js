@@ -1,36 +1,37 @@
-import { fetchAllStocks, fetchHistoricalData } from "services/statusInvest";
+import { fetchAllStocks, fetchHistoricalData, getHistoricalDataInBatches } from "services/statusInvest";
 import styles from "styles/Wallets.module.css";
 import { filterByMagicFormula } from "utils/wallets";
 import RankingPanel from "components/RankingPanel";
-import {
-  Stack,
-} from "@mui/material";
+import { Stack } from "@mui/material";
 import { WalletRules } from "components/WalletRules";
 
 export async function getServerSideProps(context) {
-  const stocks = await fetchAllStocks();
-  let stocksWithRanking = filterByMagicFormula(stocks);
+  try {
+    const stocks = await fetchAllStocks();
+    let stocksWithRanking = filterByMagicFormula(stocks);
 
-  const historicalData = await Promise.all(
-    stocksWithRanking.map((stock) =>
-      fetchHistoricalData({ ticker: stock.ticker })
-    )
-  );
-  const historicalDataWithTicker = historicalData.map((companyData, index) => {
-    return { ticker: stocksWithRanking[index].ticker, ...companyData };
-  });
-  stocksWithRanking = stocksWithRanking.map((stock) => ({
-    ...stock,
-    historicalData: historicalDataWithTicker.find(
-      (historicalStock) => historicalStock.ticker === stock.ticker
-    ),
-  }));
+    const historicalData = await getHistoricalDataInBatches(stocksWithRanking);
+    const historicalDataWithTicker = historicalData.map(
+      (companyData, index) => {
+        return { ticker: stocksWithRanking[index].ticker, ...companyData };
+      }
+    );
+    stocksWithRanking = stocksWithRanking.map((stock) => ({
+      ...stock,
+      historicalData: historicalDataWithTicker.find(
+        (historicalStock) => historicalStock.ticker === stock.ticker
+      ),
+    }));
 
-  return {
-    props: {
-      stocks: stocksWithRanking,
-    },
-  };
+    return {
+      props: {
+        stocks: stocksWithRanking,
+      },
+    };
+  } catch (error) {
+    return;
+    console.log(error);
+  }
 }
 
 const headCells = [
@@ -88,11 +89,13 @@ export default function MagicFormula({ stocks }) {
         <WalletRules
           ruleDescription={
             <>
-              1 - Ranking de empresas <strong>&quot;mais baratas&quot; </strong>:
+              1 - Ranking de empresas <strong>&quot;mais baratas&quot; </strong>
+              :
               <br />
               Ordenamos empresas por menor <strong>EV/EBIT</strong>.
               <br />
-              <br />2 - Ranking de empresas <strong>&quot;mais eficientes&quot;</strong>:
+              <br />2 - Ranking de empresas{" "}
+              <strong>&quot;mais eficientes&quot;</strong>:
               <br />
               Ordenamos empresas por maior <strong>ROIC</strong>.
               <br />
