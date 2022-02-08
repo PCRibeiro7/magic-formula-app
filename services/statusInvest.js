@@ -128,7 +128,7 @@ export const toReadableStockHistoricalInfoResult = (infos) => {
 
 export const getHistoricalDataInBatches = async (stocks) => {
   let historicalData = [];
-  const batchSize = 100;
+  const batchSize = 50;
   for (let i = 0; i < stocks.length; i = i + batchSize) {
     const currStocksBatch = stocks.slice(i, i + batchSize);
     const currHistoricalData = await Promise.all(
