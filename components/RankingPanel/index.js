@@ -113,9 +113,7 @@ export default function RankingPanel({
           id="panel1a-header"
         >
           <Typography variant="h6">
-            <StarIcon
-              sx={{ verticalAlign: "sub", marginRight: "8px" }}
-            />
+            <StarIcon sx={{ verticalAlign: "sub", marginRight: "8px" }} />
             Favoritos:
           </Typography>
         </AccordionSummary>
@@ -125,6 +123,7 @@ export default function RankingPanel({
               <TableHead>
                 <TableRow>
                   <TableCell>Rank</TableCell>
+                  <TableCell>Top (%)</TableCell>
                   <TableCell>Ativo</TableCell>
                 </TableRow>
               </TableHead>
@@ -140,6 +139,16 @@ export default function RankingPanel({
                               (currStock) => currStock.ticker === stock.ticker
                             ) + 1
                           }º`}
+                        </TableCell>
+                        <TableCell>
+                          {(
+                            ((filteredStocks.findIndex(
+                              (currStock) => currStock.ticker === stock.ticker
+                            ) +
+                              1) /
+                              filteredStocks.length) *
+                            100
+                          ).toFixed(2)}
                         </TableCell>
                         <TableCell>{stock.ticker}</TableCell>
                       </TableRow>
