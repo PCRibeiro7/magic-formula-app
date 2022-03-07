@@ -8,7 +8,7 @@ import { WalletRules } from "components/WalletRules";
 
 export async function getServerSideProps(context) {
   try {
-    const res = await fetch(`http://localhost:3000/api/acquirers_multiple_stocks`)
+    const res = await fetch(`${process.env.API_URL}/api/acquirers_multiple_stocks`)
     const stocksWithRanking = await res.json()
   
     return {
