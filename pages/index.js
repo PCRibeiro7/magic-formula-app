@@ -3,6 +3,8 @@ import HomePageCard from "components/HomePageCard";
 import styles from "styles/Home.module.css";
 import greenblattImage from "public/greenblatt.jpg";
 import grahamImage from "public/graham.jpg";
+import tobiasImage from "public/tobias-carlisle.jpg";
+
 import { useRouter } from 'next/router'
 
 const cards = [
@@ -20,6 +22,14 @@ const cards = [
     description:
       'Ranking de ações baseado no preço justo de graham. Este preço é calculado em função do lucro e valor patrimonial da empresa.',
   },
+  {
+    pagePath: 'carteiras/acquirers_multiple',
+    image: tobiasImage,
+    title: "Carteira  Acquirers Multiple + Momentum",
+    description:
+      'Ranking de ações baseado em um baixo EV/EBIT (empresas baratas) e um alto Momentum de 6 Meses (empresas com tendência de alta).',
+  },
+
 ];
 
 export default function Home() {  

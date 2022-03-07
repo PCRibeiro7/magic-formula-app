@@ -15,7 +15,9 @@ export default function HomePageCard({ image, title, description }) {
         "&:hover": { transform: "scale3d(1.05, 1.05, 1)" },
       }}
     >
+      <div>
       <Image component="img" src={image} alt="green iguana" />
+      </div>
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
           {title}
