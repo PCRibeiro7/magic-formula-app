@@ -12,11 +12,18 @@ export default async function handler(req, res) {
     return stock.eV_Ebit > 0;
   });
 
-  const prices = await getHistoricalPrices({
-    symbols: filteredStocks.map((stock) => `${stock.ticker}.SA`),
-    from: sixMonthsBeforeDate,
-    to: currentDate,
-  });
+  let prices = await Promise.all(
+    filteredStocks.map((stock) =>
+      getHistoricalPrices({
+        symbols: [`${stock.ticker}.SA`],
+        from: sixMonthsBeforeDate,
+        to: currentDate,
+        period:'m'
+      })
+    )
+  );
+  prices = prices.reduce((acc, curr) => ({ ...curr, ...acc }), {});
+
   Object.keys(prices).map((ticker) => {
     const tickerKey = ticker.replace(".SA", "");
     const currentPrice = prices[ticker][0]?.close;
