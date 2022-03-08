@@ -9,9 +9,13 @@ export default async function handler(req, res) {
   const sixMonthsBeforeDate = moment().add(-6, "months").format("YYYY-MM-DD");
 
   let filteredStocks = stocks.filter((stock) => {
-    return stock.eV_Ebit > 0;
+    return stock.eV_Ebit > 0 && stock.liquidezMediaDiaria > 1000;
   });
-
+  // const prices = await getHistoricalPrices({
+  //   symbols: filteredStocks.map((stock) => `${stock.ticker}.SA`),
+  //   from: sixMonthsBeforeDate,
+  //   to: currentDate,
+  // });
   let prices = await Promise.all(
     filteredStocks.map((stock) =>
       getHistoricalPrices({
