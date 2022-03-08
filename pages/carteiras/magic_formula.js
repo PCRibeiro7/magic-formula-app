@@ -1,9 +1,14 @@
-import { fetchAllStocks, fetchHistoricalData, getHistoricalDataInBatches } from "services/statusInvest";
+import {
+  fetchAllStocks,
+  fetchHistoricalData,
+  getHistoricalDataInBatches,
+} from "services/statusInvest";
 import styles from "styles/Wallets.module.css";
 import { filterByMagicFormula } from "utils/wallets";
 import RankingPanel from "components/RankingPanel";
 import { Stack } from "@mui/material";
 import { WalletRules } from "components/WalletRules";
+import { useEffect } from "react";
 
 export async function getServerSideProps(context) {
   try {
@@ -79,6 +84,17 @@ const headCells = [
 ];
 
 export default function MagicFormula({ stocks }) {
+  const fetchData =async ()=>{
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/acquirers_multiple_stocks`
+    );
+    const stocksWithRanking = await res.json();
+
+  }
+  useEffect(() => {
+    console.log(process.env.NEXT_PUBLIC_API_URL)
+    fetchData();
+  }, []);
   return (
     <div className={styles.container}>
       <main className={styles.main}>
