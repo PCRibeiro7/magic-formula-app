@@ -16,6 +16,11 @@ export default async function handler(req, res) {
   //   from: sixMonthsBeforeDate,
   //   to: currentDate,
   // });
+  await getHistoricalPrices({
+    symbols: [`${filteredStocks[0].ticker}.SA`],
+    from: currentDate,
+    to: currentDate,
+  })
   let prices = await Promise.all(
     filteredStocks.map((stock) =>
       getHistoricalPrices({
