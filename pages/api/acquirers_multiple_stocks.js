@@ -5,17 +5,12 @@ import { getHistoricalPrices } from "services/yahooFinance";
 
 export default async function handler(req, res) {
   const stocks = await fetchAllStocks()
-  const currentDate = moment().add(-7, "days").format("YYYY-MM-DD");
+  const currentDate = moment().format("YYYY-MM-DD");
   const sixMonthsBeforeDate = moment().add(-6, "months").format("YYYY-MM-DD");
 
   let filteredStocks = stocks.filter((stock) => {
     return stock.eV_Ebit > 0 && stock.liquidezMediaDiaria > 1000;
   });
-  // const prices = await getHistoricalPrices({
-  //   symbols: filteredStocks.map((stock) => `${stock.ticker}.SA`),
-  //   from: sixMonthsBeforeDate,
-  //   to: currentDate,
-  // });
   await getHistoricalPrices({
     symbols: [`${filteredStocks[0].ticker}.SA`],
     from: currentDate,
@@ -27,16 +22,16 @@ export default async function handler(req, res) {
         symbols: [`${stock.ticker}.SA`],
         from: sixMonthsBeforeDate,
         to: currentDate,
-        period:'m'
+        period: process.env.NODE_ENV === 'development' ? "d" : "m",
       })
     )
   );
   prices = prices.reduce((acc, curr) => ({ ...curr, ...acc }), {});
 
-  Object.keys(prices).map((ticker) => {
+  Object.keys(prices).map((ticker,index) => {
     const tickerKey = ticker.replace(".SA", "");
-    const currentPrice = prices[ticker][0]?.close;
-    const sixMonthsBeforePrice = prices[ticker][prices[ticker].length - 1]?.close;
+    const currentPrice = prices[ticker][0]?.adjClose;
+    const sixMonthsBeforePrice = prices[ticker][prices[ticker].length - 1]?.adjClose;
     const stockMatch = filteredStocks.find(
       (currStock) => currStock.ticker === tickerKey
     );

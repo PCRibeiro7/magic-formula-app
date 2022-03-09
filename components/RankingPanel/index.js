@@ -150,7 +150,13 @@ export default function RankingPanel({
                             100
                           ).toFixed(2)}
                         </TableCell>
-                        <TableCell>{stock.ticker}</TableCell>
+                        <TableCell>
+                          <a
+                            href={`https://statusinvest.com.br/acoes/${stock.ticker}`}
+                          >
+                            {stock.ticker}
+                          </a>
+                        </TableCell>
                       </TableRow>
                     </>
                   ))}

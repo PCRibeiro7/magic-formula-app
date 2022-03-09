@@ -198,7 +198,12 @@ export default function CustomTable({
                             }}
                             key={headCell.id}
                           >
+                            <a
+                            target="_blank" 
+                            href={`https://statusinvest.com.br/acoes/${row.ticker}`} rel="noreferrer"
+                          >
                             {row.ticker}
+                          </a>
                             <Checkbox
                               checked={favoriteTickers.includes(row.ticker)}
                               onChange={(e) => handleClickOnStar(e, row.ticker)}
