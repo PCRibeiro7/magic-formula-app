@@ -53,7 +53,7 @@ export const filterByGraham = (stocks) => {
 export const filterByDecioBasin = (stocks) => {
   return stocks
     .filter((stock) => {
-      return stock.dy > 6 && stock.p_L > 0;
+      return stock.p_L > 0;
     });
 };
 
