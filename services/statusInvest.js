@@ -50,6 +50,23 @@ const getStockHistoricalInfo = async ({ ticker }) => {
   return indexBy(toReadableStockHistoricalInfoResult(data.data), "key");
 };
 
+export const fetchDividendData = async ({ ticker }) => {
+  const stockHistoricalInfoUrl = `https://statusinvest.com.br/acao/companytickerprovents?ticker=${ticker}&chartProventsType=2`;
+  const { data } = await axios.request(stockHistoricalInfoUrl, {
+    headers: {
+      accept: "*/*",
+      "accept-language":
+        "en-US,en;q=0.9,pt-BR;q=0.8,pt;q=0.7,es-MX;q=0.6,es;q=0.5",
+      "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+      "x-requested-with": "XMLHttpRequest",
+      "user-agent":
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko)",
+    },
+    method: "GET",
+  });
+  return { [ticker]: {...data} };
+};
+
 export const fetchHistoricalData = async ({ ticker }) => {
   const stockHistoricalInfoUrl =
     "https://statusinvest.com.br/acao/indicatorhistoricallist";

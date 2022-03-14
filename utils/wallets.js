@@ -50,6 +50,13 @@ export const filterByGraham = (stocks) => {
     .sort((a, b) => b.graham_price_diff - a.graham_price_diff);
 };
 
+export const filterByDecioBasin = (stocks) => {
+  return stocks
+    .filter((stock) => {
+      return stock.dy > 6 && stock.p_L > 0;
+    });
+};
+
 export const checkIfTickerIsBestRanked = (ticker, stocks) => {
   const tickerIndex = stocks.findIndex((stock) => stock.ticker === ticker);
 

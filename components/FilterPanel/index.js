@@ -17,7 +17,10 @@ export const FilterPanel = function ({
   setMinimumMarketCap,
   minimumYearsWithProfit,
   setMinimumYearsWithProfit,
-  hideYearsWithProfitFilter
+  hideYearsWithProfitFilter,
+  showDividendFilters,
+  lastYears,
+  setLastYears,
 }) {
     return (
       <Accordion sx={{ marginBottom: "16px" }}>
@@ -57,6 +60,20 @@ export const FilterPanel = function ({
                 value={minimumYearsWithProfit}
                 onChange={(e) => setMinimumYearsWithProfit(e.target.value)}
                 placeholder={"0"}
+              />
+            </Box>
+          )}
+          {showDividendFilters ? (
+            <></>
+          ) : (
+            <Box mb={4} textAlign={"start"} ml={2}>
+              <Typography>
+                Número de anos passados considerados: (Anos)
+              </Typography>
+              <TextField
+                value={lastYears}
+                onChange={(e) => setLastYears(Number(e.target.value))}
+                placeholder={"3"}
               />
             </Box>
           )}

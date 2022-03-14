@@ -137,7 +137,6 @@ export default function CustomTable({
   };
 
   const handleClickOnStar = (event, ticker) => {
-    console.log("ALOU", event.target.checked, ticker);
     const action = event.target.checked ? "add" : "remove";
     updateFavoriteTickers(ticker, action);
   };

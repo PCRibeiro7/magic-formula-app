@@ -25,6 +25,9 @@ export default function RankingPanel({
   headCells,
   initialOrderBy,
   hideYearsWithProfitFilter,
+  showDividendFilter,
+  lastYears,
+  setLastYears
 }) {
   const [minimumMarketCap, setMinimumMarketCap] = useState("");
   const [minimumLiquidity, setMinimumLiquidity] = useState("");
@@ -105,6 +108,9 @@ export default function RankingPanel({
         minimumYearsWithProfit={minimumYearsWithProfit}
         setMinimumYearsWithProfit={setMinimumYearsWithProfit}
         hideYearsWithProfitFilter={hideYearsWithProfitFilter}
+        showDividendFilter={showDividendFilter}
+        lastYears={lastYears}
+        setLastYears={setLastYears}
       />
       <Accordion sx={{ marginBottom: "16px" }}>
         <AccordionSummary

@@ -69,6 +69,14 @@ export default function CustomAppBar() {
                 label={"Acquirers Multiple + Momentum"}
               />
             </MenuItem>
+            <MenuItem onClick={handleClose}>
+              <CustomLink
+                path={"carteiras/decio_basin"}
+                key={`link-app-bar-${"decio_basin"}`}
+                styles={styles}
+                label={"Décio Basin"}
+              />
+            </MenuItem>
           </Menu>
           <CustomLink
             path={"about"}
