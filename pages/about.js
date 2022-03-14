@@ -16,9 +16,13 @@ export default function About() {
             <br />
           </p>
           <p>
-            1ª - Fórmula Mágica - Joel Greenblatt
+            - Fórmula Mágica - Joel Greenblatt
             <br />
-            2ª - Preço Justo de Graham
+            - Preço Justo de Graham
+            <br />
+            - Aquirers Multiple + Momentum - Tobias Carlisle
+            <br />
+            - Dividendos - Décio Basin
             <br />
           </p>
           <p>
