@@ -141,7 +141,6 @@ export default function DecioBasinWallet({ stocks }) {
             column: "basinPriceDiff",
             direction: "desc",
           }}
-          hideYearsWithProfitFilter
           showDividendFilter
           lastYears={lastYears}
           setLastYears={setLastYears}

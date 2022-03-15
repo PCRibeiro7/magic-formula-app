@@ -77,6 +77,14 @@ export default function CustomAppBar() {
                 label={"Décio Basin"}
               />
             </MenuItem>
+            <MenuItem onClick={handleClose}>
+              <CustomLink
+                path={"carteiras/preco_lucro"}
+                key={`link-app-bar-${"preco_lucro"}`}
+                styles={styles}
+                label={"P/L Abaixo da Média"}
+              />
+            </MenuItem>
           </Menu>
           <CustomLink
             path={"about"}

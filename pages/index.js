@@ -5,6 +5,7 @@ import greenblattImage from "public/greenblatt.jpg";
 import grahamImage from "public/graham.jpg";
 import tobiasImage from "public/tobias-carlisle.jpg";
 import decioImage from "public/decio-bazin.jpg";
+import valuationImage from "public/valuation.png";
 
 import { useRouter } from "next/router";
 
@@ -35,7 +36,14 @@ const cards = [
     image: decioImage,
     title: "Carteira  de Dividendos Décio Basin",
     description:
-      "Ranking de ações baseado em ações pagadoras de dividendos.  Calculamos o preço teto assumindo um yield alvo de 6%.",
+      "Ranking baseado em ações pagadoras de dividendos.  Calculamos o preço teto assumindo um yield alvo de 6%.",
+  },
+  {
+    pagePath: "carteiras/preco_lucro",
+    image: valuationImage,
+    title: "Carteira  de P/L Abaixo da Média",
+    description:
+      "Ranking baseado em ações com indicador P/L atual abaixo da sua média histórica",
   },
 ];
 
