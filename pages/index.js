@@ -16,6 +16,16 @@ const cards = [
     title: "Fórmula Mágica",
     description:
       "Ranking de ações baseado em um baixo EV/EBIT (empresas baratas) e um alto ROIC (empresas eficientes).",
+    rules: [
+      {
+        direction: "high",
+        indicator: "ROIC",
+      },
+      {
+        direction: "low",
+        indicator: "EV / EBIT",
+      },
+    ],
   },
   {
     pagePath: "carteiras/graham_wallet",
@@ -23,6 +33,16 @@ const cards = [
     title: "Carteira  Graham",
     description:
       "Ranking de ações baseado no preço justo de graham. Este preço é calculado em função do lucro e valor patrimonial da empresa.",
+    rules: [
+      {
+        direction: "low",
+        indicator: "P / VP",
+      },
+      {
+        direction: "low",
+        indicator: "P / L",
+      },
+    ],
   },
   {
     pagePath: "carteiras/acquirers_multiple",
@@ -30,6 +50,16 @@ const cards = [
     title: "Carteira  Acquirers Multiple + Momentum",
     description:
       "Ranking de ações baseado em um baixo EV/EBIT (empresas baratas) e um alto Momentum de 6 Meses (empresas com tendência de alta).",
+    rules: [
+      {
+        direction: "low",
+        indicator: "EV /  EBIT",
+      },
+      {
+        direction: "high",
+        indicator: "Momentum de Preço",
+      },
+    ],
   },
   {
     pagePath: "carteiras/decio_basin",
@@ -37,6 +67,12 @@ const cards = [
     title: "Carteira  de Dividendos Décio Basin",
     description:
       "Ranking baseado em ações pagadoras de dividendos.  Calculamos o preço teto assumindo um yield alvo de 6%.",
+    rules: [
+      {
+        direction: "high",
+        indicator: "Dividend Yield",
+      },
+    ],
   },
   {
     pagePath: "carteiras/preco_lucro",
@@ -44,6 +80,16 @@ const cards = [
     title: "Carteira  de P/L Abaixo da Média",
     description:
       "Ranking baseado em ações com indicador P/L atual abaixo da sua média histórica",
+    rules: [
+      {
+        direction: "low",
+        indicator: "P/L Atual",
+      },
+      {
+        direction: "high",
+        indicator: "P/L Médio Histórico",
+      },
+    ],
   },
 ];
 
@@ -54,7 +100,7 @@ export default function Home() {
       <main className={styles.main}>
         <h1 className={styles.title}>Carteiras disponíveis:</h1>
       </main>
-      <Grid container spacing={2} justifyContent={"center"}>
+      <Grid container spacing={3} justifyContent={"center"}>
         {cards.map((card) => (
           <Grid
             item
@@ -66,6 +112,7 @@ export default function Home() {
               image={card.image}
               title={card.title}
               description={card.description}
+              subtext={card.rules}
             />
           </Grid>
         ))}

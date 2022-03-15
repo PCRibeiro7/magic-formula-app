@@ -143,7 +143,6 @@ export default function GrahamWallet({ stocks }) {
           stocks={filteredStocks}
           headCells={headCells}
           initialOrderBy={{ column: "plDiff", direction: "desc" }}
-          hideYearsWithProfitFilter
           showDividendFilter
           lastYears={lastYears}
           setLastYears={setLastYears}
