@@ -13,7 +13,7 @@ export default function HomePageCard({ image, title, description, subtext }) {
     <Card
       sx={{
         maxWidth: 345,
-        height: 440,
+        height: 448,
         "&:hover": { transform: "scale3d(1.05, 1.05, 1)" },
       }}
     >
@@ -28,7 +28,7 @@ export default function HomePageCard({ image, title, description, subtext }) {
           {description}
         </Typography>
         <Divider sx={{ margin: "8px", width:'75%',justifySelf:'center' }} />
-        <Grid sx={{ display: "flex", justifyContent: "space-evenly" }}>
+        <Grid sx={{ display: "flex", justifyContent: "space-evenly" , marginTop:'4px'}}>
           {subtext.map((rule) => (
             <Typography
               key={rule.indicator}
