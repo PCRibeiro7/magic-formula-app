@@ -87,6 +87,12 @@ export default function CustomAppBar() {
             </MenuItem>
           </Menu>
           <CustomLink
+            path={"favorites"}
+            key={`link-app-bar-${"favorites"}`}
+            styles={styles}
+            label={"Meus Favoritos"}
+          />
+          <CustomLink
             path={"about"}
             key={`link-app-bar-${"about"}`}
             styles={styles}

@@ -17,8 +17,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import EmojiEventsIcon from '@mui/icons-material/EmojiEventsOutlined';
 import { FilterPanel } from "components/FilterPanel";
 import StarIcon from '@mui/icons-material/Star';
-
-const LOCAL_STORAGE_FAVORITE_TICKERS_KEY = "favoriteTickers";
+import { LOCAL_STORAGE_FAVORITE_TICKERS_KEY } from "components/FavoritesPanel";
 
 export default function RankingPanel({
   stocks,
