@@ -20,7 +20,11 @@ export default async function handler(req, res) {
     historicalData = [...historicalData, ...currHistoricalData];
   }
   const historicalDataWithTicker = historicalData.map((companyData, index) => {
-    return { ticker: stocksWithRanking[index].ticker, ...companyData };
+    return {
+      ticker: stocksWithRanking[index].ticker,
+      LPA: companyData.LPA,
+      ["P/L"]: companyData["P/L"],
+    };
   });
 
   stocksWithRanking = stocksWithRanking.map((stock) => ({
