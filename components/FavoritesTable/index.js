@@ -1,17 +1,17 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import Box from '@mui/material/Box';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
-import TableSortLabel from '@mui/material/TableSortLabel';
-import Paper from '@mui/material/Paper';
-import { visuallyHidden } from '@mui/utils';
-import { nFormatter } from 'utils/math';
+import * as React from "react";
+import PropTypes from "prop-types";
+import Box from "@mui/material/Box";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TablePagination from "@mui/material/TablePagination";
+import TableRow from "@mui/material/TableRow";
+import TableSortLabel from "@mui/material/TableSortLabel";
+import Paper from "@mui/material/Paper";
+import { visuallyHidden } from "@mui/utils";
+import { nFormatter } from "utils/math";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -24,7 +24,7 @@ function descendingComparator(a, b, orderBy) {
 }
 
 function getComparator(order, orderBy) {
-  return order === 'desc'
+  return order === "desc"
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
@@ -44,8 +44,7 @@ function stableSort(array, comparator) {
 }
 
 function EnhancedTableHead(props) {
-  const { order, orderBy, onRequestSort } =
-    props;
+  const { order, orderBy, onRequestSort } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
@@ -56,18 +55,18 @@ function EnhancedTableHead(props) {
         {props.headCells.map((headCell) => (
           <TableCell
             key={headCell}
-            padding={'normal'}
+            padding={"normal"}
             sortDirection={orderBy === headCell ? order : false}
           >
             <TableSortLabel
               active={orderBy === headCell}
-              direction={orderBy === headCell ? order : 'asc'}
+              direction={orderBy === headCell ? order : "asc"}
               onClick={createSortHandler(headCell)}
             >
               {headCell}
               {orderBy === headCell ? (
                 <Box component="span" sx={visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                  {order === "desc" ? "sorted descending" : "sorted ascending"}
                 </Box>
               ) : null}
             </TableSortLabel>
@@ -82,11 +81,10 @@ EnhancedTableHead.propTypes = {
   numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
   onSelectAllClick: PropTypes.func.isRequired,
-  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
+  order: PropTypes.oneOf(["asc", "desc"]).isRequired,
   orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired,
 };
-
 
 export default function EnhancedTable({ rows, headCells }) {
   const [order, setOrder] = React.useState("asc");
@@ -136,7 +134,7 @@ export default function EnhancedTable({ rows, headCells }) {
             size={dense ? "small" : "medium"}
           >
             <EnhancedTableHead
-            headCells={headCells}
+              headCells={headCells}
               numSelected={selected.length}
               order={order}
               orderBy={orderBy}
@@ -152,21 +150,33 @@ export default function EnhancedTable({ rows, headCells }) {
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.name);
                   const labelId = `enhanced-table-checkbox-${index}`;
-
                   return (
                     <TableRow
                       hover
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.name}
+                      key={row.Ticker}
                       selected={isItemSelected}
                     >
-                      {headCells.map((key) => (
-                        <TableCell key={`${row[key]}-${key}`}>
-                          {isNaN(row[key]) ? row[key] : nFormatter(row[key],2)}
-                        </TableCell>
-                          // : Math.round(row[key] * 100) / 100}
-                      ))}
+                      {headCells.map((key, index) =>
+                        index === 0 ? (
+                          <TableCell key={`${row.Ticker}-${key}-1`}>
+                            <a
+                              target="_blank"
+                              href={`https://statusinvest.com.br/acoes/${row[key]}`}
+                              rel="noreferrer"
+                            >
+                              {row[key]}
+                            </a>
+                          </TableCell>
+                        ) : (
+                          <TableCell key={`${row.Ticker}-${key}-2`}>
+                            {isNaN(row[key])
+                              ? row[key]
+                              : nFormatter(row[key], 2)}
+                          </TableCell>
+                        )
+                      )}
                     </TableRow>
                   );
                 })}

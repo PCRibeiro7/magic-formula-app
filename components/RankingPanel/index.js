@@ -148,34 +148,32 @@ export default function RankingPanel({
                 {filteredStocks
                   .filter((stock) => favoriteTickers.includes(stock.ticker))
                   .map((stock, index) => (
-                    <>
-                      <TableRow>
-                        <TableCell>
-                          {`${
-                            filteredStocks.findIndex(
-                              (currStock) => currStock.ticker === stock.ticker
-                            ) + 1
-                          }º`}
-                        </TableCell>
-                        <TableCell>
-                          {(
-                            ((filteredStocks.findIndex(
-                              (currStock) => currStock.ticker === stock.ticker
-                            ) +
-                              1) /
-                              filteredStocks.length) *
-                            100
-                          ).toFixed(2)}
-                        </TableCell>
-                        <TableCell>
-                          <a
-                            href={`https://statusinvest.com.br/acoes/${stock.ticker}`}
-                          >
-                            {stock.ticker}
-                          </a>
-                        </TableCell>
-                      </TableRow>
-                    </>
+                    <TableRow key={stock.ticker}>
+                      <TableCell>
+                        {`${
+                          filteredStocks.findIndex(
+                            (currStock) => currStock.ticker === stock.ticker
+                          ) + 1
+                        }º`}
+                      </TableCell>
+                      <TableCell>
+                        {(
+                          ((filteredStocks.findIndex(
+                            (currStock) => currStock.ticker === stock.ticker
+                          ) +
+                            1) /
+                            filteredStocks.length) *
+                          100
+                        ).toFixed(2)}
+                      </TableCell>
+                      <TableCell>
+                        <a
+                          href={`https://statusinvest.com.br/acoes/${stock.ticker}`}
+                        >
+                          {stock.ticker}
+                        </a>
+                      </TableCell>
+                    </TableRow>
                   ))}
               </TableBody>
             </Table>
