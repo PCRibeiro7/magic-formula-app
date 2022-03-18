@@ -46,7 +46,7 @@ export default function GrahamWallet() {
   const fetchData = async () => {
     setLoading(true)
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/price_earning_stocks`
+      `/api/price_earning_stocks`
     );
     const stocksWithRanking = await res.json();
     setStocks(stocksWithRanking);
