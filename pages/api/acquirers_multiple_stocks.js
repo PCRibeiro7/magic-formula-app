@@ -1,12 +1,18 @@
 const axios = require("axios");
 import moment from "moment";
 import { fetchAllStocks } from "services/statusInvest";
-import { getHistoricalPrices } from "services/yahooFinance";
+import { getHistoricalPrices, getMultipleHistoricalPrices } from "services/yahooFinance";
 
 export default async function handler(req, res) {
-  const stocks = await fetchAllStocks()
+  const stocks = await fetchAllStocks();
+
   const currentDate = moment().format("YYYY-MM-DD");
   const sixMonthsBeforeDate = moment().add(-6, "months").format("YYYY-MM-DD");
+  const sixMonthsBeforeDateMinusOne = moment()
+    .add(-6, "months")
+    .add(-1, "day")
+    .format("YYYY-MM-DD");
+
 
   let filteredStocks = stocks.filter((stock) => {
     return stock.eV_Ebit > 0 && stock.liquidezMediaDiaria > 1000;
@@ -15,23 +21,26 @@ export default async function handler(req, res) {
     symbols: [`${filteredStocks[0].ticker}.SA`],
     from: currentDate,
     to: currentDate,
-  })
-  let prices = await Promise.all(
-    filteredStocks.map((stock) =>
-      getHistoricalPrices({
-        symbols: [`${stock.ticker}.SA`],
-        from: sixMonthsBeforeDate,
-        to: currentDate,
-        period: process.env.NODE_ENV === 'development' ? "d" : "m",
-      })
-    )
-  );
-  prices = prices.reduce((acc, curr) => ({ ...curr, ...acc }), {});
-
-  Object.keys(prices).map((ticker,index) => {
+  });
+  let [prices,pricesBefore] = await Promise.all([
+    getMultipleHistoricalPrices({
+      symbols: filteredStocks.map((stock) => `${stock.ticker}.SA`),
+      from: currentDate,
+      to: currentDate,
+      period:'d'
+    }),
+    getMultipleHistoricalPrices({
+      symbols: filteredStocks.map((stock) => `${stock.ticker}.SA`),
+      from: sixMonthsBeforeDateMinusOne,
+      to: sixMonthsBeforeDate,
+      period:'d'
+    })
+  ]);
+  Object.keys(prices).map((ticker, index) => {
     const tickerKey = ticker.replace(".SA", "");
     const currentPrice = prices[ticker][0]?.adjClose;
-    const sixMonthsBeforePrice = prices[ticker][prices[ticker].length - 1]?.adjClose;
+    const sixMonthsBeforePrice =
+      pricesBefore[ticker][pricesBefore[ticker].length - 1]?.adjClose;
     const stockMatch = filteredStocks.find(
       (currStock) => currStock.ticker === tickerKey
     );
