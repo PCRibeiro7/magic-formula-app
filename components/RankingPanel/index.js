@@ -29,7 +29,7 @@ export default function RankingPanel({
   setLastYears
 }) {
   const [minimumMarketCap, setMinimumMarketCap] = useState("");
-  const [minimumLiquidity, setMinimumLiquidity] = useState("");
+  const [minimumLiquidity, setMinimumLiquidity] = useState(100000);
   const [minimumYearsWithProfit, setMinimumYearsWithProfit] = useState("");
   const [favoriteTickers, setFavoriteTickers] = useState(
     typeof window !== 'undefined' && JSON.parse(localStorage.getItem(LOCAL_STORAGE_FAVORITE_TICKERS_KEY)) || []
