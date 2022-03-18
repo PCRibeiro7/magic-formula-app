@@ -2,7 +2,6 @@
 import styles from "styles/Wallets.module.css";
 import FavoritesPanel from "components/FavoritesPanel";
 import { Stack } from "@mui/material";
-import { WalletRules } from "components/WalletRules";
 import { fetchAllStocks } from "services/statusInvest";
 
 

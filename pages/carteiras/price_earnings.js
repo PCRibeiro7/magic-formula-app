@@ -2,51 +2,10 @@ import { Stack } from "@mui/material";
 import RankingPanel from "components/RankingPanel";
 import { WalletRules } from "components/WalletRules";
 import { useEffect, useState } from "react";
-import { fetchAllStocks, fetchHistoricalData } from "services/statusInvest";
 import styles from "styles/Wallets.module.css";
 import { average, median } from "utils/math";
-import { filterByDecioBasin } from "utils/wallets";
 
 const INITIAL_LAST_YEARS = 5;
-
-export async function getServerSideProps(context) {
-  try {
-    const stocks = await fetchAllStocks();
-    let stocksWithRanking = filterByDecioBasin(stocks);
-    let historicalData = [];
-    const batchSize = 100;
-    for (let i = 0; i < stocksWithRanking.length; i = i + batchSize) {
-      const currStocksBatch = stocksWithRanking.slice(i, i + batchSize);
-      const currHistoricalData = await Promise.all(
-        currStocksBatch.map((stock) =>
-          fetchHistoricalData({
-            ticker: stock.ticker,
-          })
-        )
-      );
-      historicalData = [...historicalData, ...currHistoricalData];
-    }
-    const historicalDataWithTicker = historicalData.map(
-      (companyData, index) => {
-        return { ticker: stocksWithRanking[index].ticker, ...companyData };
-      }
-    );
-
-    stocksWithRanking = stocksWithRanking.map((stock) => ({
-      ...stock,
-      historicalData: historicalDataWithTicker.find(
-        (historicalStock) => historicalStock.ticker === stock.ticker
-      ),
-    }));
-    return {
-      props: {
-        stocks: stocksWithRanking,
-      }, // will be passed to the page component as props
-    };
-  } catch (error) {
-    console.log(error);
-  }
-}
 
 const headCells = [
   {
@@ -79,9 +38,25 @@ const headCells = [
   },
 ];
 
-export default function GrahamWallet({ stocks }) {
+export default function GrahamWallet() {
   const [lastYears, setLastYears] = useState(INITIAL_LAST_YEARS);
-  const [filteredStocks, setFilteredStocks] = useState(stocks);
+  const [filteredStocks, setFilteredStocks] = useState([]);
+  const [stocks, setStocks] = useState([]);
+  const [loading,setLoading] = useState(false);
+  const fetchData = async () => {
+    setLoading(true)
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/price_earning_stocks`
+    );
+    const stocksWithRanking = await res.json();
+    setStocks(stocksWithRanking);
+    setLoading(false)
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   useEffect(() => {
     const newStocks = stocks
       .map((stock) => ({
@@ -130,8 +105,8 @@ export default function GrahamWallet({ stocks }) {
               estar com prejuízo atualmente.
               <br />
               <br />
-              2 - Calculamos o P/L Médio dos últimos x anos. Esse P/L calculado é o
-              menor entre a média e a mediana históricas.
+              2 - Calculamos o P/L Médio dos últimos x anos. Esse P/L calculado
+              é o menor entre a média e a mediana históricas.
               <br />
               <br />3 - Criamos o ranking considerando as ações{" "}
               <strong>mais descontadas</strong> em relação ao{" "}
@@ -146,6 +121,7 @@ export default function GrahamWallet({ stocks }) {
           showDividendFilter
           lastYears={lastYears}
           setLastYears={setLastYears}
+          loading={loading}
         />
       </Stack>
     </div>

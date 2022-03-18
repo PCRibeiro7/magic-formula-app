@@ -75,7 +75,7 @@ const cards = [
     ],
   },
   {
-    pagePath: "carteiras/preco_lucro",
+    pagePath: "carteiras/price_earnings",
     image: valuationImage,
     title: "Carteira  de P/L Abaixo da Média",
     description:

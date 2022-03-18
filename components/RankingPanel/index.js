@@ -2,6 +2,7 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  CircularProgress,
   Paper,
   Table,
   TableBody,
@@ -14,9 +15,9 @@ import { Box } from "@mui/system";
 import { useCallback, useEffect, useState } from "react";
 import CustomTable from "components/CustomTable";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import EmojiEventsIcon from '@mui/icons-material/EmojiEventsOutlined';
+import EmojiEventsIcon from "@mui/icons-material/EmojiEventsOutlined";
 import { FilterPanel } from "components/FilterPanel";
-import StarIcon from '@mui/icons-material/Star';
+import StarIcon from "@mui/icons-material/Star";
 import { LOCAL_STORAGE_FAVORITE_TICKERS_KEY } from "components/FavoritesPanel";
 
 export default function RankingPanel({
@@ -26,43 +27,54 @@ export default function RankingPanel({
   hideYearsWithProfitFilter,
   showDividendFilter,
   lastYears,
-  setLastYears
+  setLastYears,
+  loading,
 }) {
   const [minimumMarketCap, setMinimumMarketCap] = useState("");
   const [minimumLiquidity, setMinimumLiquidity] = useState(100000);
   const [minimumYearsWithProfit, setMinimumYearsWithProfit] = useState("");
   const [favoriteTickers, setFavoriteTickers] = useState(
-    typeof window !== 'undefined' && JSON.parse(localStorage.getItem(LOCAL_STORAGE_FAVORITE_TICKERS_KEY)) || []
+    (typeof window !== "undefined" &&
+      JSON.parse(localStorage.getItem(LOCAL_STORAGE_FAVORITE_TICKERS_KEY))) ||
+      []
   );
   const [filteredStocks, setFilteredStocks] = useState([]);
 
+  const filterByMarketCap = useCallback(
+    (stock) => {
+      return minimumMarketCap ? stock.valorMercado > minimumMarketCap : true;
+    },
+    [minimumMarketCap]
+  );
 
-  const filterByMarketCap = useCallback((stock) => {
-    return minimumMarketCap ? stock.valorMercado > minimumMarketCap : true;
-  },[minimumMarketCap]);
+  const filterByLiquidity = useCallback(
+    (stock) => {
+      return minimumLiquidity
+        ? stock.liquidezMediaDiaria > minimumLiquidity
+        : true;
+    },
+    [minimumLiquidity]
+  );
 
-  const filterByLiquidity = useCallback((stock) => {
-    return minimumLiquidity
-      ? stock.liquidezMediaDiaria > minimumLiquidity
-      : true;
-  },[minimumLiquidity]);
-
-  const filterByYearsWithProfit = useCallback((stock) => {
-    const minimumYearsWithProfitAsNumber = Number(minimumYearsWithProfit);
-    const profitableLastYears = stock?.historicalData?.["P/L"]?.series
-      .slice(2, 2 + minimumYearsWithProfitAsNumber)
-      .filter((year) => year?.value > 0);
-    const alternativeProfitableLastYears = stock?.historicalData?.[
-      "LPA"
-    ]?.series
-      .slice(2, 2 + minimumYearsWithProfitAsNumber)
-      .filter((year) => year?.value > 0);
-    return minimumYearsWithProfitAsNumber
-      ? profitableLastYears?.length === minimumYearsWithProfitAsNumber ||
-          alternativeProfitableLastYears?.length ===
-            minimumYearsWithProfitAsNumber
-      : true;
-  },[minimumYearsWithProfit]);
+  const filterByYearsWithProfit = useCallback(
+    (stock) => {
+      const minimumYearsWithProfitAsNumber = Number(minimumYearsWithProfit);
+      const profitableLastYears = stock?.historicalData?.["P/L"]?.series
+        .slice(2, 2 + minimumYearsWithProfitAsNumber)
+        .filter((year) => year?.value > 0);
+      const alternativeProfitableLastYears = stock?.historicalData?.[
+        "LPA"
+      ]?.series
+        .slice(2, 2 + minimumYearsWithProfitAsNumber)
+        .filter((year) => year?.value > 0);
+      return minimumYearsWithProfitAsNumber
+        ? profitableLastYears?.length === minimumYearsWithProfitAsNumber ||
+            alternativeProfitableLastYears?.length ===
+              minimumYearsWithProfitAsNumber
+        : true;
+    },
+    [minimumYearsWithProfit]
+  );
 
   const updateFavoriteTickers = (ticker, action) => {
     if (action === "add") {
@@ -175,13 +187,17 @@ export default function RankingPanel({
           <EmojiEventsIcon sx={{ verticalAlign: "sub", marginRight: "8px" }} />
           Ranking:
         </Typography>
-        <CustomTable
-          rows={filteredStocks}
-          headCells={headCells}
-          initialOrderBy={initialOrderBy}
-          favoriteTickers={favoriteTickers}
-          updateFavoriteTickers={updateFavoriteTickers}
-        />
+        {loading ? (
+          <CircularProgress sx={{ color: "white" }} />
+        ) : (
+          <CustomTable
+            rows={filteredStocks}
+            headCells={headCells}
+            initialOrderBy={initialOrderBy}
+            favoriteTickers={favoriteTickers}
+            updateFavoriteTickers={updateFavoriteTickers}
+          />
+        )}
       </Paper>
     </>
   );

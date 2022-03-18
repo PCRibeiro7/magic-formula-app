@@ -1,6 +1,5 @@
 
 import styles from "styles/Wallets.module.css";
-import { filterByAcquirersMultiple } from "utils/wallets";
 import RankingPanel from "components/RankingPanel";
 import { Stack } from "@mui/material";
 import { WalletRules } from "components/WalletRules";

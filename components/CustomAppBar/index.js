@@ -79,8 +79,8 @@ export default function CustomAppBar() {
             </MenuItem>
             <MenuItem onClick={handleClose}>
               <CustomLink
-                path={"carteiras/preco_lucro"}
-                key={`link-app-bar-${"preco_lucro"}`}
+                path={"carteiras/price_earnings"}
+                key={`link-app-bar-${"price_earnings"}`}
                 styles={styles}
                 label={"P/L Abaixo da Média"}
               />
