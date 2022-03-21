@@ -66,7 +66,7 @@ export const FilterPanel = function ({
         {showDividendFilter ? (
           <Box mb={4} textAlign={"start"} ml={2}>
             <Typography>
-              Número de anos passados considerados para média de P/L: (Anos)
+              Número de anos passados considerados para cálculo: (Anos)
             </Typography>
             <TextField
               value={lastYears}
