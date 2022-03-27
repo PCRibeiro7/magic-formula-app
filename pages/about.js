@@ -22,7 +22,7 @@ export default function About() {
             <br />
             - Aquirers Multiple + Momentum - Tobias Carlisle
             <br />
-            - Dividendos - Décio Basin
+            - Dividendos - Décio Bazin
             <br />
           </p>
           <p>

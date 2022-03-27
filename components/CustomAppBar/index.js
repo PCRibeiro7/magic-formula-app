@@ -74,7 +74,7 @@ export default function CustomAppBar() {
                 path={"carteiras/decio_basin"}
                 key={`link-app-bar-${"decio_basin"}`}
                 styles={styles}
-                label={"Décio Basin"}
+                label={"Décio Bazin"}
               />
             </MenuItem>
             <MenuItem onClick={handleClose}>

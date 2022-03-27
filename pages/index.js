@@ -64,7 +64,7 @@ const cards = [
   {
     pagePath: "carteiras/decio_basin",
     image: decioImage,
-    title: "Carteira  de Dividendos Décio Basin",
+    title: "Carteira  de Dividendos Décio Bazin",
     description:
       "Ranking baseado em ações pagadoras de dividendos.  Calculamos o preço teto assumindo um yield alvo de 6%.",
     rules: [
