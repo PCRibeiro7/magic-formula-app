@@ -36,6 +36,13 @@ const headCells = [
     isOrdinal: false,
     label: "Margem P/L (%)",
   },
+  {
+    id: "shillerPL",
+    numeric: true,
+    disablePadding: false,
+    isOrdinal: false,
+    label: "Shiller P/L",
+  },
 ];
 
 export default function GrahamWallet() {
@@ -62,6 +69,15 @@ export default function GrahamWallet() {
       .map((stock) => ({
         ...stock,
         p_L: Math.round(stock.p_L * 100) / 100,
+        shillerPL:
+          Math.round(
+            ((stock.price * lastYears) /
+              stock.historicalData["LPA"].series
+                .slice(1, 1 + lastYears)
+                .map((year) => year.value)
+                .reduce((acc, curr) => acc + curr, 0)) *
+              100
+          ) / 100,
         averagePL:
           Math.round(
             Math.min(
