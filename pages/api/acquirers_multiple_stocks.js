@@ -13,17 +13,12 @@ export default async function handler(req, res) {
   let filteredStocks = stocks.filter((stock) => {
     return stock.eV_Ebit > 0 && stock.liquidezMediaDiaria > 1000;
   });
-  await getHistoricalPrices({
-    symbols: [`${filteredStocks[0].ticker}.SA`],
-    from: currentDate,
-    to: currentDate,
-  });
   let [prices] = await Promise.all([
-    getMultipleHistoricalPrices({
+    getHistoricalPrices({
       symbols: filteredStocks.map((stock) => `${stock.ticker}.SA`),
       from: sixMonthsBeforeDate,
       to: currentDate,
-      period: process.env.NODE_ENV === "development" ? "d" : "m",
+      period: "m",
     }),
   ]);
   Object.keys(prices).map((ticker, index) => {

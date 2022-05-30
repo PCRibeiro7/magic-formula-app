@@ -31,8 +31,7 @@ export const getMultipleHistoricalPrices = async ({
         symbols: [symbol],
         from,
         to,
-  period,
-
+        period,
       })
     )
   );
