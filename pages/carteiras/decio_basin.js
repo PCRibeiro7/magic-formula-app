@@ -47,7 +47,7 @@ const headCells = [
     numeric: true,
     disablePadding: false,
     isOrdinal: false,
-    label: "Margem de Bazin (%)",
+    label: "Margem de Basin (%)",
   },
   {
     id: "price",
@@ -68,7 +68,7 @@ const headCells = [
     numeric: true,
     disablePadding: false,
     isOrdinal: false,
-    label: "Preço Bazin  (R$)",
+    label: "Preço Basin  (R$)",
   },
 ];
 
@@ -111,7 +111,7 @@ export default function DecioBasinWallet({ stocks }) {
   return (
     <div className={styles.container}>
       <main className={styles.main}>
-        <h1 className={styles.title}>Carteira Décio Bazin:</h1>
+        <h1 className={styles.title}>Carteira Décio Basin:</h1>
       </main>
       <Stack maxWidth={"800px"}>
         <WalletRules
@@ -125,12 +125,12 @@ export default function DecioBasinWallet({ stocks }) {
               2 - Ter dividend yield atual maior que 6%.
               <br />
               <br />
-              3 - Calculamos o preço teto de Bazin a partir do yield médio
+              3 - Calculamos o preço teto de Basin a partir do yield médio
               histórico dividido por 6%.
               <br />
               <br />4 - Criamos o ranking considerando as ações{" "}
               <strong>mais descontadas</strong> em relação ao{" "}
-              <strong>preço teto de Bazin</strong>.
+              <strong>preço teto de Basin</strong>.
             </>
           }
         />

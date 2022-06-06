@@ -5,6 +5,7 @@ import Toolbar from "@mui/material/Toolbar";
 import styles from "styles/CustomAppBar.module.css";
 import { Menu, MenuItem, Typography } from "@mui/material";
 import CustomLink from "components/CustomLink";
+import pages from '../../utils/pages'
 
 export default function CustomAppBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -45,46 +46,19 @@ export default function CustomAppBar() {
               "aria-labelledby": "basic-button",
             }}
           >
-            <MenuItem onClick={handleClose}>
-              <CustomLink
-                path={"carteiras/magic_formula"}
-                key={`link-app-bar-${"magic_formula"}`}
-                styles={styles}
-                label={"Fórmula Mágica"}
-              />
-            </MenuItem>
-            <MenuItem onClick={handleClose}>
-              <CustomLink
-                path={"carteiras/graham_wallet"}
-                key={`link-app-bar-${"graham_wallet"}`}
-                styles={styles}
-                label={"Graham"}
-              />
-            </MenuItem>
-            <MenuItem onClick={handleClose}>
-              <CustomLink
-                path={"carteiras/acquirers_multiple"}
-                key={`link-app-bar-${"acquirers_multiple"}`}
-                styles={styles}
-                label={"Acquirers Multiple + Momentum"}
-              />
-            </MenuItem>
-            <MenuItem onClick={handleClose}>
-              <CustomLink
-                path={"carteiras/decio_basin"}
-                key={`link-app-bar-${"decio_basin"}`}
-                styles={styles}
-                label={"Décio Bazin"}
-              />
-            </MenuItem>
-            <MenuItem onClick={handleClose}>
-              <CustomLink
-                path={"carteiras/price_earnings"}
-                key={`link-app-bar-${"price_earnings"}`}
-                styles={styles}
-                label={"P/L Abaixo da Média"}
-              />
-            </MenuItem>
+            {pages.map(page =>
+              <MenuItem
+                onClick={handleClose}
+                key={`menu-item-app-bar-${page.pagePath}`}
+              >
+                <CustomLink
+                  path={page.pagePath}
+                  key={`link-app-bar-${page.pagePath}`}
+                  styles={styles}
+                  label={page.title}
+                />
+              </MenuItem>
+            )}
           </Menu>
           <CustomLink
             path={"favorites"}

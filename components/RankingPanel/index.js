@@ -32,7 +32,7 @@ export default function RankingPanel({
 }) {
   const [minimumMarketCap, setMinimumMarketCap] = useState("");
   const [minimumLiquidity, setMinimumLiquidity] = useState(100000);
-  const [minimumYearsWithProfit, setMinimumYearsWithProfit] = useState("");
+  const [minimumYearsWithProfit, setMinimumYearsWithProfit] = useState(lastYears || "");
   const [favoriteTickers, setFavoriteTickers] = useState(
     (typeof window !== "undefined" &&
       JSON.parse(localStorage.getItem(LOCAL_STORAGE_FAVORITE_TICKERS_KEY))) ||
@@ -60,12 +60,12 @@ export default function RankingPanel({
     (stock) => {
       const minimumYearsWithProfitAsNumber = Number(minimumYearsWithProfit);
       const profitableLastYears = stock?.historicalData?.["P/L"]?.series
-        .slice(2, 2 + minimumYearsWithProfitAsNumber)
+        .slice(0, 0 + minimumYearsWithProfitAsNumber)
         .filter((year) => year?.value > 0);
       const alternativeProfitableLastYears = stock?.historicalData?.[
         "LPA"
       ]?.series
-        .slice(2, 2 + minimumYearsWithProfitAsNumber)
+        .slice(0, 0 + minimumYearsWithProfitAsNumber)
         .filter((year) => year?.value > 0);
       return minimumYearsWithProfitAsNumber
         ? profitableLastYears?.length === minimumYearsWithProfitAsNumber ||
