@@ -3,23 +3,7 @@ import styles from "styles/Wallets.module.css";
 import RankingPanel from "components/RankingPanel";
 import { Stack } from "@mui/material";
 import { WalletRules } from "components/WalletRules";
-
-
-export async function getServerSideProps(context) {
-  try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/acquirers_multiple_stocks`)
-    const stocksWithRanking = await res.json()
-  
-    return {
-      props: {
-        stocks: stocksWithRanking,
-      },
-    };
-  } catch (error) {
-    console.log(error);
-    return;
-  }
-}
+import { useEffect, useState } from "react";
 
 const headCells = [
   {
@@ -66,7 +50,25 @@ const headCells = [
   },
 ];
 
-export default function AcquirersMultiple({ stocks }) {
+export default function AcquirersMultiple() {
+  const [stocks, setStocks] = useState([]);
+  const [loading,setLoading] = useState(false);
+
+  const fetchData = async () => {
+    setLoading(true)
+    const res = await fetch(
+      `/api/acquirers_multiple_stocks`
+    );
+    const stocksWithRanking = await res.json();
+    setStocks(stocksWithRanking);
+    setLoading(false)
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+
   return (
     <div className={styles.container}>
       <main className={styles.main}>
@@ -100,6 +102,7 @@ export default function AcquirersMultiple({ stocks }) {
           headCells={headCells}
           initialOrderBy={{ column: "rank", direction: "asc" }}
           hideYearsWithProfitFilter={true}
+          loading={loading}
         />
       </Stack>
     </div>
