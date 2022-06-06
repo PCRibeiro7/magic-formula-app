@@ -55,7 +55,6 @@ export default function ProfitableLastYears() {
       `/api/profitable_last_years_stocks`
     );
     const stocksWithRanking = await res.json();
-    console.log(stocksWithRanking[0])
     setStocks(stocksWithRanking);
     setLoading(false)
   };
