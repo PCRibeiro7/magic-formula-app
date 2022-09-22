@@ -135,6 +135,7 @@ export default function GrahamWallet() {
           headCells={headCells}
           initialOrderBy={{ column: "plDiff", direction: "desc" }}
           showDividendFilter
+          hideYearsWithProfitFilter
           lastYears={lastYears}
           setLastYears={setLastYears}
           loading={loading}
