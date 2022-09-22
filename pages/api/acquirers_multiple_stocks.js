@@ -18,7 +18,7 @@ export default async function handler(req, res) {
       symbols: filteredStocks.map((stock) => `${stock.ticker}.SA`),
       from: sixMonthsBeforeDate,
       to: currentDate,
-      period: "m",
+      period: "d",
     }),
   ]);
   Object.keys(prices).map((ticker, index) => {
