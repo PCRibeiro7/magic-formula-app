@@ -22,6 +22,7 @@ export default async function handler(req, res) {
         );
 
         data.results.map((ticker, index) => {
+            ticker.historicalDataPrice = ticker?.historicalDataPrice?.sort((a, b) => a.date - b.date);
             if(!sixMonthsBeforeDateEpoch) sixMonthsBeforeDateEpoch = ticker?.historicalDataPrice?.[1]?.date;
             if(!threeMonthsBeforeDateEpoch) threeMonthsBeforeDateEpoch = ticker?.historicalDataPrice?.[4]?.date;
 

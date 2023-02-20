@@ -32,14 +32,14 @@ const headCells = [
     numeric: true,
     disablePadding: false,
     isOrdinal: false,
-    label: "Momentum 6M",
+    label: "Momentum 6M (%)",
   },
   {
     id: "momentum3M",
     numeric: true,
     disablePadding: false,
     isOrdinal: false,
-    label: "Momentum 3M",
+    label: "Momentum 3M (%)",
   },
   {
     id: "rank_Momentum_6M",
