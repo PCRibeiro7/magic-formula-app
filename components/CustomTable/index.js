@@ -13,6 +13,7 @@ import TableSortLabel from "@mui/material/TableSortLabel";
 import Paper from "@mui/material/Paper";
 
 import { visuallyHidden } from "@mui/utils";
+import { Tooltip } from "@mui/material";
 import { checkIfTickerIsBestRanked } from "utils/wallets";
 import { Checkbox, Radio } from "@mui/material";
 import StarIcon from '@mui/icons-material/Star';
@@ -64,25 +65,26 @@ function EnhancedTableHead(props) {
     <TableHead>
       <TableRow>
         {headCellWithRank.map((headCell) => (
-          <TableCell
-            key={headCell.id}
-            align={headCell.numeric ? "right" : "left"}
-            padding={headCell.disablePadding ? "none" : "normal"}
-            sortDirection={orderBy === headCell.id ? order : false}
-          >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : "asc"}
-              onClick={createSortHandler(headCell.id)}
-            >
-              {headCell.label}
-              {orderBy === headCell.id ? (
-                <Box component="span" sx={visuallyHidden}>
-                  {order === "desc" ? "sorted descending" : "sorted ascending"}
-                </Box>
-              ) : null}
-            </TableSortLabel>
-          </TableCell>
+            <Tooltip title={headCell.tooltip} key={headCell.id}>
+                <TableCell
+                    align={headCell.numeric ? "right" : "left"}
+                    padding={headCell.disablePadding ? "none" : "normal"}
+                    sortDirection={orderBy === headCell.id ? order : false}
+                >
+                    <TableSortLabel
+                        active={orderBy === headCell.id}
+                        direction={orderBy === headCell.id ? order : "asc"}
+                        onClick={createSortHandler(headCell.id)}
+                    >
+                        {headCell.label}
+                        {orderBy === headCell.id ? (
+                            <Box component="span" sx={visuallyHidden}>
+                                {order === "desc" ? "sorted descending" : "sorted ascending"}
+                            </Box>
+                        ) : null}
+                    </TableSortLabel>
+                </TableCell>
+            </Tooltip>
         ))}
       </TableRow>
     </TableHead>

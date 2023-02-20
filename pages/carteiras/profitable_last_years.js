@@ -76,6 +76,7 @@ export default function ProfitableLastYears() {
           lastYears={lastYears}
           setLastYears={setLastYears}
           loading={loading}
+          hideYearsWithProfitFilter
         />
       </Stack>
     </div>

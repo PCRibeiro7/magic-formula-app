@@ -1,0 +1,770 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "brapi - API de finanças",
+      "description": "Tenha acesso instantâneo aos valores da cotação da bolsa de valores, dados históricos e até dados de criptomoedas em diferentes moedas\n\n**https://brapi.dev**",
+      "termsOfService": "/terms-of-use",
+      "contact": {
+        "name": "brapi",
+        "url": "https://brapi.dev/",
+        "email": "brapi@proton.me"
+      },
+      "version": "2.6.0"
+    },
+    "servers": [
+      {
+        "url": "https://brapi.dev"
+      }
+    ],
+    "paths": {
+      "/api/quote/{tickers}": {
+        "get": {
+          "tags": ["ticker"],
+          "summary": "Get any tickers informarion",
+          "parameters": [
+            {
+              "name": "tickers",
+              "in": "path",
+              "description": "Add one or more tickers separated by a comma",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "example": "PETR4,MGLU3"
+            },
+            {
+              "name": "range",
+              "in": "query",
+              "description": "Range for historical prices",
+              "required": false,
+              "style": "form",
+              "schema": {
+                "type": "string",
+                "enum": [
+                  "1d",
+                  "5d",
+                  "1mo",
+                  "3mo",
+                  "6mo",
+                  "1y",
+                  "2y",
+                  "5y",
+                  "10y",
+                  "ytd",
+                  "max"
+                ]
+              },
+              "example": "1d"
+            },
+            {
+              "name": "interval",
+              "in": "query",
+              "description": "Interval to get historial prices within the range",
+              "required": false,
+              "style": "form",
+              "schema": {
+                "type": "string",
+                "enum": [
+                  "1d",
+                  "5d",
+                  "1mo",
+                  "3mo",
+                  "6mo",
+                  "1y",
+                  "2y",
+                  "5y",
+                  "10y",
+                  "ytd",
+                  "max"
+                ]
+              },
+              "example": "1d"
+            },
+            {
+              "name": "fundamental",
+              "in": "query",
+              "description": "Retrieve fundamental analysis data",
+              "required": false,
+              "style": "form",
+              "schema": {
+                "type": "boolean"
+              },
+              "example": "true"
+            },
+            {
+              "name": "dividends",
+              "in": "query",
+              "description": "Retrieve dividends data",
+              "required": false,
+              "style": "form",
+              "schema": {
+                "type": "boolean"
+              },
+              "example": "true"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {
+                  "example": {
+                    "results": [
+                      {
+                        "symbol": "COGN3",
+                        "shortName": "COGNA ON    ON      NM",
+                        "longName": "Cogna Educação S.A.",
+                        "currency": "BRL",
+                        "regularMarketPrice": 2.71,
+                        "regularMarketDayHigh": 2.76,
+                        "regularMarketDayLow": 2.67,
+                        "regularMarketDayRange": "2.67 - 2.76",
+                        "regularMarketChange": -0.029999971,
+                        "regularMarketChangePercent": -1.0948894,
+                        "regularMarketTime": "2022-05-27T20:07:32.000Z",
+                        "marketCap": 5134067712,
+                        "regularMarketVolume": 14629600,
+                        "regularMarketPreviousClose": 2.74,
+                        "regularMarketOpen": 2.74,
+                        "averageDailyVolume10Day": 31275150,
+                        "averageDailyVolume3Month": 40639808,
+                        "fiftyTwoWeekLowChange": 0.73,
+                        "fiftyTwoWeekLowChangePercent": 0.36868688,
+                        "fiftyTwoWeekRange": "1.98 - 4.9",
+                        "fiftyTwoWeekHighChange": -2.19,
+                        "fiftyTwoWeekHighChangePercent": -0.44693878,
+                        "fiftyTwoWeekLow": 1.98,
+                        "fiftyTwoWeekHigh": 4.9,
+                        "twoHundredDayAverage": 2.60825,
+                        "twoHundredDayAverageChange": 0.101750135,
+                        "twoHundredDayAverageChangePercent": 0.039010886
+                      }
+                    ],
+                    "requestedAt": "2022-05-29T03:46:10.808Z"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/available": {
+        "get": {
+          "tags": ["ticker"],
+          "summary": "Get all available tickers",
+          "parameters": [
+            {
+              "name": "search",
+              "in": "query",
+              "required": false,
+              "style": "form",
+              "schema": {
+                "type": "string"
+              },
+              "example": "cog"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {
+                  "example": {
+                    "stocks": ["COGN3", "COGN3F"]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/quote/list": {
+        "get": {
+          "tags": ["ticker"],
+          "summary": "Get a summary of all tickers",
+          "parameters": [
+            {
+              "name": "sortBy",
+              "in": "query",
+              "description": "Sort the tickers by a column",
+              "required": false,
+              "style": "form",
+              "schema": {
+                "type": "string",
+                "enum": [
+                  "name",
+                  "close",
+                  "change",
+                  "change_abs",
+                  "volume",
+                  "market_cap_basic",
+                  "sector"
+                ]
+              },
+              "example": "close"
+            },
+            {
+              "name": "sortOrder",
+              "in": "query",
+              "description": "Sort order for sortBy",
+              "required": false,
+              "style": "form",
+              "schema": {
+                "type": "string",
+                "enum": ["desc", "asc"]
+              },
+              "example": "desc"
+            },
+            {
+              "name": "limit",
+              "in": "query",
+              "description": "Limit the returned tickers",
+              "required": false,
+              "style": "form",
+              "schema": {
+                "type": "integer"
+              },
+              "example": "10"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {
+                  "example": {
+                    "stocks": [
+                      {
+                        "stock": "PETR4",
+                        "name": "PETROBRAS PN EDJ",
+                        "close": 30.6,
+                        "change": -4.76190773,
+                        "volume": 118295600,
+                        "market_cap": 422521192168,
+                        "logo": "https://s3-symbol-logo.tradingview.com/brasileiro-petrobras--big.svg",
+                        "sector": "Energy Minerals"
+                      },
+                      {
+                        "stock": "OIBR3",
+                        "name": "OI",
+                        "close": 0.76,
+                        "change": 8.57142857,
+                        "volume": 91165400,
+                        "market_cap": 5107338999,
+                        "logo": "https://s3-symbol-logo.tradingview.com/oi--big.svg",
+                        "sector": "Communications"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v2/crypto": {
+        "get": {
+          "tags": ["crypto"],
+          "summary": "Get any crypto information",
+          "parameters": [
+            {
+              "name": "coin",
+              "in": "query",
+              "description": "Add one or more cryptocoin separated by a comma. Available coins at: https://brapi.dev/api/v2/crypto/available",
+              "required": true,
+              "style": "form",
+              "schema": {
+                "type": "string"
+              },
+              "example": "BTC,ETH"
+            },
+            {
+              "name": "currency",
+              "in": "query",
+              "description": "Currency value to be returned. Available currencies at: https://economia.awesomeapi.com.br/json/available/uniq",
+              "required": false,
+              "style": "form",
+              "schema": {
+                "type": "string"
+              },
+              "example": "BRL"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {
+                  "example": {
+                    "coins": [
+                      {
+                        "currency": "BRL",
+                        "currencyRateFromUSD": 4.7295,
+                        "coinName": "Bitcoin USD",
+                        "coin": "BTC",
+                        "regularMarketChange": 811.691214975,
+                        "regularMarketPrice": 136927.651608,
+                        "regularMarketChangePercent": 0.59631646,
+                        "regularMarketDayLow": 136434.620151,
+                        "regularMarketDayHigh": 137243.6531505,
+                        "regularMarketDayRange": "136434.620151 - 137243.6531505",
+                        "regularMarketVolume": 84120947094.528,
+                        "marketCap": 2608774518177.792,
+                        "regularMarketTime": 1653797160,
+                        "coinImageUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/1.png"
+                      },
+                      {
+                        "currency": "BRL",
+                        "currencyRateFromUSD": 4.7295,
+                        "coinName": "Ethereum USD",
+                        "coin": "ETH",
+                        "regularMarketChange": 69.3877478175,
+                        "regularMarketPrice": 8390.93275845,
+                        "regularMarketChangePercent": 0.8338289,
+                        "regularMarketDayLow": 8353.4878881,
+                        "regularMarketDayHigh": 8479.33373475,
+                        "regularMarketDayRange": "8353.4878881 - 8479.33373475",
+                        "regularMarketVolume": 56309828364.287994,
+                        "marketCap": 1014997849104.3839,
+                        "regularMarketTime": 1653797100,
+                        "coinImageUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v2/crypto/available": {
+        "get": {
+          "tags": ["crypto"],
+          "summary": "Get all available cryptocoins",
+          "parameters": [
+            {
+              "name": "search",
+              "in": "query",
+              "description": "Search all cryptocoins that starts with the query, if no query is passed then all coins are returned",
+              "required": false,
+              "style": "form",
+              "schema": {
+                "type": "string"
+              },
+              "example": "BT"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {
+                  "example": {
+                    "coins": ["BTC", "BTT1", "BTG", "BTS", "BTM", "BTC2", "BTX"]
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Coin not found",
+              "content": {
+                "application/json": {
+                  "example": {
+                    "message": "Coin not found"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v2/currency": {
+        "get": {
+          "tags": ["currency"],
+          "summary": "Get currency conversion information",
+          "parameters": [
+            {
+              "name": "currency",
+              "in": "query",
+              "description": "Currency to another currency. Available currencies at: https://brapi.dev/api/v2/currency/available",
+              "required": true,
+              "style": "form",
+              "schema": {
+                "type": "string"
+              },
+              "example": "USD-BRL,EUR-USD"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {
+                  "example": {
+                    "currency": [
+                      {
+                        "fromCurrency": "USD",
+                        "toCurrency": "BRL",
+                        "name": "Dólar Americano/Real Brasileiro",
+                        "high": "4.781",
+                        "low": "4.7153",
+                        "bidVariation": "-0.0366",
+                        "percentageChange": "-0.77",
+                        "bidPrice": "4.7295",
+                        "askPrice": "4.7326",
+                        "updatedAtTimestamp": "1653685163",
+                        "updatedAtDate": "2022-05-27 17:59:23"
+                      },
+                      {
+                        "fromCurrency": "EUR",
+                        "toCurrency": "USD",
+                        "name": "Euro/Dólar Americano",
+                        "high": "1.0765",
+                        "low": "1.0697",
+                        "bidVariation": "0.0011",
+                        "percentageChange": "0.1",
+                        "bidPrice": "1.0733",
+                        "askPrice": "1.0737",
+                        "updatedAtTimestamp": "1653685194",
+                        "updatedAtDate": "2022-05-27 17:59:54"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v2/inflation": {
+        "get": {
+          "tags": ["inflation"],
+          "summary": "Get the history of the inflation of a certain country",
+          "parameters": [
+            {
+              "name": "country",
+              "in": "query",
+              "description": "Get data for a certain country, defaults to 'brazil'",
+              "required": false,
+              "style": "form",
+              "schema": {
+                "type": "string"
+              },
+              "example": "brazil"
+            },
+            {
+              "name": "historical",
+              "in": "query",
+              "description": "Get historical data for a certain country, defaults to 'false'",
+              "required": false,
+              "style": "form",
+              "schema": {
+                "type": "boolean"
+              },
+              "example": "false"
+            },
+            {
+              "name": "start",
+              "in": "query",
+              "description": "Get historical data from a certain date, defaults to today's date (DD/MM/YYYY)",
+              "required": false,
+              "style": "form",
+              "schema": {
+                "type": "string"
+              },
+              "example": "29/10/2022"
+            },
+            {
+              "name": "end",
+              "in": "query",
+              "description": "Get historical data until a certain date, defaults to today's date (DD/MM/YYYY)",
+              "required": false,
+              "style": "form",
+              "schema": {
+                "type": "string"
+              },
+              "example": "29/10/2022"
+            },
+            {
+              "name": "sortBy",
+              "in": "query",
+              "description": "Sort the data by a column, defaults to 'date'",
+              "required": false,
+              "style": "form",
+              "schema": {
+                "type": "string",
+                "enum": ["date", "value"]
+              },
+              "example": "date"
+            },
+            {
+              "name": "sortOrder",
+              "in": "query",
+              "description": "Sort order for sortBy, defaults to 'desc'",
+              "required": false,
+              "style": "form",
+              "schema": {
+                "type": "string",
+                "enum": ["desc", "asc"]
+              },
+              "example": "desc"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {
+                  "example": {
+                    "inflation": [
+                      {
+                        "date": "01/09/2022",
+                        "value": "7.17",
+                        "epochDate": 1661990400000
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v2/inflation/available": {
+        "get": {
+          "tags": ["inflation"],
+          "summary": "Get all available supported inflation countries",
+          "parameters": [
+            {
+              "name": "search",
+              "in": "query",
+              "description": "Find all possible supported inflation countries, if no query is passed then all supported inflation countries are returned",
+              "required": false,
+              "style": "form",
+              "schema": {
+                "type": "string"
+              },
+              "example": "br"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {
+                  "example": {
+                    "countries": ["brazil"]
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Country not found",
+              "content": {
+                "application/json": {
+                  "example": {
+                    "message": "Country not found"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v2/prime-rate": {
+        "get": {
+          "tags": ["prime-rate (SELIC)"],
+          "summary": "Get the history of the prime-rate of a certain country",
+          "parameters": [
+            {
+              "name": "country",
+              "in": "query",
+              "description": "Get data for a certain country, defaults to 'brazil'",
+              "required": false,
+              "style": "form",
+              "schema": {
+                "type": "string"
+              },
+              "example": "brazil"
+            },
+            {
+              "name": "historical",
+              "in": "query",
+              "description": "Get historical data for a certain country, defaults to 'false'",
+              "required": false,
+              "style": "form",
+              "schema": {
+                "type": "boolean"
+              },
+              "example": "false"
+            },
+            {
+              "name": "start",
+              "in": "query",
+              "description": "Get historical data from a certain date, defaults to today's date (DD/MM/YYYY)",
+              "required": false,
+              "style": "form",
+              "schema": {
+                "type": "string"
+              },
+              "example": "29/10/2022"
+            },
+            {
+              "name": "end",
+              "in": "query",
+              "description": "Get historical data until a certain date, defaults to today's date (DD/MM/YYYY)",
+              "required": false,
+              "style": "form",
+              "schema": {
+                "type": "string"
+              },
+              "example": "29/10/2022"
+            },
+            {
+              "name": "sortBy",
+              "in": "query",
+              "description": "Sort the data by a column, defaults to 'date'",
+              "required": false,
+              "style": "form",
+              "schema": {
+                "type": "string",
+                "enum": ["date", "value"]
+              },
+              "example": "date"
+            },
+            {
+              "name": "sortOrder",
+              "in": "query",
+              "description": "Sort order for sortBy, defaults to 'desc'",
+              "required": false,
+              "style": "form",
+              "schema": {
+                "type": "string",
+                "enum": ["desc", "asc"]
+              },
+              "example": "desc"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {
+                  "example": {
+                    "prime-rate": [
+                      {
+                        "date": "29/11/2022",
+                        "value": "13.75",
+                        "epochDate": 1669680000000
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v2/prime-rate/available": {
+        "get": {
+          "tags": ["prime-rate (SELIC)"],
+          "summary": "Get all available supported countries' prime-rates",
+          "parameters": [
+            {
+              "name": "search",
+              "in": "query",
+              "description": "Find all possible supported countries' prime-rates, if no query is passed then all supported countries' prime-rates are returned",
+              "required": false,
+              "style": "form",
+              "schema": {
+                "type": "string"
+              },
+              "example": "br"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {
+                  "example": {
+                    "countries": ["brazil"]
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Country not found",
+              "content": {
+                "application/json": {
+                  "example": {
+                    "message": "Country not found"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v2/currency/available": {
+        "get": {
+          "tags": ["currency"],
+          "summary": "Get all available currencies",
+          "parameters": [
+            {
+              "name": "search",
+              "in": "query",
+              "description": "Find all possible currency conversions, if no query is passed then all currencies are returned",
+              "required": false,
+              "style": "form",
+              "schema": {
+                "type": "string"
+              },
+              "example": "BRL"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {
+                  "example": {
+                    "currencies": [
+                      {
+                        "name": "BRL-EGP",
+                        "currency": "Real Brasileiro/Libra Egípcia"
+                      },
+                      {
+                        "name": "BRL-EUR",
+                        "currency": "Real Brasileiro/Euro"
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Currency not found",
+              "content": {
+                "application/json": {
+                  "example": {
+                    "message": "Currency not found"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+  
+      "components": {
+        "schemas": {},
+        "securitySchemes": {
+          "noauthAuth": {
+            "type": "http",
+            "scheme": "noauth"
+          }
+        }
+      }
+    }
+  }

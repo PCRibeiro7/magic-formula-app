@@ -6,7 +6,7 @@ import valuationImage from "public/valuation.png";
 import profitImage from "public/profit.jpg";
 
 
-export default [
+const pages = [
     {
         pagePath: "carteiras/magic_formula",
         image: greenblattImage,
@@ -58,48 +58,49 @@ export default [
             },
         ],
     },
-    {
-        pagePath: "carteiras/decio_basin",
-        image: decioImage,
-        title: "Carteira  de Dividendos Décio Basin",
-        description:
-            "Ranking baseado em ações pagadoras de dividendos.  Calculamos o preço teto assumindo um yield alvo de 6%.",
-        rules: [
-            {
-                direction: "high",
-                indicator: "Dividend Yield",
-            },
-        ],
-    },
-    {
-        pagePath: "carteiras/price_earnings",
-        image: valuationImage,
-        title: "Carteira  de P/L Abaixo da Média",
-        description:
-            "Ranking baseado em ações com indicador P/L atual abaixo da sua média histórica",
-        rules: [
-            {
-                direction: "low",
-                indicator: "P/L Atual",
-            },
-            {
-                direction: "high",
-                indicator: "P/L Médio Histórico",
-            },
-        ],
-    },
-    {
-        pagePath: "carteiras/profitable_last_years",
-        image: profitImage,
-        title: "Carteira  de Anos Consecutivos de Lucro",
-        description:
-            "Ranking baseado em ações com histórico de lucro consecutivo",
-        rules: [
-            {
-                direction: "high",
-                indicator: "LPA",
-            },
-        ],
-    },
-
+    // {
+    //     pagePath: "carteiras/decio_basin",
+    //     image: decioImage,
+    //     title: "Carteira  de Dividendos Décio Basin",
+    //     description:
+    //         "Ranking baseado em ações pagadoras de dividendos.  Calculamos o preço teto assumindo um yield alvo de 6%.",
+    //     rules: [
+    //         {
+    //             direction: "high",
+    //             indicator: "Dividend Yield",
+    //         },
+    //     ],
+    // },
+    // {
+    //     pagePath: "carteiras/price_earnings",
+    //     image: valuationImage,
+    //     title: "Carteira  de P/L Abaixo da Média",
+    //     description:
+    //         "Ranking baseado em ações com indicador P/L atual abaixo da sua média histórica",
+    //     rules: [
+    //         {
+    //             direction: "low",
+    //             indicator: "P/L Atual",
+    //         },
+    //         {
+    //             direction: "high",
+    //             indicator: "P/L Médio Histórico",
+    //         },
+    //     ],
+    // },
+    // {
+    //     pagePath: "carteiras/profitable_last_years",
+    //     image: profitImage,
+    //     title: "Carteira  de Anos Consecutivos de Lucro",
+    //     description:
+    //         "Ranking baseado em ações com histórico de lucro consecutivo",
+    //     rules: [
+    //         {
+    //             direction: "high",
+    //             indicator: "LPA",
+    //         },
+    //     ],
+    // },
 ];
+
+export default pages;

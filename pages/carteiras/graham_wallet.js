@@ -8,20 +8,6 @@ import { filterByGraham } from "utils/wallets";
 export async function getServerSideProps(context) {
   const stocks = await fetchAllStocks();
   let stocksWithRanking = filterByGraham(stocks);
-  const historicalData = await Promise.all(
-    stocksWithRanking.map((stock) =>
-      fetchHistoricalData({ ticker: stock.ticker })
-    )
-  );
-  const historicalDataWithTicker = historicalData.map((companyData, index) => {
-    return { ticker: stocksWithRanking[index].ticker, ...companyData };
-  });
-  stocksWithRanking = stocksWithRanking.map((stock) => ({
-    ...stock,
-    historicalData: historicalDataWithTicker.find(
-      (historicalStock) => historicalStock.ticker === stock.ticker
-    ),
-  }));
 
   return {
     props: {
@@ -91,6 +77,7 @@ export default function GrahamWallet({ stocks }) {
         <RankingPanel
           stocks={stocks}
           headCells={headCells}
+          hideYearsWithProfitFilter
           initialOrderBy={{ column: "graham_price_diff", direction: "desc" }}
         />
       </Stack>
