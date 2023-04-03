@@ -24,25 +24,11 @@ export default async function handler(req, res) {
             );
 
             const tickerKey = ticker.symbol;
-            // const sixMonthsBeforePrice =
-            //     ticker?.historicalDataPrice?.[0]?.close;
 
-            // const currentPrice =
-            //     ticker?.historicalDataPrice?.[
-            //         ticker.historicalDataPrice.length - 2
-            //     ]?.close;
             const stockMatch = filteredStocks.find(
                 (currStock) => currStock.ticker === tickerKey
             );
             stockMatch.historicalDataPrice = ticker.historicalDataPrice;
-            // if (currentPrice && sixMonthsBeforePrice) {
-            //     stockMatch.currentPrice = Math.round(currentPrice*100)/100;
-            //     stockMatch.sixMonthsBeforePrice = sixMonthsBeforePrice;
-            //     stockMatch.momentum6M =
-            //         Math.round(
-            //             (currentPrice / sixMonthsBeforePrice - 1) * 10000
-            //         ) / 100;
-            // }
         });
     } catch (error) {
         console.log(error);
@@ -51,20 +37,6 @@ export default async function handler(req, res) {
     filteredStocks = filteredStocks.filter((stock) => {
         return stock.historicalDataPrice;
     });
-
-    // const orderedByMomentum = JSON.parse(JSON.stringify(filteredStocks)).sort(
-    //     (a, b) => b.momentum6M - a.momentum6M
-    // );
-
-    // const mountedStocks = JSON.parse(JSON.stringify(filteredStocks))
-    //     .map((company) => ({
-    //         rank:
-    //             orderedByMomentum.findIndex(
-    //                 (c) => c.ticker === company.ticker
-    //             ) + 1,
-    //         ...company,
-    //     }))
-    //     .sort((a, b) => a.rank - b.rank);
 
     const response = {
         stocks: filteredStocks,

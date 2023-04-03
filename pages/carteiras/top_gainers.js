@@ -74,27 +74,37 @@ export default function AcquirersMultiple() {
     useEffect(() => {
         const desiredYear = moment().subtract(selectedPeriod, "years");
         let filteredStocks = [...stocks].map((stock) => {
-            const matchedDate = stock.historicalDataPrice.find(dateObj => {
+            const matchedDate = stock.historicalDataPrice.find((dateObj) => {
                 return moment.unix(dateObj.date).isSame(desiredYear, "year");
             });
             if (!matchedDate) {
                 return null;
-            }       
-            stock.sixMonthsBeforePrice = Math.round(matchedDate?.adjustedClose*100)/100;
+            }
+            stock.sixMonthsBeforePrice =
+                Math.round(matchedDate?.adjustedClose * 100) / 100;
             stock.momentum6M =
-                Math.round((stock.price / stock.sixMonthsBeforePrice - 1) * 10000) /
-                100;
-            stock.annualizedReturn = Math.round(((stock.price/stock.sixMonthsBeforePrice)**(1/selectedPeriod)-1)*10000)/100;
+                Math.round(
+                    (stock.price / stock.sixMonthsBeforePrice - 1) * 10000
+                ) / 100;
+            stock.annualizedReturn =
+                Math.round(
+                    ((stock.price / stock.sixMonthsBeforePrice) **
+                        (1 / selectedPeriod) -
+                        1) *
+                        10000
+                ) / 100;
             return stock;
         });
 
-        filteredStocks = filteredStocks.filter(stock=>stock).filter((stock) => {
-            return stock.sixMonthsBeforePrice ;
-        });
-        const orderedByMomentum = JSON.parse(JSON.stringify(filteredStocks)).sort(
-            (a, b) => b.momentum6M - a.momentum6M
-        );
-    
+        filteredStocks = filteredStocks
+            .filter((stock) => stock)
+            .filter((stock) => {
+                return stock.sixMonthsBeforePrice;
+            });
+        const orderedByMomentum = JSON.parse(
+            JSON.stringify(filteredStocks)
+        ).sort((a, b) => b.momentum6M - a.momentum6M);
+
         const mountedStocks = JSON.parse(JSON.stringify(filteredStocks))
             .map((company) => ({
                 rank:
@@ -105,7 +115,11 @@ export default function AcquirersMultiple() {
             }))
             .sort((a, b) => a.rank - b.rank);
         setFilteredStocks(mountedStocks);
-        headCells.find((cell) => cell.id === "sixMonthsBeforePrice").label = `Preço ${selectedPeriod} ${selectedPeriod===1?'ano':'anos'} atrás`;
+        headCells.find(
+            (cell) => cell.id === "sixMonthsBeforePrice"
+        ).label = `Preço ${selectedPeriod} ${
+            selectedPeriod === 1 ? "ano" : "anos"
+        } atrás`;
     }, [selectedPeriod, stocks]);
 
     useEffect(() => {
@@ -115,39 +129,22 @@ export default function AcquirersMultiple() {
     return (
         <div className={styles.container}>
             <main className={styles.main}>
-                <h1 className={styles.title}>
-                    Carteira Valorização Passada:{" "}
-                </h1>
+                <h1 className={styles.title}>Carteira Valorização Passada: </h1>
             </main>
             <Stack maxWidth={"800px"}>
                 <WalletRules
                     ruleDescription={
                         <>
                             1 - Ranking de empresas{" "}
-                            <strong>&quot;mais baratas&quot; </strong>
-                            :
-                            <br />
-                            Ordenamos empresas por menor{" "}
-                            <strong>EV/EBIT</strong>.
-                            <br />
-                            <br />2 - Ranking de empresas{" "}
-                            <strong>&quot;em tendencia de alta&quot;</strong>:
-                            <br />
-                            Ordenamos empresas por maior{" "}
-                            <strong>momentum de 6 meses</strong>.
-                            <br />
-                            <br />3 - Ranking{" "}
-                            <strong>Acquirers Multiple + Momentum</strong>:
-                            <br />
-                            Ordenamos empresas combinando menor{" "}
-                            <strong>EV/EBIT</strong> e maior{" "}
-                            <strong>momentum</strong>.
-                            <br />
+                            <strong>que mais valorizaram </strong>
+                            nos ulimos anos selecionados{" "}
                         </>
                     }
                 />
-                <Box sx={{padding:'16px',paddingTop:'0px'}}>
-                    <Typography variant="h6" sx={{padding:'8px'}}>Anos Passados:</Typography>
+                <Box sx={{ padding: "16px", paddingTop: "0px" }}>
+                    <Typography variant="h6" sx={{ padding: "8px" }}>
+                        Anos Passados:
+                    </Typography>
                     <FormControl fullWidth>
                         <InputLabel id="demo-simple-select-label">
                             Anos
@@ -159,10 +156,10 @@ export default function AcquirersMultiple() {
                             label="Age"
                             onChange={(e) => setSelectedPeriod(e.target.value)}
                         >
-                            {availablePeriods.map((period,index) => {
+                            {availablePeriods.map((period, index) => {
                                 return (
                                     <MenuItem value={period} key={period}>
-                                        {period} {index===0?'ano':'anos'}
+                                        {period} {index === 0 ? "ano" : "anos"}
                                     </MenuItem>
                                 );
                             })}
@@ -173,7 +170,7 @@ export default function AcquirersMultiple() {
                 <RankingPanel
                     stocks={filteredStocks}
                     headCells={headCells}
-                    initialOrderBy={{ column: "rank", direction: "desc" }}
+                    initialOrderBy={{ column: "momentum6M", direction: "desc" }}
                     hideYearsWithProfitFilter={true}
                     loading={loading}
                     hideFavorites
