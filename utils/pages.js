@@ -58,6 +58,19 @@ const pages = [
             },
         ],
     },
+        {
+        pagePath: "carteiras/top_gainers",
+        image: profitImage,
+        title: "Carteira  de Valorização Passada",
+        description:
+            "Ranking baseado nas ações que mais valorizaram nos últimos anos",
+        rules: [
+            {
+                direction: "high",
+                indicator: "Preço de Mercado",
+            },
+        ],
+    },
     // {
     //     pagePath: "carteiras/decio_basin",
     //     image: decioImage,
