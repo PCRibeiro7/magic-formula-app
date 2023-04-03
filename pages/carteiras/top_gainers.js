@@ -80,7 +80,6 @@ export default function AcquirersMultiple() {
             if (!matchedDate) {
                 return null;
             }       
-            console.log('dale')
             stock.sixMonthsBeforePrice = Math.round(matchedDate?.adjustedClose*100)/100;
             stock.momentum6M =
                 Math.round((stock.price / stock.sixMonthsBeforePrice - 1) * 10000) /
@@ -92,7 +91,6 @@ export default function AcquirersMultiple() {
         filteredStocks = filteredStocks.filter(stock=>stock).filter((stock) => {
             return stock.sixMonthsBeforePrice ;
         });
-        console.log(filteredStocks)
         const orderedByMomentum = JSON.parse(JSON.stringify(filteredStocks)).sort(
             (a, b) => b.momentum6M - a.momentum6M
         );
@@ -106,7 +104,6 @@ export default function AcquirersMultiple() {
                 ...company,
             }))
             .sort((a, b) => a.rank - b.rank);
-        console.log(mountedStocks)
         setFilteredStocks(mountedStocks);
         headCells.find((cell) => cell.id === "sixMonthsBeforePrice").label = `Preço ${selectedPeriod} ${selectedPeriod===1?'ano':'anos'} atrás`;
     }, [selectedPeriod, stocks]);
