@@ -1,5 +1,6 @@
 import { fetchAllStocks } from "services/statusInvest";
-import { Api } from 'services/bovespaApi.ts';
+import { Api } from "services/bovespaApi.ts";
+import moment from "moment";
 
 export default async function handler(req, res) {
     let sixMonthsBeforeDateEpoch, threeMonthsBeforeDateEpoch;
@@ -16,37 +17,96 @@ export default async function handler(req, res) {
         const { data } = await bovespaApi.quoteDetail(
             filteredStocks.map((stock) => `${stock.ticker}`),
             {
-                range: '6mo',
-                interval: '1mo',
+                range: "6mo",
+                interval: "1mo",
             }
         );
 
-        data.results.map((ticker, index) => {
-            ticker.historicalDataPrice = ticker?.historicalDataPrice?.sort((a, b) => a.date - b.date);
-            if(!sixMonthsBeforeDateEpoch) sixMonthsBeforeDateEpoch = ticker?.historicalDataPrice?.[1]?.date;
-            if(!threeMonthsBeforeDateEpoch) threeMonthsBeforeDateEpoch = ticker?.historicalDataPrice?.[4]?.date;
+        data.results
+            .filter((ticker) => ticker.historicalDataPrice)
+            .map((ticker, index) => {
+                ticker.historicalDataPrice = ticker?.historicalDataPrice?.sort(
+                    (a, b) => a.date - b.date
+                );
+                ticker.historicalDataPrice = ticker.historicalDataPrice.map(
+                    (d) => ({
+                        ...d,
+                        formattedDate: moment.unix(d.date).format("DD/MM/YYYY"),
+                    })
+                );
+                const tickerKey = ticker.symbol;
 
-            const tickerKey = ticker.symbol;
-            const sixMonthsBeforePrice = ticker?.historicalDataPrice?.[1]?.close;
+                const desiredThreeMonthDate = moment().subtract(3, "months");
+                const desiredSixMonthDate = moment().subtract(6, "months");
 
-            const threeMonthsBeforePrice = ticker?.historicalDataPrice?.[4]?.close;
-    
-            const currentPrice = ticker?.historicalDataPrice?.[ticker.historicalDataPrice.length - 1]?.close;
-            const stockMatch = filteredStocks.find(
-                (currStock) => currStock.ticker === tickerKey
-            );
-            if (currentPrice && sixMonthsBeforePrice) {
-                stockMatch.currentPrice = currentPrice;
-                stockMatch.sixMonthsBeforePrice = sixMonthsBeforePrice;
-                stockMatch.threeMonthsBeforePrice = threeMonthsBeforePrice;
-                stockMatch.momentum6M =
-                    Math.round((currentPrice / sixMonthsBeforePrice - 1) * 10000) / 100;
-                stockMatch.momentum3M =
-                    Math.round((currentPrice / threeMonthsBeforePrice - 1) * 10000) / 100;
-            }
-        });
+                const matchedThreeMonthDate = ticker.historicalDataPrice.find(
+                    (dateObj) => {
+                        return (
+                            moment
+                                .unix(dateObj.date)
+                                .isSame(desiredThreeMonthDate, "month") ||
+                            moment
+                                .unix(dateObj.date)
+                                .isSame(
+                                    moment(desiredThreeMonthDate).add(
+                                        1,
+                                        "month"
+                                    ),
+                                    "month"
+                                )
+                        );
+                    }
+                );
+
+                const matchedSixMonthDate = ticker.historicalDataPrice.find(
+                    (dateObj) => {
+                        return (
+                            moment
+                                .unix(dateObj.date)
+                                .isSame(desiredSixMonthDate, "month") ||
+                            moment
+                                .unix(dateObj.date)
+                                .isSame(
+                                    moment(desiredSixMonthDate).add(1, "month"),
+                                    "month"
+                                )
+                        );
+                    }
+                );
+
+                const sixMonthsBeforePrice = matchedSixMonthDate?.adjustedClose;
+                const threeMonthsBeforePrice =
+                    matchedThreeMonthDate?.adjustedClose;
+
+                const currentPrice =
+                    ticker?.historicalDataPrice?.[
+                        ticker.historicalDataPrice.length - 1
+                    ]?.adjustedClose;
+                const stockMatch = filteredStocks.find(
+                    (currStock) => currStock.ticker === tickerKey
+                );
+                if (currentPrice && sixMonthsBeforePrice) {
+                    stockMatch.currentPrice = currentPrice;
+                    stockMatch.sixMonthsBeforePrice = sixMonthsBeforePrice;
+                    stockMatch.threeMonthsBeforePrice = threeMonthsBeforePrice;
+                    stockMatch.momentum6M =
+                        Math.round(
+                            (currentPrice / sixMonthsBeforePrice - 1) * 10000
+                        ) / 100;
+                    stockMatch.momentum3M =
+                        Math.round(
+                            (currentPrice / threeMonthsBeforePrice - 1) * 10000
+                        ) / 100;
+                    if (!sixMonthsBeforeDateEpoch)
+                        sixMonthsBeforeDateEpoch =
+                            matchedSixMonthDate?.date;
+                    if (!threeMonthsBeforeDateEpoch)
+                        threeMonthsBeforeDateEpoch =
+                            matchedThreeMonthDate?.date;
+                }
+            });
     } catch (error) {
-        console.log(error)
+        console.log(error);
     }
 
     filteredStocks = filteredStocks.filter((stock) => {
@@ -63,24 +123,29 @@ export default async function handler(req, res) {
     const mountedStocks = JSON.parse(JSON.stringify(filteredStocks))
         .map((company) => ({
             rank:
-                orderedByMomentum.findIndex((c) => c.ticker === company.ticker) +
+                orderedByMomentum.findIndex(
+                    (c) => c.ticker === company.ticker
+                ) +
                 orderedByEV_EBIT.findIndex((c) => c.ticker === company.ticker) +
                 2,
             rank_EV_EBIT:
-                orderedByEV_EBIT.findIndex((c) => c.ticker === company.ticker) + 1,
+                orderedByEV_EBIT.findIndex((c) => c.ticker === company.ticker) +
+                1,
             rank_Momentum_6M:
-                orderedByMomentum.findIndex((c) => c.ticker === company.ticker) + 1,
+                orderedByMomentum.findIndex(
+                    (c) => c.ticker === company.ticker
+                ) + 1,
 
             ...company,
         }))
         .sort((a, b) => a.rank - b.rank);
 
     const response = {
-        stocks: mountedStocks, 
+        stocks: mountedStocks,
         dates: {
             sixMonths: sixMonthsBeforeDateEpoch,
-            threeMonths: threeMonthsBeforeDateEpoch,            
-        }
-    }
+            threeMonths: threeMonthsBeforeDateEpoch,
+        },
+    };
     res.status(200).json(response);
 }
