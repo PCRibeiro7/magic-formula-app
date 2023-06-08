@@ -14,21 +14,21 @@ const headCells = [
     label: "Ticker",
   },
   {
-    id: "p_L",
+    id: "p_l",
     numeric: true,
     disablePadding: false,
     isOrdinal: false,
     label: "P/L",
   },
   {
-    id: "p_VP",
+    id: "p_vp",
     numeric: true,
     disablePadding: false,
     isOrdinal: false,
     label: "P/VP",
   },
   {
-    id: "eV_Ebit",
+    id: "ev_ebit",
     numeric: true,
     disablePadding: false,
     isOrdinal: false,
@@ -72,7 +72,7 @@ export default function ProfitableLastYears() {
         <RankingPanel
           stocks={stocks}
           headCells={headCells}
-          initialOrderBy={{ column: "p_L", direction: "asc" }}
+          initialOrderBy={{ column: "p_l", direction: "asc" }}
           lastYears={lastYears}
           setLastYears={setLastYears}
           loading={loading}

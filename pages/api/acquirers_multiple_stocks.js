@@ -9,7 +9,7 @@ export default async function handler(req, res) {
     // const stocks = (await fetchAllStocks()).slice(0,1)
 
     let filteredStocks = stocks.filter((stock) => {
-        return stock.eV_Ebit > 0 && stock.liquidezMediaDiaria > 1000;
+        return stock.ev_ebit > 0 && stock.liquidezmediadiaria > 1000;
     });
     const bovespaApi = new Api().api;
 
@@ -112,8 +112,8 @@ export default async function handler(req, res) {
     filteredStocks = filteredStocks.filter((stock) => {
         return stock.momentum6M;
     });
-    const orderedByEV_EBIT = JSON.parse(JSON.stringify(filteredStocks)).sort(
-        (a, b) => a.eV_Ebit - b.eV_Ebit
+    const orderedByev_ebit = JSON.parse(JSON.stringify(filteredStocks)).sort(
+        (a, b) => a.ev_ebit - b.ev_ebit
     );
 
     const orderedByMomentum = JSON.parse(JSON.stringify(filteredStocks)).sort(
@@ -126,10 +126,10 @@ export default async function handler(req, res) {
                 orderedByMomentum.findIndex(
                     (c) => c.ticker === company.ticker
                 ) +
-                orderedByEV_EBIT.findIndex((c) => c.ticker === company.ticker) +
+                orderedByev_ebit.findIndex((c) => c.ticker === company.ticker) +
                 2,
-            rank_EV_EBIT:
-                orderedByEV_EBIT.findIndex((c) => c.ticker === company.ticker) +
+            rank_ev_ebit:
+                orderedByev_ebit.findIndex((c) => c.ticker === company.ticker) +
                 1,
             rank_Momentum_6M:
                 orderedByMomentum.findIndex(

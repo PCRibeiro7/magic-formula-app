@@ -49,7 +49,7 @@ export default function RankingPanel({
     const filterByMarketCap = useCallback(
         (stock) => {
             return minimumMarketCap
-                ? stock.valorMercado > minimumMarketCap
+                ? stock.valormercado > minimumMarketCap
                 : true;
         },
         [minimumMarketCap]
@@ -58,7 +58,7 @@ export default function RankingPanel({
     const filterByLiquidity = useCallback(
         (stock) => {
             return minimumLiquidity
-                ? stock.liquidezMediaDiaria > minimumLiquidity
+                ? stock.liquidezmediadiaria > minimumLiquidity
                 : true;
         },
         [minimumLiquidity]

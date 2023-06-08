@@ -5,7 +5,7 @@ export default async function handler(req, res) {
     const stocks = await fetchAllStocks();
 
     let filteredStocks = stocks.filter((stock) => {
-        return stock.eV_Ebit > 0 && stock.liquidezMediaDiaria > 1000;
+        return stock.ev_ebit > 0 && stock.liquidezmediadiaria > 1000;
     });
     const bovespaApi = new Api().api;
 

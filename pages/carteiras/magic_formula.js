@@ -54,14 +54,14 @@ const headCells = [
     label: "Rank Fórmula Mágica",
   },
   {
-    id: "eV_Ebit",
+    id: "ev_ebit",
     numeric: true,
     disablePadding: false,
     isOrdinal: false,
     label: "EV/EBIT",
   },
   {
-    id: "rank_EV_EBIT",
+    id: "rank_ev_ebit",
     numeric: true,
     disablePadding: false,
     isOrdinal: true,

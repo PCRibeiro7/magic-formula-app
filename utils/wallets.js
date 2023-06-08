@@ -1,10 +1,10 @@
 export const filterByMagicFormula = (stocks) => {
   const filteredStocks = stocks.filter((stock) => {
-    return stock.eV_Ebit > 0 && stock.roic > 0;
+    return stock.ev_ebit > 0 && stock.roic > 0;
   });
 
-  const orderedByEV_EBIT = JSON.parse(JSON.stringify(filteredStocks)).sort(
-    (a, b) => a.eV_Ebit - b.eV_Ebit
+  const orderedByev_ebit = JSON.parse(JSON.stringify(filteredStocks)).sort(
+    (a, b) => a.ev_ebit - b.ev_ebit
   );
   const orderedByROIC = JSON.parse(JSON.stringify(filteredStocks)).sort(
     (a, b) => b.roic - a.roic
@@ -13,11 +13,11 @@ export const filterByMagicFormula = (stocks) => {
   return JSON.parse(JSON.stringify(filteredStocks))
     .map((company) => ({
       rank:
-        orderedByEV_EBIT.findIndex((c) => c.ticker === company.ticker) +
+        orderedByev_ebit.findIndex((c) => c.ticker === company.ticker) +
         orderedByROIC.findIndex((c) => c.ticker === company.ticker) +
         2,
-      rank_EV_EBIT:
-        orderedByEV_EBIT.findIndex((c) => c.ticker === company.ticker) + 1,
+      rank_ev_ebit:
+        orderedByev_ebit.findIndex((c) => c.ticker === company.ticker) + 1,
       rank_ROIC:
         orderedByROIC.findIndex((c) => c.ticker === company.ticker) + 1,
       ...company,
@@ -26,8 +26,8 @@ export const filterByMagicFormula = (stocks) => {
 };
 
 const getGrahamPrice = (stock) => {
-  const profitPerStock = stock.price / stock.p_L;
-  const equityValuePerStock = stock.price / stock.p_VP;
+  const profitPerStock = stock.price / stock.p_l;
+  const equityValuePerStock = stock.price / stock.p_vp;
   const grahamPrice = (22.5 * profitPerStock * equityValuePerStock) ** 0.5;
   return Math.floor(grahamPrice * 100) / 100;
 };
@@ -45,7 +45,7 @@ export const filterByGraham = (stocks) => {
   });
   return stocksWithGraham
     .filter((stock) => {
-      return stock.p_VP > 0 && stock.p_L > 0 && stock.graham_price_diff >= 0.2;
+      return stock.p_vp > 0 && stock.p_l > 0 && stock.graham_price_diff >= 0.2;
     })
     .sort((a, b) => b.graham_price_diff - a.graham_price_diff);
 };
@@ -53,7 +53,7 @@ export const filterByGraham = (stocks) => {
 export const filterByDecioBasin = (stocks) => {
   return stocks
     .filter((stock) => {
-      return stock.p_L > 0 && stock.lpa > 0;
+      return stock.p_l > 0 && stock.lpa > 0;
     });
 };
 

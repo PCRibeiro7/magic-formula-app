@@ -21,7 +21,7 @@ const headCells = [
     label: "Rank AM + Momentum 6M",
   },
   {
-    id: "eV_Ebit",
+    id: "ev_ebit",
     numeric: true,
     disablePadding: false,
     isOrdinal: false,
@@ -49,7 +49,7 @@ const headCells = [
     label: "Rank Momentum 6M",
   },
   {
-    id: "rank_EV_EBIT",
+    id: "rank_ev_ebit",
     numeric: true,
     disablePadding: false,
     isOrdinal: true,

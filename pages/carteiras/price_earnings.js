@@ -23,7 +23,7 @@ const headCells = [
     label: "P/L Médio Histórico",
   },
   {
-    id: "p_L",
+    id: "p_l",
     numeric: true,
     disablePadding: false,
     isOrdinal: false,
@@ -68,7 +68,7 @@ export default function GrahamWallet() {
     const newStocks = stocks
       .map((stock) => ({
         ...stock,
-        p_L: Math.round(stock.p_L * 100) / 100,
+        p_l: Math.round(stock.p_l * 100) / 100,
         shillerPL:
           Math.round(
             ((stock.price * lastYears) /
@@ -96,11 +96,11 @@ export default function GrahamWallet() {
       }))
       .map((stock) => ({
         ...stock,
-        plDiff: Math.round((1 - stock.p_L / stock.averagePL) * 10000) / 100,
+        plDiff: Math.round((1 - stock.p_l / stock.averagePL) * 10000) / 100,
       }))
       .filter(
         (stock) =>
-          stock.p_L > 0 &&
+          stock.p_l > 0 &&
           stock.averagePL > 0 &&
           stock.historicalData["P/L"].series.length > 1 + lastYears
       );
