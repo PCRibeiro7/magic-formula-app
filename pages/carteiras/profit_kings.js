@@ -9,16 +9,37 @@ export async function getServerSideProps(context) {
     try {
         const stocks = await fetchAllStocks();
 
+        const mostLliquidTickers = stocks.reduce((acc, stock) => {
+            const alreadyExists = acc.find(
+                (s) => s.ticker.slice(0, 4) === stock.ticker.slice(0, 4)
+            );
+            if (!alreadyExists) {
+                acc = [...acc, stock];
+                return acc;
+            }
+            if (stock.liquidezmediadiaria > alreadyExists.liquidezmediadiaria) {
+                acc = [
+                    ...acc.filter(
+                        (s) => s.ticker.slice(0, 4) !== stock.ticker.slice(0, 4)
+                    ),
+                    stock,
+                ];
+                return acc;
+            }
+            return acc;
+        }, []);
+
         const { data: profits } = await supabase.from("profit_kings").select();
 
-        const stocksWithProfit = stocks.map((stock) => {
+        const stocksWithProfit = mostLliquidTickers.map((stock) => {
             const stockProfits = profits.find(
                 (profit) => profit.ticker === stock.ticker
             );
             const yearsWithProfitCount = stockProfits.years_with_profit_count;
             const yearsWithProfitPercentage =
-                Math.round((yearsWithProfitCount * 10000) / stockProfits.years_count) /
-                100;
+                Math.round(
+                    (yearsWithProfitCount * 10000) / stockProfits.years_count
+                ) / 100;
 
             const averageProfit = Math.round(stockProfits.average_profit);
 
@@ -32,10 +53,10 @@ export async function getServerSideProps(context) {
         });
 
         const orderedByYearsWithProfitPercentage = JSON.parse(
-            JSON.stringify(stocksWithProfit)
-        ).sort(
-            (a, b) => b.yearsWithProfitPercentage - a.yearsWithProfitPercentage
-        );
+            JSON.stringify(
+                stocksWithProfit.map((stock) => stock.yearsWithProfitPercentage)
+            ) // deep copy
+        ).sort((a, b) => b - a);
 
         const orderedByAverageProfit = JSON.parse(
             JSON.stringify(stocksWithProfit)
@@ -45,20 +66,12 @@ export async function getServerSideProps(context) {
             .map((company) => ({
                 rank:
                     orderedByYearsWithProfitPercentage.findIndex(
-                        (c) => c.ticker === company.ticker
+                        (p) => p === company.yearsWithProfitPercentage
                     ) +
                     orderedByAverageProfit.findIndex(
                         (c) => c.ticker === company.ticker
                     ) +
-                    2,
-                rank_years_with_profit_percentage:
-                    orderedByYearsWithProfitPercentage.findIndex(
-                        (c) => c.ticker === company.ticker
-                    ) + 1,
-                rank_average_profit:
-                    orderedByAverageProfit.findIndex(
-                        (c) => c.ticker === company.ticker
-                    ) + 1,
+                    1,
                 ...company,
             }))
             .sort((a, b) => a.rank - b.rank);
@@ -69,6 +82,7 @@ export async function getServerSideProps(context) {
             },
         };
     } catch (error) {
+        console.log(error);
         return;
     }
 }
