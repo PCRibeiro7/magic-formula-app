@@ -1,9 +1,8 @@
 import greenblattImage from "public/greenblatt.jpg";
 import grahamImage from "public/graham.jpg";
 import tobiasImage from "public/tobias-carlisle.jpg";
-import decioImage from "public/decio-basin.jpg";
-import valuationImage from "public/valuation.png";
 import profitImage from "public/profit.jpg";
+import kingsImage from "public/kings.png";
 
 
 const pages = [
@@ -58,7 +57,7 @@ const pages = [
             },
         ],
     },
-        {
+    {
         pagePath: "carteiras/top_gainers",
         image: profitImage,
         title: "Carteira  de Valorização Passada",
@@ -68,6 +67,23 @@ const pages = [
             {
                 direction: "high",
                 indicator: "Preço de Mercado",
+            },
+        ],
+    },
+    {
+        pagePath: "carteiras/profit_kings",
+        image: kingsImage,
+        title: "Carteira de Reis do Lucro",
+        description:
+            "Ranking baseado nas ações que mais lucraram nos últimos anos",
+        rules: [
+            {
+                direction: "high",
+                indicator: "Lucro Médio Anual",
+            },
+            {
+                direction: "high",
+                indicator: "Percentual de Anos com Lucro",
             },
         ],
     },

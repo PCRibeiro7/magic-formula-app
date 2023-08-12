@@ -34,7 +34,7 @@ const myHandler: Handler = async (
         const formattedProfitData = profitData.map((yearProfit) => ({
             ticker: ticker,
             year: yearProfit.year,
-            profit: yearProfit.profit,
+            profit: Math.round(yearProfit.profit),
         }));
 
         const { error: profitUpdateError } = await supabase
