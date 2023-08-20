@@ -16,6 +16,7 @@ const myHandler: Handler = async (
     context: HandlerContext
 ) => {
     try {
+        console.log("Updating profits...");
         const {
             data: [{ ticker }],
             error: tickerFetchError,
@@ -29,13 +30,21 @@ const myHandler: Handler = async (
             throw tickerFetchError;
         }
 
+        console.log(`Fetching profits for ${ticker}`);
+
         const profitData = await fetchStockProfit({ ticker });
+
+        console.log(
+            `Fetched ${profitData.length} years of profit data for ${ticker}`
+        );
 
         const formattedProfitData = profitData.map((yearProfit) => ({
             ticker: ticker,
             year: yearProfit.year,
             profit: Math.round(yearProfit.profit),
         }));
+
+        console.log(`Updating profits for ${ticker}`);
 
         const { error: profitUpdateError } = await supabase
             .from("profits")
@@ -45,12 +54,16 @@ const myHandler: Handler = async (
             throw profitUpdateError;
         }
 
+        console.log(`Updating last updated for ${ticker}`);
+
         const { error: tickerUpdateError } = await supabase
             .from("tickers")
             .upsert({
                 ticker: ticker,
                 last_updated: new Date().toISOString(),
             });
+
+        console.log(`Updated last updated for ${ticker}`);
 
         if (tickerUpdateError) {
             throw tickerUpdateError;
