@@ -21,10 +21,10 @@ import StarOutlineIcon from "@mui/icons-material/StarOutline";
 import { nFormatter } from "utils/math";
 
 function descendingComparator(a, b, orderBy) {
-    if (b[orderBy] < a[orderBy]) {
+    if ((b[orderBy] || 0) < (a[orderBy] || 0)) {
         return -1;
     }
-    if (b[orderBy] > a[orderBy]) {
+    if ((b[orderBy] || 0) > (a[orderBy] || 0)) {
         return 1;
     }
     return 0;
