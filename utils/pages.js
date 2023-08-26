@@ -85,6 +85,10 @@ const pages = [
                 direction: "high",
                 indicator: "Percentual de Anos com Lucro",
             },
+            {
+                direction: "high",
+                indicator: "Anos com Lucro",
+            },
         ],
     },
     // {

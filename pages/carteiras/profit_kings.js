@@ -48,6 +48,8 @@ export async function getServerSideProps(context) {
                 profits: stockProfits,
                 yearsWithProfitPercentage: yearsWithProfitPercentage,
                 averageProfit: averageProfit,
+                yearsCount: stockProfits.years_count,
+                yearsWithProfitCount: stockProfits.years_with_profit_count,
             };
             return stockWithProfits;
         });
@@ -59,8 +61,16 @@ export async function getServerSideProps(context) {
         ).sort((a, b) => b - a);
 
         const orderedByAverageProfit = JSON.parse(
-            JSON.stringify(stocksWithProfit)
-        ).sort((a, b) => b.averageProfit - a.averageProfit);
+            JSON.stringify(
+                stocksWithProfit.map((stock) => stock.averageProfit)
+            ) // deep copy
+        ).sort((a, b) => b - a);
+
+        const orderedByYearsWithProfitCount = JSON.parse(
+            JSON.stringify(
+                stocksWithProfit.map((stock) => stock.yearsWithProfitCount)
+            )
+        ).sort((a, b) => b - a);
 
         const stocksWithRanking = JSON.parse(JSON.stringify(stocksWithProfit))
             .map((company) => ({
@@ -69,7 +79,10 @@ export async function getServerSideProps(context) {
                         (p) => p === company.yearsWithProfitPercentage
                     ) +
                     orderedByAverageProfit.findIndex(
-                        (c) => c.ticker === company.ticker
+                        (c) => c === company.averageProfit
+                    ) +
+                    orderedByYearsWithProfitCount.findIndex(
+                        (c) => c === company.yearsWithProfitCount   
                     ) +
                     1,
                 ...company,
@@ -110,6 +123,13 @@ const headCells = [
         label: "% Anos com Lucro",
     },
     {
+        id: "yearsCount",
+        numeric: true,
+        disablePadding: false,
+        isOrdinal: false,
+        label: "Anos com Lucro",
+    },
+    {
         id: "averageProfit",
         numeric: true,
         disablePadding: false,
@@ -122,14 +142,7 @@ const headCells = [
         disablePadding: false,
         isOrdinal: false,
         label: "EV/EBIT",
-    },
-    {
-        id: "roic",
-        numeric: true,
-        disablePadding: false,
-        isOrdinal: false,
-        label: "ROIC",
-    },
+    }
 ];
 
 export default function ProfitKings({ stocks }) {
@@ -155,12 +168,18 @@ export default function ProfitKings({ stocks }) {
                             Ordenamos empresas por maior{" "}
                             <strong>Lucro Médio Anual</strong>.
                             <br />
-                            <br />3 - Ranking dos <strong>Reis do Lucro</strong>
+                            <br />3 - Ranking de empresas com{" "}
+                            <strong>&quot;maior histórico de lucro&quot;</strong>:
+                            <br />
+                            Ordenamos empresas por maior{" "}
+                            <strong>Quantidade de anos com lucro</strong>.
+                            <br />
+                            <br />4 - Ranking dos <strong>Reis do Lucro</strong>
                             :
                             <br />
                             Ordenamos empresas combinando maior{" "}
-                            <strong>percentual de anos com lucro</strong> e
-                            maior <strong>lucro médio anual</strong>.
+                            <strong>percentual de anos com lucro</strong>,{" "}
+                            maior <strong>lucro médio anual</strong> e maior <strong>quantidade de anos</strong> com lucro.
                             <br />
                         </>
                     }
