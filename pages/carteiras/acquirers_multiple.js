@@ -35,25 +35,11 @@ const headCells = [
     label: "Momentum 6M (%)",
   },
   {
-    id: "momentum3M",
+    id: "yearsWithProfitPercentage",
     numeric: true,
     disablePadding: false,
     isOrdinal: false,
-    label: "Momentum 3M (%)",
-  },
-  {
-    id: "rank_Momentum_6M",
-    numeric: true,
-    disablePadding: false,
-    isOrdinal: true,
-    label: "Rank Momentum 6M",
-  },
-  {
-    id: "rank_ev_ebit",
-    numeric: true,
-    disablePadding: false,
-    isOrdinal: true,
-    label: "Rank EV/EBIT",
+    label: "% Anos com Lucro",
   },
 ];
 
@@ -80,10 +66,6 @@ export default function AcquirersMultiple() {
 
 
   const setTooltipDates = (dates) => { 
-    const threeMonthDate = new Date(0);
-    threeMonthDate.setUTCSeconds(dates.threeMonths);
-    headCells.find((cell) => cell.id === "momentum3M").tooltip = threeMonthDate.toLocaleDateString();
-
     const sixMonthDate = new Date(0);
     sixMonthDate.setUTCSeconds(dates.sixMonths);
     headCells.find((cell) => cell.id === "momentum6M").tooltip = sixMonthDate.toLocaleDateString();

@@ -1,6 +1,7 @@
 import { fetchAllStocks } from "services/statusInvest";
 import { Api } from "services/bovespaApi.ts";
 import moment from "moment";
+import supabase from "utils/supabase";
 
 export default async function handler(req, res) {
     let sixMonthsBeforeDateEpoch, threeMonthsBeforeDateEpoch;
@@ -117,6 +118,28 @@ export default async function handler(req, res) {
     filteredStocks = filteredStocks.filter((stock) => {
         return stock.momentum6M;
     });
+
+
+    const { data: profits } = await supabase.from("profit_kings").select();
+
+    filteredStocks = filteredStocks.map((stock) => {
+        const stockProfits = profits.find(
+            (profit) => profit.ticker === stock.ticker
+        );
+        const yearsWithProfitCount = stockProfits.years_with_profit_count;
+        const yearsWithProfitPercentage =
+            Math.round(
+                (yearsWithProfitCount * 10000) / stockProfits.years_count
+            ) / 100;
+
+        const stockWithProfits = {
+            ...stock,
+            profits: stockProfits,
+            yearsWithProfitPercentage: yearsWithProfitPercentage,
+        };
+        return stockWithProfits;
+    });
+
     const orderedByev_ebit = JSON.parse(JSON.stringify(filteredStocks)).sort(
         (a, b) => a.ev_ebit - b.ev_ebit
     );
