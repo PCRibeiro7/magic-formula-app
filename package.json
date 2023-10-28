@@ -13,6 +13,7 @@
     "@mui/icons-material": "^5.3.1",
     "@mui/material": "^5.3.1",
     "@netlify/functions": "^1.6.0",
+    "@netlify/plugin-nextjs": "^4.41.1",
     "@supabase/supabase-js": "^2.32.0",
     "axios": "^0.25.0",
     "moment": "^2.29.1",
@@ -23,7 +24,8 @@
     "react-number-format": "^4.9.1",
     "touch-cli": "^0.0.1",
     "underscore": "^1.13.2",
-    "yahoo-finance": "^0.3.7"
+    "yahoo-finance": "^0.3.7",
+    "yahoo-finance2": "^2.8.1"
   },
   "devDependencies": {
     "@types/react": "^18.0.28",
