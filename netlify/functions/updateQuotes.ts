@@ -32,7 +32,20 @@ const myHandler: Handler = async (
 
         console.log(`Fetching quotes for ${ticker}`);
 
-        const quotesData = await getHistoricalPrices({ symbol: `${ticker}.SA` });
+        const { data: quotesData, error: getHistoricalPricesError } =
+            await getHistoricalPrices({ symbol: `${ticker}.SA` });
+
+        if (getHistoricalPricesError) {
+            if (getHistoricalPricesError.code === 404) {
+                console.log(
+                    `Ticker quotes for ${ticker} not found on yahoo-finance, skipping...`
+                );
+                await updateLastUpdateQuotesTimestamp({ ticker });
+                return {
+                    statusCode: 200,
+                };
+            }
+        }
 
         console.log(
             `Fetched ${quotesData.length} days of quotes data for ${ticker}`
@@ -54,26 +67,28 @@ const myHandler: Handler = async (
             throw profitUpdateError;
         }
 
-        console.log(`Updating last_updated_quotes for ${ticker}`);
-
-        const { error: tickerUpdateError } = await supabase
-            .from("tickers")
-            .upsert({
-                ticker: ticker,
-                last_updated_quotes: new Date().toISOString(),
-            });
-
-        console.log(`Updated last_updated_quotes for ${ticker}`);
-
-        if (tickerUpdateError) {
-            throw tickerUpdateError;
-        }
+        await updateLastUpdateQuotesTimestamp({ ticker });
 
         return {
             statusCode: 200,
         };
     } catch (error) {
         console.log(error);
+    }
+};
+
+const updateLastUpdateQuotesTimestamp = async ({ ticker }) => {
+    console.log(`Updating last_updated_quotes for ${ticker}`);
+
+    const { error: tickerUpdateError } = await supabase.from("tickers").upsert({
+        ticker: ticker,
+        last_updated_quotes: new Date().toISOString(),
+    });
+
+    console.log(`Updated last_updated_quotes for ${ticker}`);
+
+    if (tickerUpdateError) {
+        throw tickerUpdateError;
     }
 };
 
