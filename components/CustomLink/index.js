@@ -6,7 +6,7 @@ export default function CustomLink({ path, label }) {
   const router = useRouter();
 
   return (
-    <Link href={`/${path}`} key={`link-app-bar-${path}`}>
+    <Link href={`/${path}`} key={`link-app-bar-${path}`} legacyBehavior>
       <a
         className={
           router.pathname === `/${path}` ? styles.linkActive : styles.link

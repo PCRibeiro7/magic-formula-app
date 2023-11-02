@@ -1,5 +1,5 @@
 import { fetchAllStocks } from "services/statusInvest";
-import { Api } from "services/bovespaApi.ts";
+import { Api } from "services/bovespaApi";
 
 export default async function handler(req, res) {
     const stocks = await fetchAllStocks();

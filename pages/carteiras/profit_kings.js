@@ -35,6 +35,9 @@ export async function getServerSideProps(context) {
             const stockProfits = profits.find(
                 (profit) => profit.ticker === stock.ticker
             );
+            if (!stockProfits) {
+                return stock;
+            }
             const yearsWithProfitCount = stockProfits.years_with_profit_count;
             const yearsWithProfitPercentage =
                 Math.round(
@@ -52,7 +55,7 @@ export async function getServerSideProps(context) {
                 yearsWithProfitCount: stockProfits.years_with_profit_count,
             };
             return stockWithProfits;
-        });
+        }).filter((stock) => stock.profits);
 
         const orderedByYearsWithProfitPercentage = JSON.parse(
             JSON.stringify(
