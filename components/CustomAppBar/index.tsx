@@ -23,7 +23,6 @@ export default function CustomAppBar() {
           <CustomLink
             path={""}
             key={`link-app-bar-${""}`}
-            styles={styles}
             label={"Home"}
           />
           <Typography
@@ -54,8 +53,8 @@ export default function CustomAppBar() {
                 <CustomLink
                   path={page.pagePath}
                   key={`link-app-bar-${page.pagePath}`}
-                  styles={styles}
                   label={page.title}
+                  fullWidth
                 />
               </MenuItem>
             )}
@@ -63,13 +62,11 @@ export default function CustomAppBar() {
           <CustomLink
             path={"favorites"}
             key={`link-app-bar-${"favorites"}`}
-            styles={styles}
             label={"Meus Favoritos"}
           />
           <CustomLink
             path={"about"}
             key={`link-app-bar-${"about"}`}
-            styles={styles}
             label={"Sobre"}
           />
         </Toolbar>
