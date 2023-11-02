@@ -1,9 +1,9 @@
-import { fetchAllStocks } from "services/statusInvest";
-import styles from "styles/Wallets.module.css";
-import RankingPanel from "components/RankingPanel";
+import { fetchAllStocks } from "@/services/statusInvest";
+import styles from "@/styles/Wallets.module.css";
+import RankingPanel from "@/components/RankingPanel";
 import { Stack } from "@mui/material";
-import { WalletRules } from "components/WalletRules";
-import supabase from "utils/supabase";
+import { WalletRules } from "@/components/WalletRules";
+import supabase from "@/utils/supabase";
 
 export async function getServerSideProps(context) {
     try {

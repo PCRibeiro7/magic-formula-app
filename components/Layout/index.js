@@ -1,5 +1,5 @@
 import Head from "next/head";
-import CustomAppBar from "components/CustomAppBar";
+import CustomAppBar from "@/components/CustomAppBar";
 
 export default function Layout({ children }) {
   return (

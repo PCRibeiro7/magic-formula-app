@@ -13,12 +13,12 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { useCallback, useEffect, useState } from "react";
-import CustomTable from "components/CustomTable";
+import CustomTable from "@/components/CustomTable";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEventsOutlined";
-import { FilterPanel } from "components/FilterPanel";
+import { FilterPanel } from "@/components/FilterPanel";
 import StarIcon from "@mui/icons-material/Star";
-import { LOCAL_STORAGE_FAVORITE_TICKERS_KEY } from "components/FavoritesPanel";
+import { LOCAL_STORAGE_FAVORITE_TICKERS_KEY } from "@/components/FavoritesPanel";
 
 export default function RankingPanel({
     stocks,

@@ -1,6 +1,6 @@
 import { Grid } from "@mui/material";
-import HomePageCard from "components/HomePageCard";
-import styles from "styles/Home.module.css";
+import HomePageCard from "@/components/HomePageCard";
+import styles from "@/styles/Home.module.css";
 
 import cards from '../utils/pages'
 

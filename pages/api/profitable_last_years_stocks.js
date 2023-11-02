@@ -1,6 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 
-import { fetchAllStocks, fetchHistoricalData } from "services/statusInvest";
+import { fetchAllStocks, fetchHistoricalData } from "@/services/statusInvest";
 
 export default async function handler(req, res) {
   let stocks = await fetchAllStocks();

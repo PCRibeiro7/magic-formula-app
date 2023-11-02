@@ -1,15 +1,15 @@
 import { Stack } from "@mui/material";
-import RankingPanel from "components/RankingPanel";
-import { WalletRules } from "components/WalletRules";
+import RankingPanel from "@/components/RankingPanel";
+import { WalletRules } from "@/components/WalletRules";
 import { useEffect, useState } from "react";
 import {
     fetchAllStocks,
     fetchDividendData,
     fetchHistoricalData,
-} from "services/statusInvest";
-import styles from "styles/Wallets.module.css";
-import { average } from "utils/math";
-import { filterByDecioBasin } from "utils/wallets";
+} from "@/services/statusInvest";
+import styles from "@/styles/Wallets.module.css";
+import { average } from "@/utils/math";
+import { filterByDecioBasin } from "@/utils/wallets";
 import moment from "moment";
 const INITIAL_LAST_YEARS = 3;
 const CURRENT_YEAR = moment().year();

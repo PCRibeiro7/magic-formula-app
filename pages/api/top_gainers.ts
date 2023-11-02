@@ -1,6 +1,6 @@
 import moment from "moment";
-import { getQuotesMomentumFromTimeAgo } from "services/quotesMomentum";
-import { fetchAllStocks } from "services/statusInvest";
+import { getQuotesMomentumFromTimeAgo } from "@/services/quotesMomentum";
+import { fetchAllStocks } from "@/services/statusInvest";
 
 export default async function handler(req, res) {
     const yearsAgoParam = req.query.yearsAgo;

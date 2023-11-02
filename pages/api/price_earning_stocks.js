@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 
-import { fetchAllStocks, fetchHistoricalData } from "services/statusInvest";
-import { filterByDecioBasin } from "utils/wallets";
+import { fetchAllStocks, fetchHistoricalData } from "@/services/statusInvest";
+import { filterByDecioBasin } from "@/utils/wallets";
 
 export default async function handler(req, res) {
   const stocks = await fetchAllStocks();

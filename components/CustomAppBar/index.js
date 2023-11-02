@@ -2,9 +2,9 @@ import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
-import styles from "styles/CustomAppBar.module.css";
+import styles from "@/styles/CustomAppBar.module.css";
 import { Menu, MenuItem, Typography } from "@mui/material";
-import CustomLink from "components/CustomLink";
+import CustomLink from "@/components/CustomLink";
 import pages from '../../utils/pages'
 
 export default function CustomAppBar() {

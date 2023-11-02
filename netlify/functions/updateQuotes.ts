@@ -1,7 +1,7 @@
 import type { Handler, HandlerEvent, HandlerContext } from "@netlify/functions";
 import { schedule } from "@netlify/functions";
 import { createClient } from "@supabase/supabase-js";
-import { getHistoricalPrices } from "services/yahooFinance2";
+import { getHistoricalPrices } from "@/services/yahooFinance2";
 
 // Grab our credentials from a .env file or environment variables
 const { DATABASE_URL, SUPABASE_SERVICE_API_KEY } = process.env;

@@ -1,9 +1,9 @@
 import { Stack } from "@mui/material";
-import RankingPanel from "components/RankingPanel";
-import { WalletRules } from "components/WalletRules";
+import RankingPanel from "@/components/RankingPanel";
+import { WalletRules } from "@/components/WalletRules";
 import { useEffect, useState } from "react";
-import styles from "styles/Wallets.module.css";
-import { average, median } from "utils/math";
+import styles from "@/styles/Wallets.module.css";
+import { average, median } from "@/utils/math";
 
 const INITIAL_LAST_YEARS = 5;
 

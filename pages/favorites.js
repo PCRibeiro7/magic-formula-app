@@ -1,8 +1,8 @@
 
-import styles from "styles/Wallets.module.css";
-import FavoritesPanel from "components/FavoritesPanel";
+import styles from "@/styles/Wallets.module.css";
+import FavoritesPanel from "@/components/FavoritesPanel";
 import { Stack } from "@mui/material";
-import { fetchAllStocks } from "services/statusInvest";
+import { fetchAllStocks } from "@/services/statusInvest";
 
 
 export async function getServerSideProps(context) {

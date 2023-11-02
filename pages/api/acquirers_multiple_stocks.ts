@@ -1,6 +1,6 @@
-import { fetchAllStocks } from "services/statusInvest";
-import supabase from "utils/supabase";
-import { getQuotesMomentumFromTimeAgo } from "services/quotesMomentum";
+import { fetchAllStocks } from "@/services/statusInvest";
+import supabase from "@/utils/supabase";
+import { getQuotesMomentumFromTimeAgo } from "@/services/quotesMomentum";
 
 export default async function handler(req, res) {
     let sixMonthsBeforeDateEpoch, threeMonthsBeforeDateEpoch;

@@ -1,6 +1,6 @@
 import { Paper, Typography } from "@mui/material";
 import { useState } from "react";
-import FavoritesTable from "components/FavoritesTable";
+import FavoritesTable from "@/components/FavoritesTable";
 import StarIcon from "@mui/icons-material/Star";
 
 export const LOCAL_STORAGE_FAVORITE_TICKERS_KEY = "favoriteTickers";

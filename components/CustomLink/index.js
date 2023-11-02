@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import styles from "styles/CustomAppBar.module.css";
+import styles from "@/styles/CustomAppBar.module.css";
 
 export default function CustomLink({ path, label }) {
   const router = useRouter();

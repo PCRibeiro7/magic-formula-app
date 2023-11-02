@@ -6,7 +6,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import MaskedNumberInput from "components/MaskedNumberInput";
+import MaskedNumberInput from "@/components/MaskedNumberInput";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import FilterAltIcon from "@mui/icons-material/FilterAltOutlined";
 

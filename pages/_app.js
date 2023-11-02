@@ -1,10 +1,10 @@
 import { CssBaseline, ThemeProvider } from "@mui/material";
-import Layout from "components/Layout";
+import Layout from "@/components/Layout";
 import "styles/globals.css";
 import NextNProgress from "nextjs-progressbar";
-import * as gtag from "services/gtag";
-import Analytics from "components/Analytics";
-import theme from "utils/theme";
+import * as gtag from "@/services/gtag";
+import Analytics from "@/components/Analytics";
+import theme from "@/utils/theme";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 

@@ -1,7 +1,7 @@
 import { Stack } from "@mui/material";
-import RankingPanel from "components/RankingPanel";
+import RankingPanel from "@/components/RankingPanel";
 import { useEffect, useState } from "react";
-import styles from "styles/Wallets.module.css";
+import styles from "@/styles/Wallets.module.css";
 
 const INITIAL_LAST_YEARS = 5;
 

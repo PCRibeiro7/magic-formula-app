@@ -1,8 +1,8 @@
-import greenblattImage from "public/greenblatt.jpg";
-import grahamImage from "public/graham.jpg";
-import tobiasImage from "public/tobias-carlisle.jpg";
-import profitImage from "public/profit.jpg";
-import kingsImage from "public/kings.png";
+import greenblattImage from "@/public/greenblatt.jpg";
+import grahamImage from "@/public/graham.jpg";
+import tobiasImage from "@/public/tobias-carlisle.jpg";
+import profitImage from "@/public/profit.jpg";
+import kingsImage from "@/public/kings.png";
 
 
 const pages = [

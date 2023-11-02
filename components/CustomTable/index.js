@@ -14,11 +14,11 @@ import Paper from "@mui/material/Paper";
 
 import { visuallyHidden } from "@mui/utils";
 import { Tooltip } from "@mui/material";
-import { checkIfTickerIsBestRanked } from "utils/wallets";
+import { checkIfTickerIsBestRanked } from "@/utils/wallets";
 import { Checkbox, Radio } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 import StarOutlineIcon from "@mui/icons-material/StarOutline";
-import { nFormatter } from "utils/math";
+import { nFormatter } from "@/utils/math";
 
 function descendingComparator(a, b, orderBy) {
     if ((b[orderBy] || 0) < (a[orderBy] || 0)) {

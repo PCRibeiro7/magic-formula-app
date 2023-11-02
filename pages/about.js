@@ -1,7 +1,7 @@
 import { Box } from "@mui/system";
 import Image from "next/image";
-import styles from "styles/Home.module.css";
-import stonksImage from "public/stonks.jpg";
+import styles from "@/styles/Home.module.css";
+import stonksImage from "@/public/stonks.jpg";
 
 export default function About() {
   return (
