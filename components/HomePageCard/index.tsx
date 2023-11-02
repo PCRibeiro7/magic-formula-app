@@ -1,7 +1,6 @@
 import * as React from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import Image from "next/image";
 import { Button, CardActions, Divider, Grid } from "@mui/material";
@@ -18,7 +17,7 @@ export default function HomePageCard({ image, title, description, subtext }) {
       }}
     >
       <div>
-        <Image component="img" src={image} alt="green iguana" />
+        <Image src={image} alt="green iguana" width={345} />
       </div>
       <CardContent sx={{height:'200px',display:'grid'}}>
         <Typography gutterBottom variant="h5" component="div">
