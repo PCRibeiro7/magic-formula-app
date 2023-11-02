@@ -13,6 +13,7 @@ import { WalletRules } from "components/WalletRules";
 import { useEffect, useState } from "react";
 import { useCallback } from "react";
 import moment from "moment";
+import React from "react";
 
 const headCells = [
     {
@@ -52,10 +53,9 @@ const headCells = [
     },
 ];
 
-const availablePeriods = [...Array(10).keys()].map((i) => i + 1);
+const availablePeriods = [...Array(23).keys()].map((i) => i + 1);
 
 export default function AcquirersMultiple() {
-    const [stocks, setStocks] = useState([]);
     const [dates, setDates] = useState({});
     const [loading, setLoading] = useState(false);
     const [selectedPeriod, setSelectedPeriod] = useState(10);
@@ -63,64 +63,19 @@ export default function AcquirersMultiple() {
 
     const fetchData = useCallback(async () => {
         setLoading(true);
-        const res = await fetch(`/api/top_gainers`);
-        const { stocks: stocksWithRanking, dates } = await res.json();
+        const res = await fetch(`/api/top_gainers?yearsAgo=${selectedPeriod}`);
+        const { stocks, dates } = await res.json();
 
-        setStocks(stocksWithRanking);
-        setDates(dates);
-        setLoading(false);
-    }, []);
-
-    useEffect(() => {
-        const desiredYear = moment().subtract(selectedPeriod, "years");
-        let filteredStocks = [...stocks].map((stock) => {
-            const matchedDate = stock.historicalDataPrice.find((dateObj) => {
-                return moment.unix(dateObj.date).isSame(desiredYear, "year");
-            });
-            if (!matchedDate) {
-                return null;
-            }
-            stock.sixMonthsBeforePrice =
-                Math.round(matchedDate?.adjustedClose * 100) / 100;
-            stock.momentum6M =
-                Math.round(
-                    (stock.price / stock.sixMonthsBeforePrice - 1) * 10000
-                ) / 100;
-            stock.annualizedReturn =
-                Math.round(
-                    ((stock.price / stock.sixMonthsBeforePrice) **
-                        (1 / selectedPeriod) -
-                        1) *
-                        10000
-                ) / 100;
-            return stock;
-        });
-
-        filteredStocks = filteredStocks
-            .filter((stock) => stock)
-            .filter((stock) => {
-                return stock.sixMonthsBeforePrice;
-            });
-        const orderedByMomentum = JSON.parse(
-            JSON.stringify(filteredStocks)
-        ).sort((a, b) => b.momentum6M - a.momentum6M);
-
-        const mountedStocks = JSON.parse(JSON.stringify(filteredStocks))
-            .map((company) => ({
-                rank:
-                    orderedByMomentum.findIndex(
-                        (c) => c.ticker === company.ticker
-                    ) + 1,
-                ...company,
-            }))
-            .sort((a, b) => a.rank - b.rank);
-        setFilteredStocks(mountedStocks);
         headCells.find(
             (cell) => cell.id === "sixMonthsBeforePrice"
         ).label = `Preço ${selectedPeriod} ${
             selectedPeriod === 1 ? "ano" : "anos"
         } atrás`;
-    }, [selectedPeriod, stocks]);
+        
+        setFilteredStocks(stocks);
+        setDates(dates);
+        setLoading(false);
+    }, [selectedPeriod]);
 
     useEffect(() => {
         fetchData();
@@ -154,9 +109,11 @@ export default function AcquirersMultiple() {
                             id="demo-simple-select"
                             value={selectedPeriod}
                             label="Age"
-                            onChange={(e) => setSelectedPeriod(e.target.value)}
+                            onChange={(e) =>
+                                setSelectedPeriod(Number(e.target.value))
+                            }
                         >
-                            {availablePeriods.map((period, index) => {
+                            {availablePeriods.map((period: number, index) => {
                                 return (
                                     <MenuItem value={period} key={period}>
                                         {period} {index === 0 ? "ano" : "anos"}
@@ -175,6 +132,9 @@ export default function AcquirersMultiple() {
                     loading={loading}
                     hideFavorites
                     hideFilter
+                    showDividendFilter={undefined}
+                    lastYears={undefined}
+                    setLastYears={undefined}
                 />
             </Stack>
         </div>

@@ -1,5 +1,7 @@
 {
     "compilerOptions": {
+        "target": "es2015",
+        "downlevelIteration": true,
         "moduleResolution": "node",
         "lib": ["dom", "dom.iterable", "esnext"],
         "allowJs": true,
@@ -14,6 +16,7 @@
         "isolatedModules": true,
         "jsx": "preserve"
     },
+    "jsx": "react",
     "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
     "exclude": ["node_modules"]
 }
