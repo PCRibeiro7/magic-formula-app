@@ -1,10 +1,14 @@
-import type { Handler, HandlerEvent, HandlerContext } from "@netlify/functions";
+import type {
+    Handler,
+    HandlerEvent,
+    HandlerContext,
+} from "@netlify/functions";
 import { schedule } from "@netlify/functions";
 import { createClient } from "@supabase/supabase-js";
 import { fetchAllStocks } from "@/services/statusInvest";
 
 // Grab our credentials from a .env file or environment variables
-const { DATABASE_URL, SUPABASE_SERVICE_API_KEY } = process.env;
+const { DATABASE_URL = "", SUPABASE_SERVICE_API_KEY = "" } = process.env;
 
 // Connect to our database
 const supabase = createClient(DATABASE_URL, SUPABASE_SERVICE_API_KEY, {
@@ -29,6 +33,7 @@ const myHandler: Handler = async (
         };
     } catch (error) {
         console.log(error);
+        throw error;
     }
 };
 

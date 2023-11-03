@@ -10,7 +10,7 @@ export const getHistoricalPrices = async ({ symbol }: GetPriceParams) => {
             period1: "1990-01-01",
         });
         return { data: result };
-    } catch (error) {
+    } catch (error: any) {
         return { error };
     }
 };

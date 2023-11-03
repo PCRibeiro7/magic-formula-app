@@ -1,10 +1,14 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 
 import { fetchAllStocks, fetchHistoricalData } from "@/services/statusInvest";
+import type { NextApiRequest, NextApiResponse } from "next";
 
-export default async function handler(_req, res) {
+export default async function handler(
+    _req: NextApiRequest,
+    res: NextApiResponse
+) {
     let stocks = await fetchAllStocks();
-    let historicalData = [];
+    let historicalData: any[] = [];
     const batchSize = 100;
     for (let i = 0; i < stocks.length; i = i + batchSize) {
         const currStocksBatch = stocks.slice(i, i + batchSize);

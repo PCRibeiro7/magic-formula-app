@@ -4,7 +4,7 @@ import { createClient } from "@supabase/supabase-js";
 import { getHistoricalPrices } from "@/services/yahooFinance2";
 
 // Grab our credentials from a .env file or environment variables
-const { DATABASE_URL, SUPABASE_SERVICE_API_KEY } = process.env;
+const { DATABASE_URL = "", SUPABASE_SERVICE_API_KEY = "" } = process.env;
 
 // Connect to our database
 const supabase = createClient(DATABASE_URL, SUPABASE_SERVICE_API_KEY, {
@@ -17,14 +17,21 @@ const myHandler: Handler = async (
 ) => {
     try {
         console.log("Updating quotes...");
-        const {
-            data: [{ ticker }],
-            error: tickerFetchError,
-        } = await supabase
-            .from("tickers")
-            .select("ticker")
-            .order("last_updated_quotes", { ascending: true, nullsFirst: true })
-            .limit(1);
+        const { data: tickerFetchData, error: tickerFetchError } =
+            await supabase
+                .from("tickers")
+                .select("ticker")
+                .order("last_updated_quotes", {
+                    ascending: true,
+                    nullsFirst: true,
+                })
+                .limit(1);
+
+        if (!tickerFetchData) {
+            throw new Error("Ticker fetch data is null");
+        }
+
+        const ticker = tickerFetchData[0].ticker;
 
         if (tickerFetchError) {
             throw tickerFetchError;
@@ -45,6 +52,10 @@ const myHandler: Handler = async (
                     statusCode: 200,
                 };
             }
+        }
+
+        if(!quotesData) {
+            throw new Error("Quotes data is null");
         }
 
         console.log(
@@ -74,10 +85,15 @@ const myHandler: Handler = async (
         };
     } catch (error) {
         console.log(error);
+        throw error;
     }
 };
 
-const updateLastUpdateQuotesTimestamp = async ({ ticker }) => {
+const updateLastUpdateQuotesTimestamp = async ({
+    ticker,
+}: {
+    ticker: string;
+}) => {
     console.log(`Updating last_updated_quotes for ${ticker}`);
 
     const { error: tickerUpdateError } = await supabase.from("tickers").upsert({

@@ -2,11 +2,15 @@
 
 import { fetchAllStocks, fetchHistoricalData } from "@/services/statusInvest";
 import { filterByDecioBasin } from "@/utils/wallets";
+import { NextApiRequest, NextApiResponse } from "next";
 
-export default async function handler(_req, res) {
+export default async function handler(
+    _req: NextApiRequest,
+    res: NextApiResponse
+) {
     const stocks = await fetchAllStocks();
     let stocksWithRanking = filterByDecioBasin(stocks);
-    let historicalData = [];
+    let historicalData: any[] = [];
     const batchSize = 100;
     for (let i = 0; i < stocksWithRanking.length; i = i + batchSize) {
         const currStocksBatch = stocksWithRanking.slice(i, i + batchSize);

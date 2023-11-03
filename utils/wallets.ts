@@ -1,17 +1,22 @@
-export const filterByMagicFormula = (stocks) => {
+import { Stock } from "@/types/stock";
+
+export const filterByMagicFormula = (stocks: Stock[]) => {
     const filteredStocks = stocks.filter((stock) => {
+        if (!stock.ev_ebit || !stock.roic) {
+            return false;
+        }
         return stock.ev_ebit > 0 && stock.roic > 0;
     });
 
-    const orderedByev_ebit = JSON.parse(JSON.stringify(filteredStocks)).sort(
-        (a, b) => a.ev_ebit - b.ev_ebit
-    );
-    const orderedByROIC = JSON.parse(JSON.stringify(filteredStocks)).sort(
-        (a, b) => b.roic - a.roic
-    );
+    const orderedByev_ebit: Stock[] = JSON.parse(
+        JSON.stringify(filteredStocks)
+    ).sort((a: Stock, b: Stock) => (a.ev_ebit || 0) - (b.ev_ebit || 0));
+    const orderedByROIC: Stock[] = JSON.parse(
+        JSON.stringify(filteredStocks)
+    ).sort((a: Stock, b: Stock) => (b.roic || 0) - (a.roic || 0));
 
     return JSON.parse(JSON.stringify(filteredStocks))
-        .map((company) => ({
+        .map((company: Stock) => ({
             rank:
                 orderedByev_ebit.findIndex((c) => c.ticker === company.ticker) +
                 orderedByROIC.findIndex((c) => c.ticker === company.ticker) +
@@ -23,17 +28,20 @@ export const filterByMagicFormula = (stocks) => {
                 orderedByROIC.findIndex((c) => c.ticker === company.ticker) + 1,
             ...company,
         }))
-        .sort((a, b) => a.rank - b.rank);
+        .sort(
+            (a: Stock & { rank: number }, b: Stock & { rank: number }) =>
+                a.rank - b.rank
+        );
 };
 
-const getGrahamPrice = (stock) => {
+const getGrahamPrice = (stock: Stock) => {
     const profitPerStock = stock.price / stock.p_l;
     const equityValuePerStock = stock.price / stock.p_vp;
     const grahamPrice = (22.5 * profitPerStock * equityValuePerStock) ** 0.5;
     return Math.floor(grahamPrice * 100) / 100;
 };
 
-export const filterByGraham = (stocks) => {
+export const filterByGraham = (stocks: Stock[]) => {
     const stocksWithGraham = stocks.map((stock) => {
         const graham_price = getGrahamPrice(stock);
         const graham_price_diff =
@@ -48,6 +56,7 @@ export const filterByGraham = (stocks) => {
     return stocksWithGraham
         .filter((stock) => {
             return (
+                stock.p_vp &&
                 stock.p_vp > 0 &&
                 stock.p_l > 0 &&
                 stock.graham_price_diff >= 0.2
@@ -56,13 +65,13 @@ export const filterByGraham = (stocks) => {
         .sort((a, b) => b.graham_price_diff - a.graham_price_diff);
 };
 
-export const filterByDecioBasin = (stocks) => {
+export const filterByDecioBasin = (stocks: Stock[]) => {
     return stocks.filter((stock) => {
         return stock.p_l > 0 && stock.lpa > 0;
     });
 };
 
-export const checkIfTickerIsBestRanked = (ticker, stocks) => {
+export const checkIfTickerIsBestRanked = (ticker: string, stocks: Stock[]) => {
     const tickerIndex = stocks.findIndex((stock) => stock.ticker === ticker);
 
     const bestRankedTicker = stocks.findIndex(
