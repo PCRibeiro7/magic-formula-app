@@ -71,7 +71,7 @@ export default function AcquirersMultiple() {
         ).label = `Preço ${selectedPeriod} ${
             selectedPeriod === 1 ? "ano" : "anos"
         } atrás`;
-        
+
         setFilteredStocks(stocks);
         setDates(dates);
         setLoading(false);

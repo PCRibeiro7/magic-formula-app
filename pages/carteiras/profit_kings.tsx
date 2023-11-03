@@ -31,31 +31,35 @@ export async function getServerSideProps(context) {
 
         const { data: profits } = await supabase.from("profit_kings").select();
 
-        const stocksWithProfit = mostLliquidTickers.map((stock) => {
-            const stockProfits = profits.find(
-                (profit) => profit.ticker === stock.ticker
-            );
-            if (!stockProfits) {
-                return stock;
-            }
-            const yearsWithProfitCount = stockProfits.years_with_profit_count;
-            const yearsWithProfitPercentage =
-                Math.round(
-                    (yearsWithProfitCount * 10000) / stockProfits.years_count
-                ) / 100;
+        const stocksWithProfit = mostLliquidTickers
+            .map((stock) => {
+                const stockProfits = profits.find(
+                    (profit) => profit.ticker === stock.ticker
+                );
+                if (!stockProfits) {
+                    return stock;
+                }
+                const yearsWithProfitCount =
+                    stockProfits.years_with_profit_count;
+                const yearsWithProfitPercentage =
+                    Math.round(
+                        (yearsWithProfitCount * 10000) /
+                            stockProfits.years_count
+                    ) / 100;
 
-            const averageProfit = Math.round(stockProfits.average_profit);
+                const averageProfit = Math.round(stockProfits.average_profit);
 
-            const stockWithProfits = {
-                ...stock,
-                profits: stockProfits,
-                yearsWithProfitPercentage: yearsWithProfitPercentage,
-                averageProfit: averageProfit,
-                yearsCount: stockProfits.years_count,
-                yearsWithProfitCount: stockProfits.years_with_profit_count,
-            };
-            return stockWithProfits;
-        }).filter((stock) => stock.profits);
+                const stockWithProfits = {
+                    ...stock,
+                    profits: stockProfits,
+                    yearsWithProfitPercentage: yearsWithProfitPercentage,
+                    averageProfit: averageProfit,
+                    yearsCount: stockProfits.years_count,
+                    yearsWithProfitCount: stockProfits.years_with_profit_count,
+                };
+                return stockWithProfits;
+            })
+            .filter((stock) => stock.profits);
 
         const orderedByYearsWithProfitPercentage = JSON.parse(
             JSON.stringify(
@@ -64,9 +68,7 @@ export async function getServerSideProps(context) {
         ).sort((a, b) => b - a);
 
         const orderedByAverageProfit = JSON.parse(
-            JSON.stringify(
-                stocksWithProfit.map((stock) => stock.averageProfit)
-            ) // deep copy
+            JSON.stringify(stocksWithProfit.map((stock) => stock.averageProfit)) // deep copy
         ).sort((a, b) => b - a);
 
         const orderedByYearsWithProfitCount = JSON.parse(
@@ -85,7 +87,7 @@ export async function getServerSideProps(context) {
                         (c) => c === company.averageProfit
                     ) +
                     orderedByYearsWithProfitCount.findIndex(
-                        (c) => c === company.yearsWithProfitCount   
+                        (c) => c === company.yearsWithProfitCount
                     ) +
                     1,
                 ...company,
@@ -145,7 +147,7 @@ const headCells = [
         disablePadding: false,
         isOrdinal: false,
         label: "EV/EBIT",
-    }
+    },
 ];
 
 export default function ProfitKings({ stocks }) {
@@ -172,7 +174,10 @@ export default function ProfitKings({ stocks }) {
                             <strong>Lucro Médio Anual</strong>.
                             <br />
                             <br />3 - Ranking de empresas com{" "}
-                            <strong>&quot;maior histórico de lucro&quot;</strong>:
+                            <strong>
+                                &quot;maior histórico de lucro&quot;
+                            </strong>
+                            :
                             <br />
                             Ordenamos empresas por maior{" "}
                             <strong>Quantidade de anos com lucro</strong>.
@@ -181,8 +186,9 @@ export default function ProfitKings({ stocks }) {
                             :
                             <br />
                             Ordenamos empresas combinando maior{" "}
-                            <strong>percentual de anos com lucro</strong>,{" "}
-                            maior <strong>lucro médio anual</strong> e maior <strong>quantidade de anos</strong> com lucro.
+                            <strong>percentual de anos com lucro</strong>, maior{" "}
+                            <strong>lucro médio anual</strong> e maior{" "}
+                            <strong>quantidade de anos</strong> com lucro.
                             <br />
                         </>
                     }

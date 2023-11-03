@@ -5,15 +5,15 @@ import NextNProgress from "nextjs-progressbar";
 import theme from "@/utils/theme";
 
 function MyApp({ Component, pageProps }) {
-  return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Layout>
-        <NextNProgress color="gold" options={{ showSpinner: false }} />
-        <Component {...pageProps} />
-      </Layout>
-    </ThemeProvider>
-  );
+    return (
+        <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <Layout>
+                <NextNProgress color="gold" options={{ showSpinner: false }} />
+                <Component {...pageProps} />
+            </Layout>
+        </ThemeProvider>
+    );
 }
 
 export default MyApp;

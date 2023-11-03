@@ -44,24 +44,26 @@ export default async function handler(req, res) {
 
     const { data: profits } = await supabase.from("profit_kings").select();
 
-    filteredStocks = filteredStocks.map((stock) => {
-        const stockProfits = profits.find(
-            (profit) => profit.ticker === stock.ticker
-        );
-        if (!stockProfits) return stock;
-        const yearsWithProfitCount = stockProfits.years_with_profit_count;
-        const yearsWithProfitPercentage =
-            Math.round(
-                (yearsWithProfitCount * 10000) / stockProfits.years_count
-            ) / 100;
+    filteredStocks = filteredStocks
+        .map((stock) => {
+            const stockProfits = profits.find(
+                (profit) => profit.ticker === stock.ticker
+            );
+            if (!stockProfits) return stock;
+            const yearsWithProfitCount = stockProfits.years_with_profit_count;
+            const yearsWithProfitPercentage =
+                Math.round(
+                    (yearsWithProfitCount * 10000) / stockProfits.years_count
+                ) / 100;
 
-        const stockWithProfits = {
-            ...stock,
-            profits: stockProfits,
-            yearsWithProfitPercentage: yearsWithProfitPercentage,
-        };
-        return stockWithProfits;
-    }).filter(stock => stock.profits);
+            const stockWithProfits = {
+                ...stock,
+                profits: stockProfits,
+                yearsWithProfitPercentage: yearsWithProfitPercentage,
+            };
+            return stockWithProfits;
+        })
+        .filter((stock) => stock.profits);
 
     const orderedByev_ebit = JSON.parse(JSON.stringify(filteredStocks)).sort(
         (a, b) => a.ev_ebit - b.ev_ebit

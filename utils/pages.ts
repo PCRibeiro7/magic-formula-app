@@ -4,7 +4,6 @@ import tobiasImage from "@/public/tobias-carlisle.jpg";
 import profitImage from "@/public/profit.jpg";
 import kingsImage from "@/public/kings.png";
 
-
 const pages = [
     {
         pagePath: "carteiras/magic_formula",

@@ -39,20 +39,22 @@ export const fetchStockProfit = async ({ ticker }) => {
                     "user-agent":
                         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko)",
                 },
-
             }
         );
-        const formattedResponse = stockResponse.data.chart.category.map((year, index) => {
-            return {
-                year: year,
-                profit: stockResponse.data.chart.series.lucroLiquido[index].value
+        const formattedResponse = stockResponse.data.chart.category.map(
+            (year, index) => {
+                return {
+                    year: year,
+                    profit: stockResponse.data.chart.series.lucroLiquido[index]
+                        .value,
+                };
             }
-        });
+        );
         return formattedResponse;
     } catch (error) {
         console.log(error);
     }
-}
+};
 
 const getStockHistoricalInfo = async ({ ticker }) => {
     const stockHistoricalInfoUrl =
