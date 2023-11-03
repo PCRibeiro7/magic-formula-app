@@ -1,4 +1,4 @@
-import * as React from "react";
+import { MouseEventHandler, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -7,9 +7,9 @@ import CustomLink from "@/components/CustomLink";
 import pages from "../../utils/pages";
 
 export default function CustomAppBar() {
-    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const open = Boolean(anchorEl);
-    const handleClick = (event) => {
+    const handleClick: MouseEventHandler = (event) => {
         setAnchorEl(event.currentTarget);
     };
     const handleClose = () => {
