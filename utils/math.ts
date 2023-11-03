@@ -1,5 +1,7 @@
 export const average = (arr: number[]) =>
-    Math.round((arr.reduce((a: number, b: number) => a + b, 0) / arr.length) * 100) / 100;
+    Math.round(
+        (arr.reduce((a: number, b: number) => a + b, 0) / arr.length) * 100
+    ) / 100;
 
 export const median = (arr: number[]) => {
     const mid = Math.floor(arr.length / 2),

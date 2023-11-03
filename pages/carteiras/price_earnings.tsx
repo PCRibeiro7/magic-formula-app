@@ -65,7 +65,7 @@ export default function GrahamWallet() {
 
     useEffect(() => {
         const newStocks = stocks
-            .map((stock:Stock& { historicalData: any}) => ({
+            .map((stock: Stock & { historicalData: any }) => ({
                 ...stock,
                 p_l: Math.round(stock.p_l * 100) / 100,
                 shillerPL:
@@ -73,8 +73,11 @@ export default function GrahamWallet() {
                         ((stock.price * lastYears) /
                             stock.historicalData["LPA"].series
                                 .slice(1, 1 + lastYears)
-                                .map((year:any) => year.value)
-                                .reduce((acc: any, curr: any) => acc + curr, 0)) *
+                                .map((year: any) => year.value)
+                                .reduce(
+                                    (acc: any, curr: any) => acc + curr,
+                                    0
+                                )) *
                             100
                     ) / 100,
                 averagePL:
@@ -83,12 +86,12 @@ export default function GrahamWallet() {
                             median(
                                 stock.historicalData["P/L"].series
                                     .slice(1, 1 + lastYears)
-                                    .map((year: { value: any; }) => year.value)
+                                    .map((year: { value: any }) => year.value)
                             ),
                             average(
                                 stock.historicalData["P/L"].series
                                     .slice(1, 1 + lastYears)
-                                    .map((year: { value: any; }) => year.value)
+                                    .map((year: { value: any }) => year.value)
                             )
                         ) * 100
                     ) / 100,

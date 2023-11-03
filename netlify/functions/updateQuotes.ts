@@ -54,7 +54,7 @@ const myHandler: Handler = async (
             }
         }
 
-        if(!quotesData) {
+        if (!quotesData) {
             throw new Error("Quotes data is null");
         }
 

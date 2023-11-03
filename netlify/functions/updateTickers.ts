@@ -1,8 +1,4 @@
-import type {
-    Handler,
-    HandlerEvent,
-    HandlerContext,
-} from "@netlify/functions";
+import type { Handler, HandlerEvent, HandlerContext } from "@netlify/functions";
 import { schedule } from "@netlify/functions";
 import { createClient } from "@supabase/supabase-js";
 import { fetchAllStocks } from "@/services/statusInvest";

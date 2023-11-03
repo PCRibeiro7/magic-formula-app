@@ -52,6 +52,7 @@ export default function RankingPanel({
     );
     const [favoriteTickers, setFavoriteTickers] = useState(
         (typeof window !== "undefined" &&
+            localStorage.getItem(LOCAL_STORAGE_FAVORITE_TICKERS_KEY) &&
             JSON.parse(
                 localStorage.getItem(LOCAL_STORAGE_FAVORITE_TICKERS_KEY)
             )) ||

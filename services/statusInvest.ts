@@ -30,7 +30,7 @@ export const fetchAllStocks = async (): Promise<Stock[]> => {
 
 export const fetchStockProfit = async ({ ticker }: { ticker: string }) => {
     try {
-        const stockResponse: {data: Profit} = await axios.get(
+        const stockResponse: { data: Profit } = await axios.get(
             `https://statusinvest.com.br/acao/payoutresult?code=${ticker}&companyid=280&type=2`,
             {
                 headers: {

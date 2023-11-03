@@ -12,8 +12,9 @@ type Props = {
 export default function FavoritesPanel({ stocks }: Props) {
     const favoriteTickers =
         (typeof window !== "undefined" &&
+            localStorage.getItem(LOCAL_STORAGE_FAVORITE_TICKERS_KEY) &&
             JSON.parse(
-                localStorage.getItem(LOCAL_STORAGE_FAVORITE_TICKERS_KEY) || ""
+                localStorage.getItem(LOCAL_STORAGE_FAVORITE_TICKERS_KEY)
             )) ||
         [];
 

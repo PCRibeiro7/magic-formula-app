@@ -51,7 +51,9 @@ export async function getServerSideProps() {
     }
 }
 
-export type FavoriteStocks = Awaited<ReturnType<typeof getServerSideProps>>["props"]["stocks"]
+export type FavoriteStocks = Awaited<
+    ReturnType<typeof getServerSideProps>
+>["props"]["stocks"];
 
 export default function Favorites({ stocks }: { stocks: FavoriteStocks }) {
     return (

@@ -35,7 +35,7 @@ export const filterByMagicFormula = (stocks: Stock[]) => {
 };
 
 const getGrahamPrice = (stock: Stock) => {
-    if(!stock.p_l || !stock.p_vp) return 0;
+    if (!stock.p_l || !stock.p_vp) return 0;
     const profitPerStock = stock.price / stock.p_l;
     const equityValuePerStock = stock.price / stock.p_vp;
     const grahamPrice = (22.5 * profitPerStock * equityValuePerStock) ** 0.5;
