@@ -1,12 +1,12 @@
 import { Paper, Typography } from "@mui/material";
 import FavoritesTable from "@/components/FavoritesTable";
 import StarIcon from "@mui/icons-material/Star";
-import { Stock } from "@/types/stock";
+import { FavoriteStocks } from "@/pages/favorites";
 
 export const LOCAL_STORAGE_FAVORITE_TICKERS_KEY = "favoriteTickers";
 
 type Props = {
-    stocks: Stock[];
+    stocks: FavoriteStocks;
 };
 
 export default function FavoritesPanel({ stocks }: Props) {

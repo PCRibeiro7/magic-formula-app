@@ -1,4 +1,16 @@
 export type Stock = {
+    currentPrice: number;
+    profits: unknown;
+    historicalDataPrice: {
+        ticker: string;
+        date_current: string;
+        quote_current: number;
+        date_past: string;
+        quote_past: number;
+    };
+    sixMonthsBeforePrice: number;
+    momentum6M: number;
+    annualizedReturn: number;
     companyid: number;
     companyname: string;
     ticker: string;
