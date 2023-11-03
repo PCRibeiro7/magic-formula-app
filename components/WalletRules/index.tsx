@@ -7,7 +7,11 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import NotesIcon from "@mui/icons-material/NotesOutlined";
 
-export function WalletRules({ ruleDescription }) {
+export function WalletRules({
+    ruleDescription,
+}: {
+    ruleDescription: JSX.Element;
+}) {
     return (
         <Accordion sx={{ marginBottom: "16px" }}>
             <AccordionSummary

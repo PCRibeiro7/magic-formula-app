@@ -1,7 +1,10 @@
 import Head from "next/head";
 import CustomAppBar from "@/components/CustomAppBar";
+interface LayoutProps {
+    children: React.ReactNode;
+}
 
-export default function Layout({ children }) {
+export default function Layout({ children }: LayoutProps) {
     return (
         <>
             <Head>

@@ -1,17 +1,22 @@
 import { Paper, Typography } from "@mui/material";
 import FavoritesTable from "@/components/FavoritesTable";
 import StarIcon from "@mui/icons-material/Star";
+import { Stock } from "@/types/stock";
 
 export const LOCAL_STORAGE_FAVORITE_TICKERS_KEY = "favoriteTickers";
 
-export default function FavoritesPanel({ stocks }) {
+type Props = {
+    stocks: Stock[];
+};
+
+export default function FavoritesPanel({ stocks }: Props) {
     const favoriteTickers =
         (typeof window !== "undefined" &&
             JSON.parse(
-                localStorage.getItem(LOCAL_STORAGE_FAVORITE_TICKERS_KEY)
+                localStorage.getItem(LOCAL_STORAGE_FAVORITE_TICKERS_KEY) || ""
             )) ||
         [];
-    
+
     return (
         <>
             <Paper sx={{ padding: "16px" }}>

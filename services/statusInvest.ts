@@ -1,3 +1,4 @@
+import { Profit } from "@/types/profits";
 import { Stock } from "@/types/stock";
 
 const axios = require("axios");
@@ -29,7 +30,7 @@ export const fetchAllStocks = async (): Promise<Stock[]> => {
 
 export const fetchStockProfit = async ({ ticker }: { ticker: string }) => {
     try {
-        const stockResponse = await axios.get(
+        const stockResponse: {data: Profit} = await axios.get(
             `https://statusinvest.com.br/acao/payoutresult?code=${ticker}&companyid=280&type=2`,
             {
                 headers: {
@@ -45,7 +46,7 @@ export const fetchStockProfit = async ({ ticker }: { ticker: string }) => {
             }
         );
         const formattedResponse = stockResponse.data.chart.category.map(
-            (year: number, index: number) => {
+            (year, index) => {
                 return {
                     year: year,
                     profit: stockResponse.data.chart.series.lucroLiquido[index]

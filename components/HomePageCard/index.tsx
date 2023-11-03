@@ -2,12 +2,29 @@ import * as React from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import { Divider, Grid } from "@mui/material";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 
-export default function HomePageCard({ image, title, description, subtext }) {
+type SubtextRule = {
+    indicator: string;
+    direction: string;
+};
+
+type HomePageCardProps = {
+    image: StaticImageData;
+    title: string;
+    description: string;
+    subtext: SubtextRule[];
+};
+
+export default function HomePageCard({
+    image,
+    title,
+    description,
+    subtext,
+}: HomePageCardProps) {
     return (
         <Card
             sx={{
