@@ -2,7 +2,7 @@ import { createClient } from "@supabase/supabase-js";
 import { Database } from "@/types/supabase";
 
 const supabaseUrl = process.env.DATABASE_URL || "";
-const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || "";
+const supabaseAnonKey = process.env.SUPABASE_SERVICE_API_KEY || "";
 
 export default createClient<Database>(supabaseUrl, supabaseAnonKey, {
     auth: { persistSession: false },
