@@ -179,6 +179,7 @@ export default function DecioBasinWallet({ stocks }) {
                     showDividendFilter
                     lastYears={lastYears}
                     setLastYears={setLastYears}
+                    loading={false}
                 />
             </Stack>
         </div>

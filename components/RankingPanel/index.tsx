@@ -20,6 +20,19 @@ import { FilterPanel } from "@/components/FilterPanel";
 import StarIcon from "@mui/icons-material/Star";
 import { LOCAL_STORAGE_FAVORITE_TICKERS_KEY } from "@/components/FavoritesPanel";
 
+type Props = {
+    stocks: any[];
+    headCells: any[];
+    initialOrderBy: { column: string; direction: string };
+    hideYearsWithProfitFilter?: boolean;
+    showDividendFilter?: boolean;
+    lastYears?: number;
+    setLastYears?: (years: number) => void;
+    loading?: boolean;
+    hideFilter?: boolean;
+    hideFavorites?: boolean;
+};
+
 export default function RankingPanel({
     stocks,
     headCells,
@@ -29,9 +42,9 @@ export default function RankingPanel({
     lastYears,
     setLastYears,
     loading,
-    hideFilter = false,
-    hideFavorites = false,
-}) {
+    hideFilter,
+    hideFavorites,
+}: Props) {
     const [minimumMarketCap, setMinimumMarketCap] = useState("");
     const [minimumLiquidity, setMinimumLiquidity] = useState(100000);
     const [minimumYearsWithProfit, setMinimumYearsWithProfit] = useState(
