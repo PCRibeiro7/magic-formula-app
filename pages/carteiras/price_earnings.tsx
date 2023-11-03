@@ -4,6 +4,7 @@ import { WalletRules } from "@/components/WalletRules";
 import { useEffect, useState } from "react";
 import styles from "@/styles/Wallets.module.css";
 import { average, median } from "@/utils/math";
+import { Stock } from "@/types/stock";
 
 const INITIAL_LAST_YEARS = 5;
 
@@ -47,7 +48,7 @@ const headCells = [
 
 export default function GrahamWallet() {
     const [lastYears, setLastYears] = useState(INITIAL_LAST_YEARS);
-    const [filteredStocks, setFilteredStocks] = useState([]);
+    const [filteredStocks, setFilteredStocks] = useState<Stock[]>([]);
     const [stocks, setStocks] = useState([]);
     const [loading, setLoading] = useState(false);
     const fetchData = async () => {
@@ -64,7 +65,7 @@ export default function GrahamWallet() {
 
     useEffect(() => {
         const newStocks = stocks
-            .map((stock) => ({
+            .map((stock:Stock& { historicalData: any}) => ({
                 ...stock,
                 p_l: Math.round(stock.p_l * 100) / 100,
                 shillerPL:
@@ -72,8 +73,8 @@ export default function GrahamWallet() {
                         ((stock.price * lastYears) /
                             stock.historicalData["LPA"].series
                                 .slice(1, 1 + lastYears)
-                                .map((year) => year.value)
-                                .reduce((acc, curr) => acc + curr, 0)) *
+                                .map((year:any) => year.value)
+                                .reduce((acc: any, curr: any) => acc + curr, 0)) *
                             100
                     ) / 100,
                 averagePL:
@@ -82,12 +83,12 @@ export default function GrahamWallet() {
                             median(
                                 stock.historicalData["P/L"].series
                                     .slice(1, 1 + lastYears)
-                                    .map((year) => year.value)
+                                    .map((year: { value: any; }) => year.value)
                             ),
                             average(
                                 stock.historicalData["P/L"].series
                                     .slice(1, 1 + lastYears)
-                                    .map((year) => year.value)
+                                    .map((year: { value: any; }) => year.value)
                             )
                         ) * 100
                     ) / 100,

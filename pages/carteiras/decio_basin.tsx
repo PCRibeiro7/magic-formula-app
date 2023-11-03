@@ -11,6 +11,7 @@ import styles from "@/styles/Wallets.module.css";
 import { average } from "@/utils/math";
 import { filterByDecioBasin } from "@/utils/wallets";
 import moment from "moment";
+import { Stock } from "@/types/stock";
 const INITIAL_LAST_YEARS = 3;
 const CURRENT_YEAR = moment().year();
 const TARGET_YIELD = 0.06;
@@ -21,7 +22,7 @@ export async function getServerSideProps() {
 
     const currStocksBatch = stocksWithRanking;
     const currHistoricalData = await Promise.all(
-        currStocksBatch.map((stock) =>
+        currStocksBatch.map((stock: Stock) =>
             fetchHistoricalData({
                 ticker: stock.ticker,
             })
@@ -40,14 +41,14 @@ export async function getServerSideProps() {
 
     const historicalDividendData = (
         await Promise.all(
-            stocksWithRanking.map((stock) =>
+            stocksWithRanking.map((stock: Stock) =>
                 fetchDividendData({ ticker: stock.ticker })
             )
         )
     ).reduce((acc, curr) => ({ ...acc, ...curr }), {});
 
     stocksWithRanking = stocksWithRanking
-        .map((stock) => ({
+        .map((stock: Stock) => ({
             ...stock,
             historicalDividendData: historicalDividendData[stock.ticker],
             historicalData: historicalDataWithTicker.find(
@@ -55,7 +56,8 @@ export async function getServerSideProps() {
             ),
         }))
         .filter(
-            (stock) => stock.historicalDividendData.assetEarningsYearlyModels
+            (stock: Stock & { historicalDividendData: any }) =>
+                stock.historicalDividendData.assetEarningsYearlyModels
         );
 
     return {
@@ -103,7 +105,18 @@ const headCells = [
     },
 ];
 
-export default function DecioBasinWallet({ stocks }) {
+type DecioBasinWalletStocks = Stock & {
+    historicalDividendData: any;
+    averageYield: number;
+    basinPrice: number;
+    basinPriceDiff: number;
+};
+
+export default function DecioBasinWallet({
+    stocks,
+}: {
+    stocks: DecioBasinWalletStocks[];
+}) {
     const [lastYears, setLastYears] = useState(INITIAL_LAST_YEARS);
     const [filteredStocks, setFilteredStocks] = useState(stocks);
     useEffect(() => {
@@ -111,7 +124,7 @@ export default function DecioBasinWallet({ stocks }) {
             .filter((stock) => {
                 return (
                     stock.historicalDividendData.assetEarningsYearlyModels.filter(
-                        (year) =>
+                        (year: { rank: number; value: number }) =>
                             year.rank < CURRENT_YEAR &&
                             year.rank >= CURRENT_YEAR - lastYears &&
                             year.value > 0
@@ -122,11 +135,11 @@ export default function DecioBasinWallet({ stocks }) {
                 const yields =
                     stock.historicalDividendData.assetEarningsYearlyModels
                         .filter(
-                            (year) =>
+                            (year: { rank: number }) =>
                                 year.rank < CURRENT_YEAR &&
                                 year.rank >= CURRENT_YEAR - lastYears
                         )
-                        .map((year) => year.value);
+                        .map((year: { value: any }) => year.value);
 
                 stock.averageYield = average(yields);
                 stock.basinPrice =

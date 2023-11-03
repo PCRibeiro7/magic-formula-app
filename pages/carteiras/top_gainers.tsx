@@ -64,11 +64,14 @@ export default function AcquirersMultiple() {
         const res = await fetch(`/api/top_gainers?yearsAgo=${selectedPeriod}`);
         const { stocks } = await res.json();
 
-        headCells.find(
+        const sixMonthHeadCell = headCells.find(
             (cell) => cell.id === "sixMonthsBeforePrice"
-        ).label = `Preço ${selectedPeriod} ${
-            selectedPeriod === 1 ? "ano" : "anos"
-        } atrás`;
+        );
+        if (sixMonthHeadCell) {
+            sixMonthHeadCell.label = `Preço ${selectedPeriod} ${
+                selectedPeriod === 1 ? "ano" : "anos"
+            } atrás`;
+        }
 
         setFilteredStocks(stocks);
         setLoading(false);

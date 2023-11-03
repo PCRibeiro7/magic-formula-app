@@ -2,6 +2,7 @@ import styles from "@/styles/Wallets.module.css";
 import FavoritesPanel from "@/components/FavoritesPanel";
 import { Stack } from "@mui/material";
 import { fetchAllStocks } from "@/services/statusInvest";
+import { Stock } from "@/types/stock";
 
 export async function getServerSideProps() {
     try {
@@ -51,7 +52,7 @@ export async function getServerSideProps() {
     }
 }
 
-export default function Favorites({ stocks }) {
+export default function Favorites({ stocks }: { stocks: Stock[] }) {
     return (
         <div className={styles.container}>
             <main className={styles.main}>

@@ -1,11 +1,10 @@
-import {
-    fetchAllStocks,
-} from "@/services/statusInvest";
+import { fetchAllStocks } from "@/services/statusInvest";
 import styles from "@/styles/Wallets.module.css";
 import { filterByMagicFormula } from "@/utils/wallets";
 import RankingPanel from "@/components/RankingPanel";
 import { Stack } from "@mui/material";
 import { WalletRules } from "@/components/WalletRules";
+import { Stock } from "@/types/stock";
 
 export async function getServerSideProps() {
     try {
@@ -80,7 +79,7 @@ const headCells = [
     },
 ];
 
-export default function MagicFormula({ stocks }) {
+export default function MagicFormula({ stocks }: { stocks: Stock[] }) {
     return (
         <div className={styles.container}>
             <main className={styles.main}>

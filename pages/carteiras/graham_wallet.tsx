@@ -4,6 +4,7 @@ import { WalletRules } from "@/components/WalletRules";
 import { fetchAllStocks } from "@/services/statusInvest";
 import styles from "@/styles/Wallets.module.css";
 import { filterByGraham } from "@/utils/wallets";
+import { Stock } from "@/types/stock";
 
 export async function getServerSideProps() {
     const stocks = await fetchAllStocks();
@@ -47,7 +48,7 @@ const headCells = [
     },
 ];
 
-export default function GrahamWallet({ stocks }) {
+export default function GrahamWallet({ stocks }: { stocks: Stock[] }) {
     return (
         <div className={styles.container}>
             <main className={styles.main}>

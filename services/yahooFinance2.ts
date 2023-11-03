@@ -1,6 +1,10 @@
 import yahooFinance from "yahoo-finance2";
 
-export const getHistoricalPrices = async ({ symbol }) => {
+type GetPriceParams = {
+    symbol: string;
+};
+
+export const getHistoricalPrices = async ({ symbol }: GetPriceParams) => {
     try {
         const result = await yahooFinance.historical(symbol, {
             period1: "1990-01-01",
