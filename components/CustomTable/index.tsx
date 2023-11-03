@@ -50,8 +50,7 @@ function stableSort(array, comparator) {
     return stabilizedThis.map((el) => el[0]);
 }
 
-function EnhancedTableHead(props) {
-    const { order, orderBy, onRequestSort, headCells } = props;
+function EnhancedTableHead({ order, orderBy, onRequestSort, headCells }) {
     const createSortHandler = (property) => (event) => {
         onRequestSort(event, property);
     };
@@ -207,7 +206,6 @@ export default function CustomTable({
                                             {headCells.map((headCell, index) =>
                                                 index === 0 ? (
                                                     <TableCell
-                                                        component="th"
                                                         id={labelId}
                                                         scope="row"
                                                         sx={{

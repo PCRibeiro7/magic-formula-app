@@ -43,8 +43,7 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-function EnhancedTableHead(props) {
-  const { order, orderBy, onRequestSort } = props;
+function EnhancedTableHead({ order, orderBy, onRequestSort, headCells }) {
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
@@ -52,7 +51,7 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-        {props.headCells.map((headCell) => (
+        {headCells.map((headCell) => (
           <TableCell
             key={headCell}
             padding={"normal"}
