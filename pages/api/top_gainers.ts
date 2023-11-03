@@ -17,7 +17,7 @@ export default async function handler(req, res) {
     try {
         const quotesMomentum = await getQuotesMomentumFromTimeAgo(yearsAgo);
 
-        quotesMomentum.forEach((tickerQuotes, index) => {
+        quotesMomentum.forEach((tickerQuotes) => {
             const tickerKey = tickerQuotes.ticker;
 
             const stockMatch = filteredStocks.find(

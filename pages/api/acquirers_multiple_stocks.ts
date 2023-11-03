@@ -2,7 +2,7 @@ import { fetchAllStocks } from "@/services/statusInvest";
 import supabase from "@/utils/supabase";
 import { getQuotesMomentumFromTimeAgo } from "@/services/quotesMomentum";
 
-export default async function handler(req, res) {
+export default async function handler(_req, res) {
     let sixMonthsBeforeDateEpoch, threeMonthsBeforeDateEpoch;
 
     const stocks = await fetchAllStocks();

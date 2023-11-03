@@ -183,7 +183,7 @@ export default function RankingPanel({
                                                 stock.ticker
                                             )
                                         )
-                                        .map((stock, index) => (
+                                        .map((stock) => (
                                             <TableRow key={stock.ticker}>
                                                 <TableCell>
                                                     {`${

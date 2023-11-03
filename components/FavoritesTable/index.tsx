@@ -87,15 +87,14 @@ EnhancedTableHead.propTypes = {
     rowCount: PropTypes.number.isRequired,
 };
 
-export default function EnhancedTable({ rows, headCells }) {
+export default function EnhancedTable({ rows, headCells, dense = false }) {
     const [order, setOrder] = React.useState("asc");
     const [orderBy, setOrderBy] = React.useState("Ticker");
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
-    const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(rows.length);
 
-    const handleRequestSort = (event, property) => {
+    const handleRequestSort = (_event, property) => {
         const isAsc = orderBy === property && order === "asc";
         setOrder(isAsc ? "desc" : "asc");
         setOrderBy(property);
@@ -110,7 +109,7 @@ export default function EnhancedTable({ rows, headCells }) {
         setSelected([]);
     };
 
-    const handleChangePage = (event, newPage) => {
+    const handleChangePage = (_event, newPage) => {
         setPage(newPage);
     };
 
@@ -151,9 +150,8 @@ export default function EnhancedTable({ rows, headCells }) {
                                     page * rowsPerPage,
                                     page * rowsPerPage + rowsPerPage
                                 )
-                                .map((row, index) => {
+                                .map((row) => {
                                     const isItemSelected = isSelected(row.name);
-                                    const labelId = `enhanced-table-checkbox-${index}`;
                                     return (
                                         <TableRow
                                             hover

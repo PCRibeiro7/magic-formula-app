@@ -3,7 +3,7 @@ import FavoritesPanel from "@/components/FavoritesPanel";
 import { Stack } from "@mui/material";
 import { fetchAllStocks } from "@/services/statusInvest";
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps() {
     try {
         const stocks = await fetchAllStocks();
         const formattedStocks = stocks.map((s) => ({

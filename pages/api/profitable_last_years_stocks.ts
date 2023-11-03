@@ -2,7 +2,7 @@
 
 import { fetchAllStocks, fetchHistoricalData } from "@/services/statusInvest";
 
-export default async function handler(req, res) {
+export default async function handler(_req, res) {
     let stocks = await fetchAllStocks();
     let historicalData = [];
     const batchSize = 100;

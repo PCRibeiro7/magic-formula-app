@@ -12,7 +12,6 @@ import {
 import { WalletRules } from "@/components/WalletRules";
 import { useEffect, useState } from "react";
 import { useCallback } from "react";
-import moment from "moment";
 import React from "react";
 
 const headCells = [
@@ -56,7 +55,6 @@ const headCells = [
 const availablePeriods = [...Array(23).keys()].map((i) => i + 1);
 
 export default function AcquirersMultiple() {
-    const [dates, setDates] = useState({});
     const [loading, setLoading] = useState(false);
     const [selectedPeriod, setSelectedPeriod] = useState(10);
     const [filteredStocks, setFilteredStocks] = useState([]);
@@ -64,7 +62,7 @@ export default function AcquirersMultiple() {
     const fetchData = useCallback(async () => {
         setLoading(true);
         const res = await fetch(`/api/top_gainers?yearsAgo=${selectedPeriod}`);
-        const { stocks, dates } = await res.json();
+        const { stocks } = await res.json();
 
         headCells.find(
             (cell) => cell.id === "sixMonthsBeforePrice"
@@ -73,7 +71,6 @@ export default function AcquirersMultiple() {
         } atrás`;
 
         setFilteredStocks(stocks);
-        setDates(dates);
         setLoading(false);
     }, [selectedPeriod]);
 

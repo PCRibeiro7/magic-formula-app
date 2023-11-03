@@ -3,7 +3,7 @@
 import { fetchAllStocks, fetchHistoricalData } from "@/services/statusInvest";
 import { filterByDecioBasin } from "@/utils/wallets";
 
-export default async function handler(req, res) {
+export default async function handler(_req, res) {
     const stocks = await fetchAllStocks();
     let stocksWithRanking = filterByDecioBasin(stocks);
     let historicalData = [];

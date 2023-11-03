@@ -1,16 +1,13 @@
 import {
     fetchAllStocks,
-    fetchHistoricalData,
-    getHistoricalDataInBatches,
 } from "@/services/statusInvest";
 import styles from "@/styles/Wallets.module.css";
 import { filterByMagicFormula } from "@/utils/wallets";
 import RankingPanel from "@/components/RankingPanel";
 import { Stack } from "@mui/material";
 import { WalletRules } from "@/components/WalletRules";
-import { useEffect } from "react";
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps() {
     try {
         const stocks = await fetchAllStocks();
         let stocksWithRanking = filterByMagicFormula(stocks);

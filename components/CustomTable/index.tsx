@@ -15,7 +15,7 @@ import Paper from "@mui/material/Paper";
 import { visuallyHidden } from "@mui/utils";
 import { Tooltip } from "@mui/material";
 import { checkIfTickerIsBestRanked } from "@/utils/wallets";
-import { Checkbox, Radio } from "@mui/material";
+import { Checkbox } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 import StarOutlineIcon from "@mui/icons-material/StarOutline";
 import { nFormatter } from "@/utils/math";
@@ -112,15 +112,15 @@ export default function CustomTable({
     initialOrderBy,
     favoriteTickers,
     updateFavoriteTickers,
+    dense = false,
 }) {
     const [order, setOrder] = React.useState(initialOrderBy.direction);
     const [orderBy, setOrderBy] = React.useState(initialOrderBy.column);
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
-    const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(25);
 
-    const handleRequestSort = (event, property) => {
+    const handleRequestSort = (_event, property) => {
         const isAsc = orderBy === property && order === "asc";
         setOrder(isAsc ? "desc" : "asc");
         setOrderBy(property);
@@ -136,7 +136,7 @@ export default function CustomTable({
         setSelected([]);
     };
 
-    const handleChangePage = (event, newPage) => {
+    const handleChangePage = (_event, newPage) => {
         setPage(newPage);
     };
 

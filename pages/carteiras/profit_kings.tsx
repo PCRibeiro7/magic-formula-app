@@ -5,7 +5,7 @@ import { Stack } from "@mui/material";
 import { WalletRules } from "@/components/WalletRules";
 import supabase from "@/utils/supabase";
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps() {
     try {
         const stocks = await fetchAllStocks();
 

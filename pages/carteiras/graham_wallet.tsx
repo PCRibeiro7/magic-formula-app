@@ -1,11 +1,11 @@
 import { Stack } from "@mui/material";
 import RankingPanel from "@/components/RankingPanel";
 import { WalletRules } from "@/components/WalletRules";
-import { fetchAllStocks, fetchHistoricalData } from "@/services/statusInvest";
+import { fetchAllStocks } from "@/services/statusInvest";
 import styles from "@/styles/Wallets.module.css";
 import { filterByGraham } from "@/utils/wallets";
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps() {
     const stocks = await fetchAllStocks();
     let stocksWithRanking = filterByGraham(stocks);
 

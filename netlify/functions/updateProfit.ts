@@ -12,8 +12,8 @@ const supabase = createClient(DATABASE_URL, SUPABASE_SERVICE_API_KEY, {
 });
 
 const myHandler: Handler = async (
-    event: HandlerEvent,
-    context: HandlerContext
+    _event: HandlerEvent,
+    _context: HandlerContext
 ) => {
     try {
         console.log("Updating profits...");

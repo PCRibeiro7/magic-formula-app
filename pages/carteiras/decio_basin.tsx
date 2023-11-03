@@ -15,7 +15,7 @@ const INITIAL_LAST_YEARS = 3;
 const CURRENT_YEAR = moment().year();
 const TARGET_YIELD = 0.06;
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps() {
     const stocks = await fetchAllStocks();
     let stocksWithRanking = filterByDecioBasin(stocks);
 
