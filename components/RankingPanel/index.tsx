@@ -38,10 +38,10 @@ export default function RankingPanel({
     stocks,
     headCells,
     initialOrderBy,
-    hideYearsWithProfitFilter=true,
-    showDividendFilter=false,
-    lastYears=10,
-    setLastYears=() => {},
+    hideYearsWithProfitFilter = true,
+    showDividendFilter = false,
+    lastYears = 0,
+    setLastYears = () => {},
     loading,
     hideFilter,
     hideFavorites,
@@ -62,7 +62,7 @@ export default function RankingPanel({
     const [filteredStocks, setFilteredStocks] = useState<Stock[]>([]);
 
     const filterByMarketCap = useCallback(
-        (stock:Stock) => {
+        (stock: Stock) => {
             return minimumMarketCap
                 ? stock.valormercado && stock.valormercado > minimumMarketCap
                 : true;
@@ -71,27 +71,28 @@ export default function RankingPanel({
     );
 
     const filterByLiquidity = useCallback(
-        (stock:Stock) => {
+        (stock: Stock) => {
             return minimumLiquidity
-                ? stock.liquidezmediadiaria && stock.liquidezmediadiaria > minimumLiquidity
+                ? stock.liquidezmediadiaria &&
+                      stock.liquidezmediadiaria > minimumLiquidity
                 : true;
         },
         [minimumLiquidity]
     );
 
     const filterByYearsWithProfit = useCallback(
-        (stock:Stock) => {
+        (stock: Stock) => {
             const minimumYearsWithProfitAsNumber = Number(
                 minimumYearsWithProfit
             );
             const profitableLastYears = stock?.historicalData?.["P/L"]?.series
                 .slice(0, 0 + minimumYearsWithProfitAsNumber)
-                .filter((year:any) => year?.value > 0);
+                .filter((year: any) => year?.value > 0);
             const alternativeProfitableLastYears = stock?.historicalData?.[
                 "LPA"
             ]?.series
                 .slice(0, 0 + minimumYearsWithProfitAsNumber)
-                .filter((year:any) => year?.value > 0);
+                .filter((year: any) => year?.value > 0);
             return minimumYearsWithProfitAsNumber
                 ? profitableLastYears?.length ===
                       minimumYearsWithProfitAsNumber ||
