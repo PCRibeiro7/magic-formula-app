@@ -19,13 +19,14 @@ import EmojiEventsIcon from "@mui/icons-material/EmojiEventsOutlined";
 import { FilterPanel } from "@/components/FilterPanel";
 import StarIcon from "@mui/icons-material/Star";
 import { LOCAL_STORAGE_FAVORITE_TICKERS_KEY } from "@/components/FavoritesPanel";
+import { Stock } from "@/types/stock";
 
 type Props = {
     stocks: any[];
     headCells: any[];
-    initialOrderBy: { column: string; direction: string };
-    hideYearsWithProfitFilter?: boolean;
-    showDividendFilter?: boolean;
+    initialOrderBy: { column: string; direction: "asc" | "desc" };
+    hideYearsWithProfitFilter: boolean;
+    showDividendFilter: boolean;
     lastYears?: number;
     setLastYears?: (years: number) => void;
     loading?: boolean;
@@ -37,60 +38,60 @@ export default function RankingPanel({
     stocks,
     headCells,
     initialOrderBy,
-    hideYearsWithProfitFilter,
-    showDividendFilter,
-    lastYears,
-    setLastYears,
+    hideYearsWithProfitFilter=true,
+    showDividendFilter=false,
+    lastYears=10,
+    setLastYears=() => {},
     loading,
     hideFilter,
     hideFavorites,
 }: Props) {
-    const [minimumMarketCap, setMinimumMarketCap] = useState("");
+    const [minimumMarketCap, setMinimumMarketCap] = useState(0);
     const [minimumLiquidity, setMinimumLiquidity] = useState(100000);
     const [minimumYearsWithProfit, setMinimumYearsWithProfit] = useState(
-        lastYears || ""
+        lastYears || 0
     );
-    const [favoriteTickers, setFavoriteTickers] = useState(
+    const [favoriteTickers, setFavoriteTickers] = useState<string[]>(
         (typeof window !== "undefined" &&
             localStorage.getItem(LOCAL_STORAGE_FAVORITE_TICKERS_KEY) &&
             JSON.parse(
-                localStorage.getItem(LOCAL_STORAGE_FAVORITE_TICKERS_KEY)
+                localStorage.getItem(LOCAL_STORAGE_FAVORITE_TICKERS_KEY) || ""
             )) ||
             []
     );
-    const [filteredStocks, setFilteredStocks] = useState([]);
+    const [filteredStocks, setFilteredStocks] = useState<Stock[]>([]);
 
     const filterByMarketCap = useCallback(
-        (stock) => {
+        (stock:Stock) => {
             return minimumMarketCap
-                ? stock.valormercado > minimumMarketCap
+                ? stock.valormercado && stock.valormercado > minimumMarketCap
                 : true;
         },
         [minimumMarketCap]
     );
 
     const filterByLiquidity = useCallback(
-        (stock) => {
+        (stock:Stock) => {
             return minimumLiquidity
-                ? stock.liquidezmediadiaria > minimumLiquidity
+                ? stock.liquidezmediadiaria && stock.liquidezmediadiaria > minimumLiquidity
                 : true;
         },
         [minimumLiquidity]
     );
 
     const filterByYearsWithProfit = useCallback(
-        (stock) => {
+        (stock:Stock) => {
             const minimumYearsWithProfitAsNumber = Number(
                 minimumYearsWithProfit
             );
             const profitableLastYears = stock?.historicalData?.["P/L"]?.series
                 .slice(0, 0 + minimumYearsWithProfitAsNumber)
-                .filter((year) => year?.value > 0);
+                .filter((year:any) => year?.value > 0);
             const alternativeProfitableLastYears = stock?.historicalData?.[
                 "LPA"
             ]?.series
                 .slice(0, 0 + minimumYearsWithProfitAsNumber)
-                .filter((year) => year?.value > 0);
+                .filter((year:any) => year?.value > 0);
             return minimumYearsWithProfitAsNumber
                 ? profitableLastYears?.length ===
                       minimumYearsWithProfitAsNumber ||
@@ -101,7 +102,10 @@ export default function RankingPanel({
         [minimumYearsWithProfit]
     );
 
-    const updateFavoriteTickers = (ticker, action) => {
+    const updateFavoriteTickers = (
+        ticker: string,
+        action: "add" | "remove"
+    ) => {
         if (action === "add") {
             setFavoriteTickers((currTickers) => {
                 const newTickers = [...currTickers, ticker];

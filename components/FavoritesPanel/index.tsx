@@ -14,7 +14,7 @@ export default function FavoritesPanel({ stocks }: Props) {
         (typeof window !== "undefined" &&
             localStorage.getItem(LOCAL_STORAGE_FAVORITE_TICKERS_KEY) &&
             JSON.parse(
-                localStorage.getItem(LOCAL_STORAGE_FAVORITE_TICKERS_KEY)
+                localStorage.getItem(LOCAL_STORAGE_FAVORITE_TICKERS_KEY) || ""
             )) ||
         [];
 

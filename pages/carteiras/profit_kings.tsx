@@ -4,12 +4,27 @@ import RankingPanel from "@/components/RankingPanel";
 import { Stack } from "@mui/material";
 import { WalletRules } from "@/components/WalletRules";
 import supabase from "@/utils/supabase";
+import { Stock } from "@/types/stock";
+
+type ProfitKingsStock = Stock & {
+    profits: {
+        ticker: string | null;
+        years_count: number | null;
+        years_with_profit_count: number | null;
+        average_profit: number | null;
+    };
+    yearsWithProfitPercentage: number | null;
+    averageProfit: number | null;
+    yearsCount: number | null;
+    yearsWithProfitCount: number | null;
+    rank?: number | null;
+};
 
 export async function getServerSideProps() {
     try {
         const stocks = await fetchAllStocks();
 
-        const mostLliquidTickers = stocks.reduce((acc, stock) => {
+        const mostLliquidTickers = stocks.reduce((acc: Stock[], stock) => {
             const alreadyExists = acc.find(
                 (s) => s.ticker.slice(0, 4) === stock.ticker.slice(0, 4)
             );
@@ -17,7 +32,11 @@ export async function getServerSideProps() {
                 acc = [...acc, stock];
                 return acc;
             }
-            if (stock.liquidezmediadiaria > alreadyExists.liquidezmediadiaria) {
+            if (
+                stock.liquidezmediadiaria &&
+                alreadyExists.liquidezmediadiaria &&
+                stock.liquidezmediadiaria > alreadyExists.liquidezmediadiaria
+            ) {
                 acc = [
                     ...acc.filter(
                         (s) => s.ticker.slice(0, 4) !== stock.ticker.slice(0, 4)
@@ -31,16 +50,27 @@ export async function getServerSideProps() {
 
         const { data: profits } = await supabase.from("profit_kings").select();
 
-        const stocksWithProfit = mostLliquidTickers
-            .map((stock) => {
+        if (!profits) {
+            throw new Error("No profits found");
+        }
+
+        const stocksWithProfit: ProfitKingsStock[] = mostLliquidTickers
+            .map((stock): ProfitKingsStock => {
                 const stockProfits = profits.find(
                     (profit) => profit.ticker === stock.ticker
                 );
                 if (!stockProfits) {
-                    return stock;
+                    return stock as ProfitKingsStock;
                 }
+                if (!stockProfits.years_count) return stock as ProfitKingsStock;
+
                 const yearsWithProfitCount =
                     stockProfits.years_with_profit_count;
+
+                if (!yearsWithProfitCount) return stock as ProfitKingsStock;
+                if (!stockProfits.average_profit)
+                    return stock as ProfitKingsStock;
+
                 const yearsWithProfitPercentage =
                     Math.round(
                         (yearsWithProfitCount * 10000) /
@@ -65,34 +95,37 @@ export async function getServerSideProps() {
             JSON.stringify(
                 stocksWithProfit.map((stock) => stock.yearsWithProfitPercentage)
             ) // deep copy
-        ).sort((a, b) => b - a);
+        ).sort((a: number, b: number) => b - a);
 
         const orderedByAverageProfit = JSON.parse(
             JSON.stringify(stocksWithProfit.map((stock) => stock.averageProfit)) // deep copy
-        ).sort((a, b) => b - a);
+        ).sort((a: number, b: number) => b - a);
 
         const orderedByYearsWithProfitCount = JSON.parse(
             JSON.stringify(
                 stocksWithProfit.map((stock) => stock.yearsWithProfitCount)
             )
-        ).sort((a, b) => b - a);
+        ).sort((a: number, b: number) => b - a);
 
         const stocksWithRanking = JSON.parse(JSON.stringify(stocksWithProfit))
-            .map((company) => ({
+            .map((company: ProfitKingsStock) => ({
                 rank:
                     orderedByYearsWithProfitPercentage.findIndex(
-                        (p) => p === company.yearsWithProfitPercentage
+                        (p: number) => p === company.yearsWithProfitPercentage
                     ) +
                     orderedByAverageProfit.findIndex(
-                        (c) => c === company.averageProfit
+                        (c: number) => c === company.averageProfit
                     ) +
                     orderedByYearsWithProfitCount.findIndex(
-                        (c) => c === company.yearsWithProfitCount
+                        (c: number) => c === company.yearsWithProfitCount
                     ) +
                     1,
                 ...company,
             }))
-            .sort((a, b) => a.rank - b.rank);
+            .sort(
+                (a: ProfitKingsStock, b: ProfitKingsStock) =>
+                    (a.rank || 0) - (b.rank || 0)
+            );
 
         return {
             props: {
@@ -101,7 +134,7 @@ export async function getServerSideProps() {
         };
     } catch (error) {
         console.log(error);
-        return;
+        throw error;
     }
 }
 
@@ -150,7 +183,11 @@ const headCells = [
     },
 ];
 
-export default function ProfitKings({ stocks }) {
+export default function ProfitKings({
+    stocks,
+}: {
+    stocks: ProfitKingsStock[];
+}) {
     return (
         <div className={styles.container}>
             <main className={styles.main}>
@@ -199,6 +236,7 @@ export default function ProfitKings({ stocks }) {
                     headCells={headCells}
                     initialOrderBy={{ column: "rank", direction: "asc" }}
                     hideYearsWithProfitFilter={true}
+                    showDividendFilter={false}
                 />
             </Stack>
         </div>

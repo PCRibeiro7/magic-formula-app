@@ -84,6 +84,7 @@ export default function GrahamWallet({ stocks }: { stocks: Stock[] }) {
                         column: "graham_price_diff",
                         direction: "desc",
                     }}
+                    showDividendFilter={false}
                 />
             </Stack>
         </div>

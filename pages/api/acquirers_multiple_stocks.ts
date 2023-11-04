@@ -1,16 +1,18 @@
 import { fetchAllStocks } from "@/services/statusInvest";
 import supabase from "@/utils/supabase";
 import { getQuotesMomentumFromTimeAgo } from "@/services/quotesMomentum";
+import { NextApiHandler } from "next";
+import { Stock } from "@/types/stock";
 
-export default async function handler(_req, res) {
-    let sixMonthsBeforeDateEpoch, threeMonthsBeforeDateEpoch;
-
+const handler: NextApiHandler = async (_req, res) => {
     const stocks = await fetchAllStocks();
     // const stocks = (await fetchAllStocks()).slice(0,1)
 
     let filteredStocks = stocks.filter((stock) => {
         return (
+            stock.ev_ebit &&
             stock.ev_ebit > 0 &&
+            stock.liquidezmediadiaria &&
             stock.liquidezmediadiaria > 1000 &&
             stock.vpa > 0 &&
             stock.p_l > 0
@@ -19,6 +21,8 @@ export default async function handler(_req, res) {
 
     try {
         const quotesMomentum = await getQuotesMomentumFromTimeAgo("6m");
+
+        if (!quotesMomentum) return res.status(200).json({ stocks: [] });
 
         quotesMomentum.forEach((tickerQuotes) => {
             const tickerKey = tickerQuotes.ticker;
@@ -44,6 +48,8 @@ export default async function handler(_req, res) {
 
     const { data: profits } = await supabase.from("profit_kings").select();
 
+    if (!profits) return res.status(200).json({ stocks: [] });
+
     filteredStocks = filteredStocks
         .map((stock) => {
             const stockProfits = profits.find(
@@ -51,6 +57,8 @@ export default async function handler(_req, res) {
             );
             if (!stockProfits) return stock;
             const yearsWithProfitCount = stockProfits.years_with_profit_count;
+            if (!yearsWithProfitCount) return stock;
+            if (!stockProfits.years_count) return stock;
             const yearsWithProfitPercentage =
                 Math.round(
                     (yearsWithProfitCount * 10000) / stockProfits.years_count
@@ -66,39 +74,43 @@ export default async function handler(_req, res) {
         .filter((stock) => stock.profits);
 
     const orderedByev_ebit = JSON.parse(JSON.stringify(filteredStocks)).sort(
-        (a, b) => a.ev_ebit - b.ev_ebit
+        (a: Stock, b: Stock) => (a.ev_ebit || 0) - (b.ev_ebit || 0)
     );
 
     const orderedByMomentum = JSON.parse(JSON.stringify(filteredStocks)).sort(
-        (a, b) => b.momentum6M - a.momentum6M
+        (a: Stock, b: Stock) => (b.momentum6M || 0) - (a.momentum6M || 0)
     );
 
     const mountedStocks = JSON.parse(JSON.stringify(filteredStocks))
-        .map((company) => ({
+        .map((company: Stock) => ({
             rank:
                 orderedByMomentum.findIndex(
-                    (c) => c.ticker === company.ticker
+                    (c: Stock) => c.ticker === company.ticker
                 ) +
-                orderedByev_ebit.findIndex((c) => c.ticker === company.ticker) +
+                orderedByev_ebit.findIndex(
+                    (c: Stock) => c.ticker === company.ticker
+                ) +
                 2,
             rank_ev_ebit:
-                orderedByev_ebit.findIndex((c) => c.ticker === company.ticker) +
-                1,
+                orderedByev_ebit.findIndex(
+                    (c: Stock) => c.ticker === company.ticker
+                ) + 1,
             rank_Momentum_6M:
                 orderedByMomentum.findIndex(
-                    (c) => c.ticker === company.ticker
+                    (c: Stock) => c.ticker === company.ticker
                 ) + 1,
 
             ...company,
         }))
-        .sort((a, b) => a.rank - b.rank);
+        .sort(
+            (a: Stock & { rank: number }, b: Stock & { rank: number }) =>
+                a.rank - b.rank
+        );
 
     const response = {
         stocks: mountedStocks,
-        dates: {
-            sixMonths: sixMonthsBeforeDateEpoch,
-            threeMonths: threeMonthsBeforeDateEpoch,
-        },
     };
     res.status(200).json(response);
-}
+};
+
+export default handler;

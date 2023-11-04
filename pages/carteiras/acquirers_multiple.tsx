@@ -45,31 +45,20 @@ const headCells = [
 
 export default function AcquirersMultiple() {
     const [stocks, setStocks] = useState([]);
-    const [dates, setDates] = useState({});
     const [loading, setLoading] = useState(false);
 
     const fetchData = useCallback(async () => {
         setLoading(true);
         const res = await fetch(`/api/acquirers_multiple_stocks`);
-        const { stocks: stocksWithRanking, dates } = await res.json();
-        const x = new Date(dates.sixMonths);
+        const { stocks: stocksWithRanking } = await res.json();
 
-        setTooltipDates(dates);
         setStocks(stocksWithRanking);
-        setDates(dates);
         setLoading(false);
     }, []);
 
     useEffect(() => {
         fetchData();
     }, [fetchData]);
-
-    const setTooltipDates = (dates) => {
-        const sixMonthDate = new Date(0);
-        sixMonthDate.setUTCSeconds(dates.sixMonths);
-        headCells.find((cell) => cell.id === "momentum6M").tooltip =
-            sixMonthDate.toLocaleDateString();
-    };
 
     return (
         <div className={styles.container}>
@@ -112,6 +101,7 @@ export default function AcquirersMultiple() {
                     initialOrderBy={{ column: "rank", direction: "asc" }}
                     hideYearsWithProfitFilter={true}
                     loading={loading}
+                    showDividendFilter={false}
                 />
             </Stack>
         </div>

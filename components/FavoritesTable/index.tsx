@@ -13,7 +13,11 @@ import Paper from "@mui/material/Paper";
 import { visuallyHidden } from "@mui/utils";
 import { nFormatter } from "@/utils/math";
 
-function descendingComparator(a, b, orderBy) {
+function descendingComparator(
+    a: { [x: string]: number },
+    b: { [x: string]: number },
+    orderBy: string | number
+) {
     if (b[orderBy] < a[orderBy]) {
         return -1;
     }
@@ -23,28 +27,38 @@ function descendingComparator(a, b, orderBy) {
     return 0;
 }
 
-function getComparator(order, orderBy) {
+function getComparator(order: string, orderBy: string) {
     return order === "desc"
-        ? (a, b) => descendingComparator(a, b, orderBy)
-        : (a, b) => -descendingComparator(a, b, orderBy);
+        ? (a: any, b: any) => descendingComparator(a, b, orderBy)
+        : (a: any, b: any) => -descendingComparator(a, b, orderBy);
 }
 
 // This method is created for cross-browser compatibility, if you don't
 // need to support IE11, you can use Array.prototype.sort() directly
-function stableSort(array, comparator) {
-    const stabilizedThis = array.map((el, index) => [el, index]);
-    stabilizedThis.sort((a, b) => {
+function stableSort(
+    array: any[],
+    comparator: { (a: any, b: any): number; (arg0: any, arg1: any): any }
+) {
+    const stabilizedThis = array.map((el: any, index: any) => [el, index]);
+    stabilizedThis.sort((a: number[], b: number[]) => {
         const order = comparator(a[0], b[0]);
         if (order !== 0) {
             return order;
         }
         return a[1] - b[1];
     });
-    return stabilizedThis.map((el) => el[0]);
+    return stabilizedThis.map((el: any[]) => el[0]);
 }
 
-function EnhancedTableHead({ order, orderBy, onRequestSort, headCells }) {
-    const createSortHandler = (property) => (event) => {
+type EnhancedTableHeadProps = {
+    order: any;
+    orderBy: any;
+    onRequestSort: (event: any, property: any) => void;
+    headCells: any[];
+}
+
+function EnhancedTableHead({ order, orderBy, onRequestSort, headCells }:EnhancedTableHeadProps) {
+    const createSortHandler = (property: any) => (event: any) => {
         onRequestSort(event, property);
     };
 
@@ -87,38 +101,50 @@ EnhancedTableHead.propTypes = {
     rowCount: PropTypes.number.isRequired,
 };
 
-export default function EnhancedTable({ rows, headCells, dense = false }) {
+type EnhancedTableProps = {
+    rows: any[];
+    headCells: any[];
+    dense?: boolean;
+}
+
+export default function EnhancedTable({ rows, headCells, dense = false }:EnhancedTableProps) {
     const [order, setOrder] = React.useState("asc");
     const [orderBy, setOrderBy] = React.useState("Ticker");
-    const [selected, setSelected] = React.useState([]);
+    const [selected, setSelected] = React.useState<any[]>([]);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(rows.length);
 
-    const handleRequestSort = (_event, property) => {
+    const handleRequestSort = (
+        _event: any,
+        property: React.SetStateAction<string>
+    ) => {
         const isAsc = orderBy === property && order === "asc";
         setOrder(isAsc ? "desc" : "asc");
         setOrderBy(property);
     };
 
-    const handleSelectAllClick = (event) => {
+    const handleSelectAllClick = (event: { target: { checked: any } }) => {
         if (event.target.checked) {
-            const newSelecteds = rows.map((n) => n.name);
+            const newSelecteds = rows.map((n: { name: any }) => n.name);
             setSelected(newSelecteds);
             return;
         }
         setSelected([]);
     };
 
-    const handleChangePage = (_event, newPage) => {
+    const handleChangePage = (
+        _event: any,
+        newPage: React.SetStateAction<number>
+    ) => {
         setPage(newPage);
     };
 
-    const handleChangeRowsPerPage = (event) => {
+    const handleChangeRowsPerPage = (event: { target: { value: string } }) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
 
-    const isSelected = (name) => selected.indexOf(name) !== -1;
+    const isSelected = (name: any) => selected.indexOf(name) !== -1;
 
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows =
@@ -150,45 +176,55 @@ export default function EnhancedTable({ rows, headCells, dense = false }) {
                                     page * rowsPerPage,
                                     page * rowsPerPage + rowsPerPage
                                 )
-                                .map((row) => {
-                                    const isItemSelected = isSelected(row.name);
-                                    return (
-                                        <TableRow
-                                            hover
-                                            aria-checked={isItemSelected}
-                                            tabIndex={-1}
-                                            key={row.Ticker}
-                                            selected={isItemSelected}
-                                        >
-                                            {headCells.map((key, index) =>
-                                                index === 0 ? (
-                                                    <TableCell
-                                                        key={`${row.Ticker}-${key}-1`}
-                                                    >
-                                                        <a
-                                                            target="_blank"
-                                                            href={`https://statusinvest.com.br/acoes/${row[key]}`}
-                                                            rel="noreferrer"
-                                                        >
-                                                            {row[key]}
-                                                        </a>
-                                                    </TableCell>
-                                                ) : (
-                                                    <TableCell
-                                                        key={`${row.Ticker}-${key}-2`}
-                                                    >
-                                                        {isNaN(row[key])
-                                                            ? row[key]
-                                                            : nFormatter(
-                                                                  row[key],
-                                                                  2
-                                                              )}
-                                                    </TableCell>
-                                                )
-                                            )}
-                                        </TableRow>
-                                    );
-                                })}
+                                .map(
+                                    (row) => {
+                                        const isItemSelected = isSelected(
+                                            row.name
+                                        );
+                                        return (
+                                            <TableRow
+                                                hover
+                                                aria-checked={isItemSelected}
+                                                tabIndex={-1}
+                                                key={row.Ticker}
+                                                selected={isItemSelected}
+                                            >
+                                                {headCells.map(
+                                                    (
+                                                        key: string | number,
+                                                        index: number
+                                                    ) =>
+                                                        index === 0 ? (
+                                                            <TableCell
+                                                                key={`${row.Ticker}-${key}-1`}
+                                                            >
+                                                                <a
+                                                                    target="_blank"
+                                                                    href={`https://statusinvest.com.br/acoes/${row[key]}`}
+                                                                    rel="noreferrer"
+                                                                >
+                                                                    {row[key]}
+                                                                </a>
+                                                            </TableCell>
+                                                        ) : (
+                                                            <TableCell
+                                                                key={`${row.Ticker}-${key}-2`}
+                                                            >
+                                                                {isNaN(row[key])
+                                                                    ? row[key]
+                                                                    : nFormatter(
+                                                                          row[
+                                                                              key
+                                                                          ],
+                                                                          2
+                                                                      )}
+                                                            </TableCell>
+                                                        )
+                                                )}
+                                            </TableRow>
+                                        );
+                                    }
+                                )}
                             {emptyRows > 0 && (
                                 <TableRow
                                     style={{

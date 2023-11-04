@@ -1,21 +1,28 @@
 import moment from "moment";
 import { getQuotesMomentumFromTimeAgo } from "@/services/quotesMomentum";
 import { fetchAllStocks } from "@/services/statusInvest";
+import { NextApiRequest, NextApiResponse } from "next";
+import { Stock } from "@/types/stock";
 
-export default async function handler(req, res) {
+export default async function handler(
+    req: NextApiRequest,
+    res: NextApiResponse
+) {
     const yearsAgoParam = req.query.yearsAgo;
     const yearsAgo = Number(yearsAgoParam);
 
     const stocks = await fetchAllStocks();
 
     let filteredStocks = stocks.filter((stock) => {
-        return stock.ev_ebit > 0;
+        return stock.ev_ebit && stock.ev_ebit > 0;
     });
 
-    let mountedStocks = [];
+    let mountedStocks: Stock[] = [];
 
     try {
         const quotesMomentum = await getQuotesMomentumFromTimeAgo(yearsAgo);
+
+        if (!quotesMomentum) return res.status(200).json({ stocks: [] });
 
         quotesMomentum.forEach((tickerQuotes) => {
             const tickerKey = tickerQuotes.ticker;
@@ -63,17 +70,20 @@ export default async function handler(req, res) {
             });
         const orderedByMomentum = JSON.parse(
             JSON.stringify(filteredStocks)
-        ).sort((a, b) => b.momentum6M - a.momentum6M);
+        ).sort((a: Stock, b: Stock) => b.momentum6M - a.momentum6M);
 
         filteredStocks = JSON.parse(JSON.stringify(filteredStocks))
-            .map((company) => ({
+            .map((company: Stock) => ({
                 rank:
                     orderedByMomentum.findIndex(
-                        (c) => c.ticker === company.ticker
+                        (c: Stock) => c.ticker === company.ticker
                     ) + 1,
                 ...company,
             }))
-            .sort((a, b) => a.rank - b.rank);
+            .sort(
+                (a: Stock & { rank: number }, b: Stock & { rank: number }) =>
+                    a.rank - b.rank
+            );
 
         mountedStocks = filteredStocks;
     } catch (error) {
@@ -82,7 +92,6 @@ export default async function handler(req, res) {
 
     const response = {
         stocks: mountedStocks,
-        dates: {},
     };
     res.status(200).json(response);
 }

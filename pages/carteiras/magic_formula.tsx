@@ -117,6 +117,7 @@ export default function MagicFormula({ stocks }: { stocks: Stock[] }) {
                     headCells={headCells}
                     initialOrderBy={{ column: "rank", direction: "asc" }}
                     hideYearsWithProfitFilter={true}
+                    showDividendFilter={false}
                 />
             </Stack>
         </div>

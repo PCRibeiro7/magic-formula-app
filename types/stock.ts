@@ -8,6 +8,9 @@ export type Stock = {
         date_past: string;
         quote_past: number;
     };
+    historicalData?: {
+        [key: string]: any;
+    };
     sixMonthsBeforePrice: number;
     momentum6M: number;
     annualizedReturn: number;

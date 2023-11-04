@@ -1,4 +1,3 @@
-import * as React from "react";
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
@@ -19,8 +18,14 @@ import { Checkbox } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 import StarOutlineIcon from "@mui/icons-material/StarOutline";
 import { nFormatter } from "@/utils/math";
+import { Stock } from "@/types/stock";
+import { ChangeEvent, SetStateAction, useState } from "react";
 
-function descendingComparator(a, b, orderBy) {
+function descendingComparator(
+    a: { [x: string]: any },
+    b: { [x: string]: any },
+    orderBy: string | number
+) {
     if ((b[orderBy] || 0) < (a[orderBy] || 0)) {
         return -1;
     }
@@ -30,28 +35,45 @@ function descendingComparator(a, b, orderBy) {
     return 0;
 }
 
-function getComparator(order, orderBy) {
+function getComparator(order: string, orderBy: any) {
     return order === "desc"
-        ? (a, b) => descendingComparator(a, b, orderBy)
-        : (a, b) => -descendingComparator(a, b, orderBy);
+        ? (a: any, b: any) => descendingComparator(a, b, orderBy)
+        : (a: any, b: any) => -descendingComparator(a, b, orderBy);
 }
 
 // This method is created for cross-browser compatibility, if you don't
 // need to support IE11, you can use Array.prototype.sort() directly
-function stableSort(array, comparator) {
-    const stabilizedThis = array.map((el, index) => [el, index]);
-    stabilizedThis.sort((a, b) => {
+function stableSort(
+    array: any[],
+    comparator: { (a: any, b: any): number; (arg0: any, arg1: any): any }
+) {
+    const stabilizedThis = array.map((el: any, index: any) => [el, index]);
+    stabilizedThis.sort((a: number[], b: number[]) => {
         const order = comparator(a[0], b[0]);
         if (order !== 0) {
             return order;
         }
         return a[1] - b[1];
     });
-    return stabilizedThis.map((el) => el[0]);
+    return stabilizedThis.map((el: any[]) => el[0]);
 }
 
-function EnhancedTableHead({ order, orderBy, onRequestSort, headCells }) {
-    const createSortHandler = (property) => (event) => {
+interface EnhancedTableHeadProps {
+    numSelected: number;
+    onRequestSort: (event: any, property: any) => void;
+    onSelectAllClick: (event: any) => void;
+    order: "asc" | "desc";
+    orderBy: string;
+    rowCount: number;
+    headCells: any[];
+}
+function EnhancedTableHead({
+    order,
+    orderBy,
+    onRequestSort,
+    headCells,
+}: EnhancedTableHeadProps) {
+    const createSortHandler = (property: any) => (event: any) => {
         onRequestSort(event, property);
     };
     const headCellWithRank = [
@@ -106,6 +128,15 @@ EnhancedTableHead.propTypes = {
     rowCount: PropTypes.number.isRequired,
 };
 
+interface CustomTableProps {
+    rows: any[];
+    headCells: any[];
+    initialOrderBy: { column: string; direction: "asc" | "desc" };
+    favoriteTickers: any[];
+    updateFavoriteTickers: (ticker: any, action: "add" | "remove") => void;
+    dense?: boolean;
+}
+
 export default function CustomTable({
     rows,
     headCells,
@@ -113,44 +144,49 @@ export default function CustomTable({
     favoriteTickers,
     updateFavoriteTickers,
     dense = false,
-}) {
-    const [order, setOrder] = React.useState(initialOrderBy.direction);
-    const [orderBy, setOrderBy] = React.useState(initialOrderBy.column);
-    const [selected, setSelected] = React.useState([]);
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(25);
+}: CustomTableProps) {
+    const [order, setOrder] = useState<"asc" | "desc">(
+        initialOrderBy.direction
+    );
+    const [orderBy, setOrderBy] = useState(initialOrderBy.column);
+    const [selected, setSelected] = useState<any[]>([]);
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(25);
 
-    const handleRequestSort = (_event, property) => {
+    const handleRequestSort = (_event: any, property: any) => {
         const isAsc = orderBy === property && order === "asc";
         setOrder(isAsc ? "desc" : "asc");
         setOrderBy(property);
         setPage(0);
     };
 
-    const handleSelectAllClick = (event) => {
+    const handleSelectAllClick = (event: { target: { checked: any } }) => {
         if (event.target.checked) {
-            const newSelecteds = rows.map((n) => n.name);
+            const newSelecteds = rows.map((n: { name: any }) => n.name);
             setSelected(newSelecteds);
             return;
         }
         setSelected([]);
     };
 
-    const handleChangePage = (_event, newPage) => {
+    const handleChangePage = (_event: any, newPage: SetStateAction<number>) => {
         setPage(newPage);
     };
 
-    const handleChangeRowsPerPage = (event) => {
+    const handleChangeRowsPerPage = (event: { target: { value: string } }) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
 
-    const handleClickOnStar = (event, ticker) => {
+    const handleClickOnStar = (
+        event: ChangeEvent<HTMLInputElement>,
+        ticker: any
+    ) => {
         const action = event.target.checked ? "add" : "remove";
         updateFavoriteTickers(ticker, action);
     };
 
-    const isSelected = (name) => selected.indexOf(name) !== -1;
+    const isSelected = (name: any) => selected.indexOf(name) !== -1;
 
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows =
@@ -181,102 +217,138 @@ export default function CustomTable({
                                     page * rowsPerPage,
                                     page * rowsPerPage + rowsPerPage
                                 )
-                                .map((row, index, stocks) => {
-                                    const isItemSelected = isSelected(row.name);
-                                    const labelId = `enhanced-table-checkbox-${index}`;
-                                    const isTickerBestRanked =
-                                        checkIfTickerIsBestRanked(
-                                            row.ticker,
-                                            stocks
+                                .map(
+                                    (
+                                        row: {
+                                            name: any;
+                                            ticker: string;
+                                        } & {
+                                            [x: string]: number;
+                                        },
+                                        index: number,
+                                        stocks: Stock[]
+                                    ) => {
+                                        const isItemSelected = isSelected(
+                                            row.name
                                         );
+                                        const labelId = `enhanced-table-checkbox-${index}`;
+                                        const isTickerBestRanked =
+                                            checkIfTickerIsBestRanked(
+                                                row.ticker,
+                                                stocks
+                                            );
 
-                                    return (
-                                        <TableRow
-                                            hover
-                                            role="checkbox"
-                                            aria-checked={isItemSelected}
-                                            tabIndex={-1}
-                                            key={row.ticker}
-                                            selected={isItemSelected}
-                                        >
-                                            <TableCell>
-                                                {index + page * rowsPerPage + 1}
-                                                º
-                                            </TableCell>
-                                            {headCells.map((headCell, index) =>
-                                                index === 0 ? (
-                                                    <TableCell
-                                                        id={labelId}
-                                                        scope="row"
-                                                        sx={{
-                                                            color: isTickerBestRanked
-                                                                ? "gold"
-                                                                : "",
-                                                            display: "flex",
-                                                            alignItems:
-                                                                "center",
-                                                        }}
-                                                        key={headCell.id}
-                                                    >
-                                                        <a
-                                                            target="_blank"
-                                                            href={`https://statusinvest.com.br/acoes/${row.ticker}`}
-                                                            rel="noreferrer"
-                                                        >
-                                                            {row.ticker}
-                                                        </a>
-                                                        <Checkbox
-                                                            checked={favoriteTickers.includes(
-                                                                row.ticker
-                                                            )}
-                                                            onChange={(e) =>
-                                                                handleClickOnStar(
-                                                                    e,
-                                                                    row.ticker
-                                                                )
-                                                            }
-                                                            value={row.ticker}
-                                                            icon={
-                                                                <StarOutlineIcon />
-                                                            }
-                                                            checkedIcon={
-                                                                <StarIcon />
-                                                            }
-                                                            sx={{
-                                                                "&.Mui-checked":
-                                                                    {
-                                                                        color: "gold",
-                                                                    },
-                                                            }}
-                                                        />
-                                                    </TableCell>
-                                                ) : (
-                                                    <TableCell
-                                                        align="right"
-                                                        key={
-                                                            row.ticker +
-                                                            headCell.id
-                                                        }
-                                                    >
-                                                        {isNaN(
-                                                            row[headCell.id]
-                                                        ) || headCell.isOrdinal
-                                                            ? row[headCell.id]
-                                                            : nFormatter(
-                                                                  row[
-                                                                      headCell
-                                                                          .id
-                                                                  ],
-                                                                  2
-                                                              )}
-                                                        {headCell.isOrdinal &&
-                                                            "º"}
-                                                    </TableCell>
-                                                )
-                                            )}
-                                        </TableRow>
-                                    );
-                                })}
+                                        return (
+                                            <TableRow
+                                                hover
+                                                role="checkbox"
+                                                aria-checked={isItemSelected}
+                                                tabIndex={-1}
+                                                key={row.ticker}
+                                                selected={isItemSelected}
+                                            >
+                                                <TableCell>
+                                                    {index +
+                                                        page * rowsPerPage +
+                                                        1}
+                                                    º
+                                                </TableCell>
+                                                {headCells.map(
+                                                    (
+                                                        headCell: {
+                                                            id: string;
+                                                            isOrdinal: any;
+                                                        },
+                                                        index: number
+                                                    ) =>
+                                                        index === 0 ? (
+                                                            <TableCell
+                                                                id={labelId}
+                                                                scope="row"
+                                                                sx={{
+                                                                    color: isTickerBestRanked
+                                                                        ? "gold"
+                                                                        : "",
+                                                                    display:
+                                                                        "flex",
+                                                                    alignItems:
+                                                                        "center",
+                                                                }}
+                                                                key={
+                                                                    headCell.id
+                                                                }
+                                                            >
+                                                                <a
+                                                                    target="_blank"
+                                                                    href={`https://statusinvest.com.br/acoes/${row.ticker}`}
+                                                                    rel="noreferrer"
+                                                                >
+                                                                    {row.ticker}
+                                                                </a>
+                                                                <Checkbox
+                                                                    checked={favoriteTickers.includes(
+                                                                        row.ticker
+                                                                    )}
+                                                                    onChange={(
+                                                                        e
+                                                                    ) =>
+                                                                        handleClickOnStar(
+                                                                            e,
+                                                                            row.ticker
+                                                                        )
+                                                                    }
+                                                                    value={
+                                                                        row.ticker
+                                                                    }
+                                                                    icon={
+                                                                        <StarOutlineIcon />
+                                                                    }
+                                                                    checkedIcon={
+                                                                        <StarIcon />
+                                                                    }
+                                                                    sx={{
+                                                                        "&.Mui-checked":
+                                                                            {
+                                                                                color: "gold",
+                                                                            },
+                                                                    }}
+                                                                />
+                                                            </TableCell>
+                                                        ) : (
+                                                            <TableCell
+                                                                align="right"
+                                                                key={
+                                                                    row.ticker +
+                                                                    headCell.id
+                                                                }
+                                                            >
+                                                                {isNaN(
+                                                                    row[
+                                                                        headCell
+                                                                            .id
+                                                                    ]
+                                                                ) ||
+                                                                headCell.isOrdinal
+                                                                    ? row[
+                                                                          headCell
+                                                                              .id
+                                                                      ]
+                                                                    : nFormatter(
+                                                                          row[
+                                                                              headCell
+                                                                                  .id
+                                                                          ],
+                                                                          2
+                                                                      )}
+                                                                {headCell.isOrdinal &&
+                                                                    "º"}
+                                                            </TableCell>
+                                                        )
+                                                )}
+                                            </TableRow>
+                                        );
+                                    }
+                                )}
                             {emptyRows > 0 && (
                                 <TableRow
                                     style={{

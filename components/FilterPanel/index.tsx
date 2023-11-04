@@ -10,6 +10,19 @@ import MaskedNumberInput from "@/components/MaskedNumberInput";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import FilterAltIcon from "@mui/icons-material/FilterAltOutlined";
 
+type Props = {
+    minimumLiquidity: number;
+    setMinimumLiquidity: (value: number) => void;
+    minimumMarketCap: number;
+    setMinimumMarketCap: (value: number) => void;
+    minimumYearsWithProfit: number;
+    setMinimumYearsWithProfit: (value: number) => void;
+    hideYearsWithProfitFilter: boolean;
+    showDividendFilter: boolean;
+    lastYears: number;
+    setLastYears: (value: number) => void;
+};
+
 export const FilterPanel = function ({
     minimumLiquidity,
     setMinimumLiquidity,
@@ -21,7 +34,7 @@ export const FilterPanel = function ({
     showDividendFilter,
     lastYears,
     setLastYears,
-}) {
+}:Props) {
     return (
         <Accordion sx={{ marginBottom: "16px" }}>
             <AccordionSummary
@@ -40,9 +53,9 @@ export const FilterPanel = function ({
                 <Box mb={4} textAlign={"start"} ml={2}>
                     <Typography>Liquidez diária mínima: (R$)</Typography>
                     <MaskedNumberInput
-                        value={minimumLiquidity}
+                        value={`${minimumLiquidity}`}
                         handleChange={(e) =>
-                            setMinimumLiquidity(e.target.value)
+                            setMinimumLiquidity(Number(e.target.value))
                         }
                         placeholder={"0"}
                     />
@@ -50,9 +63,9 @@ export const FilterPanel = function ({
                 <Box mb={4} textAlign={"start"} ml={2}>
                     <Typography>Valor de mercado mínimo: (R$)</Typography>
                     <MaskedNumberInput
-                        value={minimumMarketCap}
+                        value={`${minimumMarketCap}`}
                         handleChange={(e) =>
-                            setMinimumMarketCap(e.target.value)
+                            setMinimumMarketCap(Number(e.target.value))
                         }
                         placeholder={"0"}
                     />
@@ -65,7 +78,7 @@ export const FilterPanel = function ({
                         <TextField
                             value={minimumYearsWithProfit}
                             onChange={(e) =>
-                                setMinimumYearsWithProfit(e.target.value)
+                                setMinimumYearsWithProfit(Number(e.target.value))
                             }
                             placeholder={"0"}
                         />

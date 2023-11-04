@@ -132,7 +132,7 @@ export default function AcquirersMultiple() {
                     loading={loading}
                     hideFavorites
                     hideFilter
-                    showDividendFilter={undefined}
+                    showDividendFilter={false}
                     lastYears={undefined}
                     setLastYears={undefined}
                 />
