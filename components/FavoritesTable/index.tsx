@@ -55,9 +55,14 @@ type EnhancedTableHeadProps = {
     orderBy: any;
     onRequestSort: (event: any, property: any) => void;
     headCells: any[];
-}
+};
 
-function EnhancedTableHead({ order, orderBy, onRequestSort, headCells }:EnhancedTableHeadProps) {
+function EnhancedTableHead({
+    order,
+    orderBy,
+    onRequestSort,
+    headCells,
+}: EnhancedTableHeadProps) {
     const createSortHandler = (property: any) => (event: any) => {
         onRequestSort(event, property);
     };
@@ -105,9 +110,13 @@ type EnhancedTableProps = {
     rows: any[];
     headCells: any[];
     dense?: boolean;
-}
+};
 
-export default function EnhancedTable({ rows, headCells, dense = false }:EnhancedTableProps) {
+export default function EnhancedTable({
+    rows,
+    headCells,
+    dense = false,
+}: EnhancedTableProps) {
     const [order, setOrder] = React.useState("asc");
     const [orderBy, setOrderBy] = React.useState("Ticker");
     const [selected, setSelected] = React.useState<any[]>([]);
@@ -176,55 +185,49 @@ export default function EnhancedTable({ rows, headCells, dense = false }:Enhance
                                     page * rowsPerPage,
                                     page * rowsPerPage + rowsPerPage
                                 )
-                                .map(
-                                    (row) => {
-                                        const isItemSelected = isSelected(
-                                            row.name
-                                        );
-                                        return (
-                                            <TableRow
-                                                hover
-                                                aria-checked={isItemSelected}
-                                                tabIndex={-1}
-                                                key={row.Ticker}
-                                                selected={isItemSelected}
-                                            >
-                                                {headCells.map(
-                                                    (
-                                                        key: string | number,
-                                                        index: number
-                                                    ) =>
-                                                        index === 0 ? (
-                                                            <TableCell
-                                                                key={`${row.Ticker}-${key}-1`}
+                                .map((row) => {
+                                    const isItemSelected = isSelected(row.name);
+                                    return (
+                                        <TableRow
+                                            hover
+                                            aria-checked={isItemSelected}
+                                            tabIndex={-1}
+                                            key={row.Ticker}
+                                            selected={isItemSelected}
+                                        >
+                                            {headCells.map(
+                                                (
+                                                    key: string | number,
+                                                    index: number
+                                                ) =>
+                                                    index === 0 ? (
+                                                        <TableCell
+                                                            key={`${row.Ticker}-${key}-1`}
+                                                        >
+                                                            <a
+                                                                target="_blank"
+                                                                href={`https://statusinvest.com.br/acoes/${row[key]}`}
+                                                                rel="noreferrer"
                                                             >
-                                                                <a
-                                                                    target="_blank"
-                                                                    href={`https://statusinvest.com.br/acoes/${row[key]}`}
-                                                                    rel="noreferrer"
-                                                                >
-                                                                    {row[key]}
-                                                                </a>
-                                                            </TableCell>
-                                                        ) : (
-                                                            <TableCell
-                                                                key={`${row.Ticker}-${key}-2`}
-                                                            >
-                                                                {isNaN(row[key])
-                                                                    ? row[key]
-                                                                    : nFormatter(
-                                                                          row[
-                                                                              key
-                                                                          ],
-                                                                          2
-                                                                      )}
-                                                            </TableCell>
-                                                        )
-                                                )}
-                                            </TableRow>
-                                        );
-                                    }
-                                )}
+                                                                {row[key]}
+                                                            </a>
+                                                        </TableCell>
+                                                    ) : (
+                                                        <TableCell
+                                                            key={`${row.Ticker}-${key}-2`}
+                                                        >
+                                                            {isNaN(row[key])
+                                                                ? row[key]
+                                                                : nFormatter(
+                                                                      row[key],
+                                                                      2
+                                                                  )}
+                                                        </TableCell>
+                                                    )
+                                            )}
+                                        </TableRow>
+                                    );
+                                })}
                             {emptyRows > 0 && (
                                 <TableRow
                                     style={{

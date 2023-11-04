@@ -34,7 +34,7 @@ export const FilterPanel = function ({
     showDividendFilter,
     lastYears,
     setLastYears,
-}:Props) {
+}: Props) {
     return (
         <Accordion sx={{ marginBottom: "16px" }}>
             <AccordionSummary
@@ -78,7 +78,9 @@ export const FilterPanel = function ({
                         <TextField
                             value={minimumYearsWithProfit}
                             onChange={(e) =>
-                                setMinimumYearsWithProfit(Number(e.target.value))
+                                setMinimumYearsWithProfit(
+                                    Number(e.target.value)
+                                )
                             }
                             placeholder={"0"}
                         />
