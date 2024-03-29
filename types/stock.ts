@@ -54,6 +54,8 @@ export type Stock = {
     lucros_cagr5?: number;
 };
 
+export type StockKeys = keyof Stock;
+
 export type Sectorname =
     | "Saúde"
     | "Financeiro e Outros"

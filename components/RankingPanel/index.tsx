@@ -3,6 +3,7 @@ import {
     AccordionDetails,
     AccordionSummary,
     CircularProgress,
+    IconButton,
     Paper,
     Table,
     TableBody,
@@ -16,10 +17,12 @@ import { useCallback, useEffect, useState } from "react";
 import CustomTable from "@/components/CustomTable";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEventsOutlined";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import { FilterPanel } from "@/components/FilterPanel";
 import StarIcon from "@mui/icons-material/Star";
 import { LOCAL_STORAGE_FAVORITE_TICKERS_KEY } from "@/components/FavoritesPanel";
-import { Stock } from "@/types/stock";
+import { Stock, StockKeys } from "@/types/stock";
+import { json2csv } from "json-2-csv";
 
 type Props = {
     stocks: any[];
@@ -139,6 +142,25 @@ export default function RankingPanel({
         );
     }, [filterByLiquidity, filterByMarketCap, filterByYearsWithProfit, stocks]);
 
+    const downdloadCsv = () => {
+        const keys: StockKeys[] = headCells.map((cell) => cell.id);
+        const jsonData = filteredStocks.map((stock) => {
+            const obj: any = {};
+            keys.forEach((key) => {
+                obj[key] = stock[key];
+            });
+            return obj;
+        });
+        const csv = json2csv(jsonData);
+        const blob = new Blob([csv], { type: "text/csv" });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "ranking.csv";
+        a.click();
+        window.URL.revokeObjectURL(url);
+    };
+
     return (
         <>
             {hideFilter || (
@@ -228,12 +250,21 @@ export default function RankingPanel({
                 </Accordion>
             )}
             <Paper sx={{ padding: "16px" }}>
-                <Typography variant="h6" textAlign={"start"}>
-                    <EmojiEventsIcon
-                        sx={{ verticalAlign: "sub", marginRight: "8px" }}
-                    />
-                    Ranking:
-                </Typography>
+                <Box display={"flex"} justifyContent={"space-between"}>
+                    <Typography variant="h6" textAlign={"start"}>
+                        <EmojiEventsIcon
+                            sx={{ verticalAlign: "sub", marginRight: "8px" }}
+                        />
+                        Ranking:
+                    </Typography>
+                    <IconButton
+                        aria-label="download"
+                        onClick={downdloadCsv}
+                        disabled={loading}
+                    >
+                        <FileDownloadIcon />
+                    </IconButton>
+                </Box>
                 {loading ? (
                     <CircularProgress sx={{ color: "white" }} />
                 ) : (
