@@ -28,7 +28,7 @@ const headCells = [
         label: "EV/EBIT",
     },
     {
-        id: "momentum6M",
+        id: "momentum",
         numeric: true,
         disablePadding: false,
         isOrdinal: false,

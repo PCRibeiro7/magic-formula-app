@@ -11,8 +11,8 @@ export type Stock = {
     historicalData?: {
         [key: string]: any;
     };
-    sixMonthsBeforePrice: number;
-    momentum6M: number;
+    pastPrice: number;
+    momentum: number;
     annualizedReturn: number;
     companyid: number;
     companyname: string;

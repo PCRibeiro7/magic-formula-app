@@ -23,7 +23,7 @@ const headCells = [
         label: "Ticker",
     },
     {
-        id: "momentum6M",
+        id: "momentum",
         numeric: true,
         disablePadding: false,
         isOrdinal: false,
@@ -37,7 +37,7 @@ const headCells = [
         label: "Retorno Anualizado(%)",
     },
     {
-        id: "sixMonthsBeforePrice",
+        id: "pastPrice",
         numeric: true,
         disablePadding: false,
         isOrdinal: false,
@@ -65,7 +65,7 @@ export default function AcquirersMultiple() {
         const { stocks } = await res.json();
 
         const sixMonthHeadCell = headCells.find(
-            (cell) => cell.id === "sixMonthsBeforePrice"
+            (cell) => cell.id === "pastPrice"
         );
         if (sixMonthHeadCell) {
             sixMonthHeadCell.label = `Preço ${selectedPeriod} ${
@@ -127,7 +127,7 @@ export default function AcquirersMultiple() {
                 <RankingPanel
                     stocks={filteredStocks}
                     headCells={headCells}
-                    initialOrderBy={{ column: "momentum6M", direction: "desc" }}
+                    initialOrderBy={{ column: "momentum", direction: "desc" }}
                     hideYearsWithProfitFilter={true}
                     loading={loading}
                     hideFavorites

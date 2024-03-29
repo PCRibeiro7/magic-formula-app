@@ -27,7 +27,7 @@ const handler: NextApiHandler = async (_req, res) => {
         quotesMomentum.forEach((tickerQuotes) => {
             const tickerKey = tickerQuotes.ticker;
 
-            const sixMonthsBeforePrice = tickerQuotes.quote_past;
+            const pastPrice = tickerQuotes.quote_past;
 
             const currentPrice = tickerQuotes.quote_current;
 
@@ -37,9 +37,9 @@ const handler: NextApiHandler = async (_req, res) => {
             if (!stockMatch) return;
 
             stockMatch.currentPrice = currentPrice;
-            stockMatch.sixMonthsBeforePrice = sixMonthsBeforePrice;
-            stockMatch.momentum6M =
-                Math.round((currentPrice / sixMonthsBeforePrice - 1) * 10000) /
+            stockMatch.pastPrice = pastPrice;
+            stockMatch.momentum =
+                Math.round((currentPrice / pastPrice - 1) * 10000) /
                 100;
         });
     } catch (error) {
@@ -78,7 +78,7 @@ const handler: NextApiHandler = async (_req, res) => {
     );
 
     const orderedByMomentum = JSON.parse(JSON.stringify(filteredStocks)).sort(
-        (a: Stock, b: Stock) => (b.momentum6M || 0) - (a.momentum6M || 0)
+        (a: Stock, b: Stock) => (b.momentum || 0) - (a.momentum || 0)
     );
 
     const mountedStocks = JSON.parse(JSON.stringify(filteredStocks))
@@ -95,11 +95,6 @@ const handler: NextApiHandler = async (_req, res) => {
                 orderedByev_ebit.findIndex(
                     (c: Stock) => c.ticker === company.ticker
                 ) + 1,
-            rank_Momentum_6M:
-                orderedByMomentum.findIndex(
-                    (c: Stock) => c.ticker === company.ticker
-                ) + 1,
-
             ...company,
         }))
         .sort(

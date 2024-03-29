@@ -47,15 +47,15 @@ export default async function handler(
                 return stock;
             }
 
-            stock.sixMonthsBeforePrice =
+            stock.pastPrice =
                 Math.round(stock.historicalDataPrice.quote_past * 100) / 100;
-            stock.momentum6M =
+            stock.momentum =
                 Math.round(
-                    (stock.price / stock.sixMonthsBeforePrice - 1) * 10000
+                    (stock.price / stock.pastPrice - 1) * 10000
                 ) / 100;
             stock.annualizedReturn =
                 Math.round(
-                    ((stock.price / stock.sixMonthsBeforePrice) **
+                    ((stock.price / stock.pastPrice) **
                         (1 / yearsAgo) -
                         1) *
                         10000
@@ -66,11 +66,11 @@ export default async function handler(
         filteredStocks = filteredStocks
             .filter((stock) => stock)
             .filter((stock) => {
-                return stock.sixMonthsBeforePrice;
+                return stock.pastPrice;
             });
         const orderedByMomentum = JSON.parse(
             JSON.stringify(filteredStocks)
-        ).sort((a: Stock, b: Stock) => b.momentum6M - a.momentum6M);
+        ).sort((a: Stock, b: Stock) => b.momentum - a.momentum);
 
         filteredStocks = JSON.parse(JSON.stringify(filteredStocks))
             .map((company: Stock) => ({
