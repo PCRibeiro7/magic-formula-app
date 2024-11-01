@@ -28,8 +28,7 @@
     "supabase": "^1.110.1",
     "touch-cli": "^0.0.1",
     "underscore": "^1.13.2",
-    "yahoo-finance": "^0.3.7",
-    "yahoo-finance2": "^2.8.1"
+    "yahoo-finance2": "^2.13.2"
   },
   "devDependencies": {
     "@types/react": "^18.2.34",

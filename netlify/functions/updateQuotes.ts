@@ -43,15 +43,13 @@ const myHandler: Handler = async (
             await getHistoricalPrices({ symbol: `${ticker}.SA` });
 
         if (getHistoricalPricesError) {
-            if (getHistoricalPricesError.code === 404) {
-                console.log(
-                    `Ticker quotes for ${ticker} not found on yahoo-finance, skipping...`
-                );
-                await updateLastUpdateQuotesTimestamp({ ticker });
-                return {
-                    statusCode: 200,
-                };
-            }
+            console.log(
+                `Ticker quotes for ${ticker} not found on yahoo-finance, skipping...`
+            );
+            await updateLastUpdateQuotesTimestamp({ ticker });
+            return {
+                statusCode: 200,
+            };
         }
 
         if (!quotesData) {
@@ -62,17 +60,39 @@ const myHandler: Handler = async (
             `Fetched ${quotesData.length} days of quotes data for ${ticker}`
         );
 
+        console.log(`Formatting quotes for ${ticker}`);
+
         const formattedQuotesData = quotesData.map((dayQuote) => ({
             ticker: ticker,
             date: dayQuote.date,
             quote: dayQuote.adjClose,
         }));
 
+        const lastYearQuotes = formattedQuotesData.slice(
+            quotesData.length - 260,
+            quotesData.length
+        );
+
+        const historicalQuotes = formattedQuotesData
+            .slice(0, quotesData.length - 260)
+            .filter((_, index) => index % 100 === 0);
+
+        console.log(`Deleting quotes for ${ticker}`);
+
+        const { error: quotesDeleteError } = await supabase
+            .from("quotes")
+            .delete()
+            .eq("ticker", ticker);
+
+        if (quotesDeleteError) {
+            throw quotesDeleteError;
+        }
+
         console.log(`Updating quotes for ${ticker}`);
 
         const { error: profitUpdateError } = await supabase
             .from("quotes")
-            .upsert(formattedQuotesData);
+            .upsert([...historicalQuotes, ...lastYearQuotes]);
 
         if (profitUpdateError) {
             throw profitUpdateError;
