@@ -2,8 +2,7 @@ import styles from "@/styles/Wallets.module.css";
 import RankingPanel from "@/components/RankingPanel";
 import { Stack } from "@mui/material";
 import { WalletRules } from "@/components/WalletRules";
-import { useEffect, useState } from "react";
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 const headCells = [
     {

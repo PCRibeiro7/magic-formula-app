@@ -1,3 +1,5 @@
+'use client';
+
 import { MouseEventHandler, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";

@@ -1,5 +1,5 @@
 import { TextField } from "@mui/material";
-import NumberFormat from "react-number-format";
+import { NumericFormat } from 'react-number-format';
 import React from "react";
 
 interface Props {
@@ -14,10 +14,9 @@ export default function MaskedNumberInput({
     placeholder,
 }: Props) {
     return (
-        <NumberFormat
+        <NumericFormat
             thousandSeparator={"."}
             decimalSeparator={","}
-            isNumericString
             prefix="R$"
             value={value}
             customInput={TextField}

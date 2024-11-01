@@ -10,9 +10,7 @@ import {
     Typography,
 } from "@mui/material";
 import { WalletRules } from "@/components/WalletRules";
-import { useEffect, useState } from "react";
-import { useCallback } from "react";
-import React from "react";
+import { useCallback, useEffect, useState } from "react";
 
 const headCells = [
     {
