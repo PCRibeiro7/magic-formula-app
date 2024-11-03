@@ -9,7 +9,7 @@ import {
 } from "@/services/statusInvest";
 import styles from "@/styles/Wallets.module.css";
 import { average } from "@/utils/math";
-import { filterByDecioBasin } from "@/utils/wallets";
+import { filterPositiveProfitStocks } from "@/utils/wallets";
 import moment from "moment";
 import { Stock } from "@/types/stock";
 const INITIAL_LAST_YEARS = 3;
@@ -18,7 +18,7 @@ const TARGET_YIELD = 0.06;
 
 export async function getServerSideProps() {
     const stocks = await fetchAllStocks();
-    let stocksWithRanking = filterByDecioBasin(stocks);
+    let stocksWithRanking = filterPositiveProfitStocks(stocks);
 
     const currStocksBatch = stocksWithRanking;
     const currHistoricalData = await Promise.all(

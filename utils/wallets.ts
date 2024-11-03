@@ -66,7 +66,7 @@ export const filterByGraham = (stocks: Stock[]) => {
         .sort((a, b) => b.graham_price_diff - a.graham_price_diff);
 };
 
-export const filterByDecioBasin = (stocks: Stock[]) => {
+export const filterPositiveProfitStocks = (stocks: Stock[]) => {
     return stocks.filter((stock) => {
         return stock.p_l > 0 && stock.lpa > 0;
     });

@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 
 import { fetchAllStocks, fetchHistoricalData } from "@/services/statusInvest";
-import { filterByDecioBasin } from "@/utils/wallets";
+import { filterPositiveProfitStocks } from "@/utils/wallets";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -9,7 +9,7 @@ export default async function handler(
     res: NextApiResponse
 ) {
     const stocks = await fetchAllStocks();
-    let stocksWithRanking = filterByDecioBasin(stocks);
+    let stocksWithRanking = filterPositiveProfitStocks(stocks);
     let historicalData: any[] = [];
     const batchSize = 100;
     for (let i = 0; i < stocksWithRanking.length; i = i + batchSize) {
